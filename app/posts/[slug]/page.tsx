@@ -1,4 +1,5 @@
-import { getAllSlugs, getPostBySlug, categoryLabel, getPostsByCategory } from "@/lib/posts";
+import { getAllSlugs, getPostBySlug, getPostsByCategory } from "@/lib/posts";
+import { categoryLabel } from "@/lib/categories";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import AdSlot from "@/components/AdSlot";

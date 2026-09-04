@@ -1,4 +1,5 @@
-import { getPostsByCategory, getAllCategories, categoryLabel } from "@/lib/posts";
+import { getPostsByCategory, getAllCategories } from "@/lib/posts";
+import { categoryLabel } from "@/lib/categories";
 import PostCard from "@/components/PostCard";
 
 export function generateStaticParams() {

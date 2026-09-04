@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import { calculateReadingTime } from "./reading-time";
+import { categoryLabel } from "./categories";
 
 const POSTS_DIR = path.join(process.cwd(), "content/posts");
 
@@ -53,11 +54,4 @@ export function getAllCategories(): string[] {
   return Array.from(new Set(getAllPosts().map((p) => p.category)));
 }
 
-export function categoryLabel(category: string): string {
-  const map: Record<string, string> = {
-    "legal-rights": "Legal Rights",
-    "ai-policy": "AI & Policy",
-    "media-literacy": "Media Literacy"
-  };
-  return map[category] ?? category;
-}
+export { categoryLabel } from "./categories";

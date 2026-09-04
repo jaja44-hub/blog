@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { PostMeta } from "@/lib/posts";
-import { categoryLabel } from "@/lib/posts";
+import { categoryLabel } from "@/lib/categories";
 
 export default function PostCard({ post }: { post: PostMeta }) {
   return (

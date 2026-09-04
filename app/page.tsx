@@ -1,4 +1,5 @@
-import { getAllPosts, getAllCategories, categoryLabel } from "@/lib/posts";
+import { getAllPosts, getAllCategories } from "@/lib/posts";
+import { categoryLabel } from "@/lib/categories";
 import PostCard from "@/components/PostCard";
 import AdSlot from "@/components/AdSlot";
 import Link from "next/link";

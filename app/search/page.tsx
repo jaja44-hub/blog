@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { categoryLabel } from "@/lib/posts";
+import { categoryLabel } from "@/lib/categories";
 
 interface PostMeta {
   title: string;
