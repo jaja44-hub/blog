@@ -9,7 +9,7 @@ export default function Comments() {
     <div className="mt-12">
       <Giscus
         id="comments"
-        repo="jaja44-hub/blog-addiscrown"
+        repo="jaja44-hub/blog"
         repoId="REPLACE_WITH_REPO_ID"
         category="Comments"
         categoryId="REPLACE_WITH_CATEGORY_ID"

@@ -1,10 +1,11 @@
-import { getAllPosts } from "@/lib/posts";
+import { getAllPosts, getAllCategories, categoryLabel } from "@/lib/posts";
 import PostCard from "@/components/PostCard";
 import AdSlot from "@/components/AdSlot";
 import Link from "next/link";
 
 export default function HomePage() {
   const posts = getAllPosts();
+  const categories = getAllCategories();
   const [featured, ...rest] = posts;
 
   return (
@@ -45,6 +46,26 @@ export default function HomePage() {
           </Link>
         </div>
       </section>
+
+      {categories.length > 0 && (
+        <nav className="mb-10 flex flex-wrap gap-3" aria-label="Category filters">
+          <Link
+            href="/"
+            className="px-4 py-2 text-sm font-medium text-teal bg-teal/10 rounded-full hover:bg-teal/20 transition-colors"
+          >
+            All
+          </Link>
+          {categories.map((category) => (
+            <Link
+              key={category}
+              href={`/category/${category}`}
+              className="px-4 py-2 text-sm font-medium text-stone border border-line rounded-full hover:border-teal hover:text-teal transition-colors"
+            >
+              {categoryLabel(category)}
+            </Link>
+          ))}
+        </nav>
+      )}
 
       <AdSlot position="header" />
 
