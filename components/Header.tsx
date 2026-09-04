@@ -4,6 +4,7 @@ const NAV = [
   { href: "/category/legal-rights", label: "Legal Rights" },
   { href: "/category/ai-policy", label: "AI & Policy" },
   { href: "/category/media-literacy", label: "Media Literacy" },
+  { href: "/search", label: "Search" },
   { href: "/about", label: "About" }
 ];
 

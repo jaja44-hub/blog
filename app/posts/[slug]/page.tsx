@@ -1,20 +1,23 @@
-import { getAllSlugs, getPostBySlug, categoryLabel } from "@/lib/posts";
+import { getAllSlugs, getPostBySlug, categoryLabel, getPostsByCategory } from "@/lib/posts";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import AdSlot from "@/components/AdSlot";
 import Comments from "@/components/Comments";
+import PostRating from "@/components/PostRating";
+import Link from "next/link";
 import type { Metadata } from "next";
 
 export function generateStaticParams() {
   return getAllSlugs().map((slug) => ({ slug }));
 }
 
-export function generateMetadata({
+export async function generateMetadata({
   params
 }: {
-  params: { slug: string };
-}): Metadata {
-  const post = getPostBySlug(params.slug);
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const post = getPostBySlug(slug);
   return {
     title: post.title,
     description: post.description,
@@ -26,8 +29,12 @@ export function generateMetadata({
   };
 }
 
-export default function PostPage({ params }: { params: { slug: string } }) {
-  const post = getPostBySlug(params.slug);
+export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const post = getPostBySlug(slug);
+  const relatedPosts = getPostsByCategory(post.category)
+    .filter((p) => p.slug !== slug)
+    .slice(0, 3);
 
   return (
     <article className="mx-auto max-w-article px-6 py-12">
@@ -49,8 +56,42 @@ export default function PostPage({ params }: { params: { slug: string } }) {
         <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
       </div>
 
+      <PostRating postSlug={slug} />
+
       <AdSlot position="in-article" />
       <Comments />
+
+      {relatedPosts.length > 0 && (
+        <section className="mt-16 border-t border-line pt-10">
+          <h2 className="font-display text-2xl font-semibold text-ink mb-6">
+            Related posts
+          </h2>
+          <div className="grid gap-6 md:grid-cols-3">
+            {relatedPosts.map((relatedPost) => (
+              <article key={relatedPost.slug} className="border border-line rounded-lg p-5 hover:border-teal transition-colors">
+                <p className="text-xs text-ochre font-medium mb-2">
+                  {categoryLabel(relatedPost.category)}
+                </p>
+                <h3 className="font-display text-lg font-semibold text-ink mb-2 leading-snug">
+                  <Link href={`/posts/${relatedPost.slug}`} className="hover:text-teal transition-colors">
+                    {relatedPost.title}
+                  </Link>
+                </h3>
+                <p className="text-stone text-sm leading-relaxed mb-3 line-clamp-3">
+                  {relatedPost.description}
+                </p>
+                <time className="text-xs text-stone" dateTime={relatedPost.date}>
+                  {new Date(relatedPost.date).toLocaleDateString("en-GB", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric"
+                  })}
+                </time>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
     </article>
   );
 }
