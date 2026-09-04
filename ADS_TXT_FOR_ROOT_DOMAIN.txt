@@ -1,0 +1,15 @@
+This file is NOT meant to live in this repo's /public folder.
+
+AdSense requires ads.txt to be served from the ROOT domain
+(https://addiscrown.et/ads.txt), even though this blog lives on the
+blog.addiscrown.et subdomain. This means the line below needs to be
+added to the LEGAL APP's repo (jaja44-hub), not this one.
+
+Per the build spec: add it via a pull request against that repo,
+reviewed and merged by the project owner — not a direct commit — so a
+mistake here can never affect the live legal app.
+
+Once you've applied for AdSense and received your publisher ID, the
+real line will look like:
+
+google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0
