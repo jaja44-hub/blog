@@ -44,13 +44,18 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       <h1 className="font-display text-3xl font-semibold text-ink leading-tight mb-3">
         {post.title}
       </h1>
-      <time className="text-sm text-stone" dateTime={post.date}>
-        {new Date(post.date).toLocaleDateString("en-GB", {
-          day: "numeric",
-          month: "long",
-          year: "numeric"
-        })}
-      </time>
+      <div className="flex items-center gap-4 text-sm text-stone mb-6">
+        <time dateTime={post.date}>
+          {new Date(post.date).toLocaleDateString("en-GB", {
+            day: "numeric",
+            month: "long",
+            year: "numeric"
+          })}
+        </time>
+        {post.readingTime && (
+          <span className="text-ochre font-medium">{post.readingTime} min read</span>
+        )}
+      </div>
 
       <div className="prose-article mt-8">
         <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>

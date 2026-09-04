@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
+import { calculateReadingTime } from "./reading-time";
 
 const POSTS_DIR = path.join(process.cwd(), "content/posts");
 
@@ -12,6 +13,7 @@ export type PostMeta = {
   description: string;
   ogImage?: string;
   draft?: boolean;
+  readingTime?: number;
 };
 
 export type Post = PostMeta & { content: string };
@@ -28,7 +30,12 @@ export function getPostBySlug(slug: string): Post {
   const fullPath = path.join(POSTS_DIR, `${slug}.md`);
   const raw = fs.readFileSync(fullPath, "utf8");
   const { data, content } = matter(raw);
-  return { ...(data as PostMeta), content };
+  const postMeta = data as PostMeta;
+  return { 
+    ...postMeta, 
+    content,
+    readingTime: calculateReadingTime(content)
+  };
 }
 
 export function getAllPosts(): Post[] {

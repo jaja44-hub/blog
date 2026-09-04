@@ -14,13 +14,18 @@ export default function PostCard({ post }: { post: PostMeta }) {
         </Link>
       </h2>
       <p className="text-stone leading-relaxed mb-3">{post.description}</p>
-      <time className="text-xs text-stone" dateTime={post.date}>
-        {new Date(post.date).toLocaleDateString("en-GB", {
-          day: "numeric",
-          month: "long",
-          year: "numeric"
-        })}
-      </time>
+      <div className="flex items-center gap-4 text-xs text-stone">
+        <time dateTime={post.date}>
+          {new Date(post.date).toLocaleDateString("en-GB", {
+            day: "numeric",
+            month: "long",
+            year: "numeric"
+          })}
+        </time>
+        {post.readingTime && (
+          <span className="text-ochre">{post.readingTime} min read</span>
+        )}
+      </div>
     </article>
   );
 }
