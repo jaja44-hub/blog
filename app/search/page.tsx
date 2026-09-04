@@ -1,10 +1,17 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getAllPosts } from "@/lib/posts";
-import type { PostMeta } from "@/lib/posts";
 import Link from "next/link";
 import { categoryLabel } from "@/lib/posts";
+
+interface PostMeta {
+  title: string;
+  slug: string;
+  date: string;
+  category: string;
+  description: string;
+  readingTime?: number;
+}
 
 export default function SearchResults() {
   const [query, setQuery] = useState("");
@@ -12,16 +19,18 @@ export default function SearchResults() {
   const [isSearching, setIsSearching] = useState(false);
 
   useEffect(() => {
-    const allPosts = getAllPosts();
     if (query.trim().length >= 2) {
       setIsSearching(true);
-      const filtered = allPosts.filter((post) =>
-        post.title.toLowerCase().includes(query.toLowerCase()) ||
-        post.description.toLowerCase().includes(query.toLowerCase()) ||
-        post.category.toLowerCase().includes(query.toLowerCase())
-      );
-      setResults(filtered);
-      setIsSearching(false);
+      fetch(`/api/search?q=${encodeURIComponent(query)}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setResults(data.posts || []);
+          setIsSearching(false);
+        })
+        .catch(() => {
+          setResults([]);
+          setIsSearching(false);
+        });
     } else {
       setResults([]);
     }
@@ -65,13 +74,18 @@ export default function SearchResults() {
                     </Link>
                   </h2>
                   <p className="text-stone leading-relaxed mb-3">{post.description}</p>
-                  <time className="text-xs text-stone" dateTime={post.date}>
-                    {new Date(post.date).toLocaleDateString("en-GB", {
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric"
-                    })}
-                  </time>
+                  <div className="flex items-center gap-4 text-xs text-stone">
+                    <time dateTime={post.date}>
+                      {new Date(post.date).toLocaleDateString("en-GB", {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric"
+                      })}
+                    </time>
+                    {post.readingTime && (
+                      <span className="text-ochre">{post.readingTime} min read</span>
+                    )}
+                  </div>
                 </article>
               ))}
             </div>
