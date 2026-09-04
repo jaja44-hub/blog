@@ -1,0 +1,33 @@
+# Guide files - excluded from Vercel deployment but kept in GitHub for development records
+docs/
+PROJECT_HANDOFF_LOG.md
+blog_addiscrown_build_spec.md
+
+# Local development files
+.env.local
+.env.*.local
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# IDE/Editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test files
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+
+# Coverage
+coverage/
+.nyc_output/
