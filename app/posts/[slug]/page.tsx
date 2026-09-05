@@ -7,6 +7,7 @@ import Comments from "@/components/Comments";
 import PostRating from "@/components/PostRating";
 import Link from "next/link";
 import type { Metadata } from "next";
+import { generateStructuredData } from "@/lib/structured-data";
 
 export function generateStaticParams() {
   return getAllSlugs().map((slug) => ({ slug }));
@@ -37,8 +38,14 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
     .filter((p) => p.slug !== slug)
     .slice(0, 3);
 
+  const structuredData = generateStructuredData(post);
+
   return (
     <article className="mx-auto max-w-article px-6 py-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       <p className="text-xs text-ochre font-medium mb-3">
         {categoryLabel(post.category)}
       </p>

@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CookieConsent from "@/components/CookieConsent";
+import { generateWebSiteStructuredData } from "@/lib/structured-data";
 
 const newsreader = Newsreader({
   subsets: ["latin"],
@@ -32,8 +33,16 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const websiteStructuredData = generateWebSiteStructuredData();
+
   return (
     <html lang="en" className={`${newsreader.variable} ${publicSans.variable}`}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteStructuredData) }}
+        />
+      </head>
       <body className="font-body flex min-h-screen flex-col">
         <Header />
         <main className="flex-1">{children}</main>
