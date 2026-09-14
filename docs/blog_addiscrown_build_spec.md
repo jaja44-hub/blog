@@ -4,15 +4,15 @@
 
 ---
 
-## 1. Tech stack (deliberately minimal, no database)
+## 1. Tech stack (fast public site, database-native platform)
 
 - **Framework:** Next.js 15 (App Router) — best-in-class for SEO/AdSense page-speed signals, native Vercel support
 - **Styling:** Tailwind CSS — fast to theme, easy for me to iterate on branding with you
-- **Content:** Markdown files with frontmatter (no CMS, no database) — each post is one `.md` file in `/content/posts/`
+- **Content:** Markdown files with frontmatter for the current public corpus, expanding into a Neon/Postgres-backed editorial system for drafts, research, scheduling, publishing, and governance
 - **Deployment:** GitHub repo → Vercel (auto-deploy on push to `main`)
 - **Analytics:** Vercel Analytics (built-in, zero config) — start collecting traffic history now, useful evidence when you apply for AdSense later
 
-**Why no CMS/database:** keeps you at zero technical burden (you never log into an admin panel — you tell me what to publish, I commit it) while keeping the whole stack simple enough that nothing breaks silently. Upgradeable to a real CMS (Sanity/Contentlayer) later if you ever want to publish without me.
+**Database direction:** Neon/Postgres is an inherent part of the platform, not a later add-on. It will support editorial workflow, research planning, audience and user signals, advertiser records, publishing schedules, aggregate decision metrics, and recommendation systems. Markdown remains a reliable import/export and developer publishing path while the admin platform is built.
 
 ---
 
@@ -94,7 +94,7 @@ Once GitHub is connected, I'll read your **studio updates** repo's production br
 - Related-posts recommendations
 
 ### Phase 3 — Advanced: admin CMS, uploads, payments, analytics dashboard
-- **Database added** (Vercel Postgres or Supabase) — this is the real dividing line between "simple site" and "platform," and it's the point where an admin UI becomes possible at all
+- **Database-native platform** (Neon/Postgres) — the operational source of truth for editorial, research, user, advertiser, scheduling, and analytics data
 - **Authenticated admin panel** (login-gated to you only) with a drag-and-drop uploader supporting mixed formats (video, PDF, image, doc) attached to a single post — this is the local-file-upload capability you asked for
 - **Analytics dashboard** inside the admin panel — most-visited, best-rated, and trending posts, to guide what we cover next
 - **Paid downloads/products**, via **Stripe** (not an AdSense feature — a separate, standard integration) if you want to sell templates, guides, or documents directly

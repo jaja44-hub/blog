@@ -2,23 +2,6 @@ import { neon } from "@neondatabase/serverless";
 
 const sql = neon(process.env.DATABASE_URL!);
 
-export async function initRatingsTable() {
-  await sql`
-    CREATE TABLE IF NOT EXISTS post_ratings (
-      id SERIAL PRIMARY KEY,
-      post_slug VARCHAR(255) NOT NULL,
-      rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
-      user_identifier VARCHAR(255) NOT NULL,
-      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-      UNIQUE(post_slug, user_identifier)
-    );
-  `;
-  
-  await sql`
-    CREATE INDEX IF NOT EXISTS idx_post_ratings_post_slug ON post_ratings(post_slug);
-  `;
-}
-
 export async function getPostRating(postSlug: string) {
   const result = await sql`
     SELECT 

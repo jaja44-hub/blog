@@ -1,6 +1,7 @@
 import { getPostsByCategory, getAllCategories } from "@/lib/posts";
 import { categoryLabel } from "@/lib/categories";
 import PostCard from "@/components/PostCard";
+import { notFound } from "next/navigation";
 
 export function generateStaticParams() {
   return getAllCategories().map((category) => ({ category }));
@@ -12,6 +13,9 @@ export default async function CategoryPage({
   params: Promise<{ category: string }>;
 }) {
   const { category } = await params;
+  if (!getAllCategories().includes(category)) {
+    notFound();
+  }
   const posts = getPostsByCategory(category);
 
   return (

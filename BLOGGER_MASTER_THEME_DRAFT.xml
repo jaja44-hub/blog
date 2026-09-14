@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html b:css='false' b:defaultwidgetversion='2' b:layoutsVersion='3' b:responsive='true' b:templateUrl='indie' b:templateVersion='1.0.0' expr:dir='data:blog.languageDirection' expr:lang='data:blog.locale' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2005/gml/b' xmlns:data='http://www.google.com/2005/gml/data' xmlns:expr='http://www.google.com/2005/gml/expr'>
+<head>
+  <meta content='width=device-width, initial-scale=1' name='viewport'/>
+  <meta content='on' http-equiv='x-dns-prefetch-control'/>
+  <link href='//fonts.googleapis.com' rel='dns-prefetch'/>
+  <link href='//fonts.gstatic.com' rel='dns-prefetch'/>
+  <title><data:blog.pageTitle/></title>
+  <b:include data='blog' name='all-head-content'/>
+  <b:skin><![CDATA[
+    /* Addis Crown Blogger master theme draft v0.1 */
+    :root {
+      --ink: #14213d;
+      --parchment: #fbf9f4;
+      --parchment-deep: #f2eee3;
+      --teal: #2f6f5e;
+      --teal-deep: #234f43;
+      --ochre: #c08a2e;
+      --rose: #f4e8e2;
+      --stone: #6b6b63;
+      --line: #e4dfd3;
+      --display: Georgia, 'Times New Roman', serif;
+      --body: Arial, Helvetica, sans-serif;
+      --content: 1180px;
+      --reading: 720px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--parchment);
+      color: var(--ink);
+      font-family: var(--body);
+      line-height: 1.7;
+    }
+    a { color: var(--teal); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    a:hover { color: var(--teal-deep); }
+    img { max-width: 100%; height: auto; }
+    iframe, video, embed, object { max-width: 100%; }
+    table { display: block; max-width: 100%; overflow-x: auto; }
+    pre, code { max-width: 100%; overflow-x: auto; white-space: pre-wrap; overflow-wrap: anywhere; }
+    body, .ac-wrap, .ac-main, .ac-sidebar, .main, .post, .post-body { min-width: 0; overflow-wrap: anywhere; }
+    .ac-wrap { width: min(calc(100% - 32px), var(--content)); margin: 0 auto; }
+    .ac-skip { position: absolute; left: -9999px; }
+    .ac-skip:focus { left: 16px; top: 16px; z-index: 99; background: #fff; padding: 10px; }
+
+    .ac-topline { background: var(--ink); color: #fff; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+    .ac-topline .ac-wrap { display: flex; justify-content: space-between; gap: 16px; padding: 8px 0; }
+    .ac-topline a { color: #fff; }
+    .ac-header { border-bottom: 1px solid var(--line); background: var(--parchment); }
+    .ac-header-main { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 24px 0 18px; }
+    .ac-brand { color: var(--ink); font-family: var(--display); font-size: 32px; font-weight: 700; letter-spacing: -.02em; text-decoration: none; }
+    .ac-brand span { color: var(--ochre); }
+    .ac-tagline { margin: 2px 0 0; color: var(--stone); font-size: 13px; }
+    .ac-search { display: flex; gap: 8px; }
+    .ac-search input { width: 180px; border: 1px solid var(--line); border-radius: 3px; background: #fff; padding: 10px 12px; }
+    .ac-button { display: inline-block; border: 1px solid var(--teal); border-radius: 3px; background: var(--teal); color: #fff; padding: 9px 14px; font-size: 13px; font-weight: 700; text-decoration: none; }
+    .ac-button:hover { background: var(--teal-deep); color: #fff; }
+    .ac-nav { border-top: 1px solid var(--line); }
+    .ac-nav ul { display: flex; flex-wrap: wrap; gap: 0; list-style: none; margin: 0; padding: 0; }
+    .ac-nav li { margin: 0; }
+    .ac-nav a { display: block; padding: 13px 15px; color: var(--ink); font-size: 13px; font-weight: 700; text-decoration: none; }
+    .ac-nav a:hover { background: var(--parchment-deep); color: var(--teal); }
+    .ac-menu { display: none; border: 1px solid var(--line); background: transparent; color: var(--ink); padding: 9px 12px; }
+
+    .ac-ad { min-height: 78px; display: flex; align-items: center; justify-content: center; margin: 24px 0; border: 1px dashed var(--line); color: var(--stone); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
+    .ac-hero { margin: 30px 0; padding: 36px; background: var(--ink); color: var(--parchment); }
+    .ac-hero h1 { max-width: 720px; margin: 0 0 12px; font-family: var(--display); font-size: clamp(32px, 5vw, 60px); line-height: 1.05; }
+    .ac-hero p { max-width: 680px; margin: 0; color: rgba(251,249,244,.78); font-size: 17px; }
+    .ac-kicker { margin: 0 0 12px; color: var(--ochre); font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+
+    .ac-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 48px; align-items: start; }
+    .ac-main { min-width: 0; }
+    .ac-sidebar { min-width: 0; }
+    .ac-section-title { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin: 0 0 18px; border-bottom: 2px solid var(--ink); padding-bottom: 9px; font-family: var(--display); font-size: 27px; }
+    .ac-post { margin: 0 0 28px; border-bottom: 1px solid var(--line); padding-bottom: 28px; }
+    .ac-post h2 { margin: 5px 0 9px; font-family: var(--display); font-size: 29px; line-height: 1.15; }
+    .ac-post h2 a { color: var(--ink); text-decoration: none; }
+    .ac-post h2 a:hover { color: var(--teal); }
+    .ac-meta { color: var(--stone); font-size: 12px; }
+    .ac-label { color: var(--ochre); font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    .ac-excerpt { color: var(--stone); }
+    .ac-readmore { font-size: 13px; font-weight: 700; }
+
+    /* Native Blogger Blog1 widget styling */
+    .main .widget { margin: 0; }
+    .main .blog-posts { margin: 0; }
+    .main .date-header { margin: 0 0 8px; color: var(--ochre); font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    .main .post { display: flex; flex-direction: column; margin: 0 0 30px; border-bottom: 1px solid var(--line); padding: 0 0 30px; }
+    .main .post-header { order: 1; }
+    .main .post-body { order: 2; }
+    .main .post-footer, .main .post-share-buttons, .main .share-buttons { order: 3; }
+    .main .post-title, .main h3.post-title { margin: 0 0 10px; font-family: var(--display); font-size: 30px; line-height: 1.15; }
+    .main .post-title a { color: var(--ink); text-decoration: none; }
+    .main .post-title a:hover { color: var(--teal); }
+    .main .post-header, .main .post-timestamp, .main .post-header-line-1 { color: var(--stone); font-size: 12px; }
+    .main .post-body { max-width: var(--reading); color: var(--ink); font-size: 17px; line-height: 1.75; }
+    .main .post-body h2, .main .post-body h3 { font-family: var(--display); line-height: 1.2; }
+    .main .post-body blockquote { margin: 24px 0; border-left: 4px solid var(--ochre); background: var(--rose); padding: 16px 20px; color: var(--stone); }
+    .main .post-footer { margin-top: 18px; color: var(--stone); font-size: 12px; }
+    .main .post-labels a { color: var(--teal); font-weight: 700; }
+    .main .jump-link { margin-top: 16px; }
+    .main .jump-link a { display: inline-block; color: var(--teal); font-size: 13px; font-weight: 700; text-decoration: none; }
+    .main .jump-link a:hover { color: var(--teal-deep); }
+    .main .feed-links { margin: 20px 0; border-top: 1px solid var(--line); padding-top: 12px; color: var(--stone); font-size: 12px; }
+    .main .feed-links a { color: var(--teal); }
+    .main .blog-pager { display: flex; justify-content: space-between; gap: 12px; margin: 24px 0; border-top: 2px solid var(--ink); padding-top: 14px; font-size: 13px; font-weight: 700; }
+    .main .blog-pager a { color: var(--teal); text-decoration: none; }
+    .main .comments { margin-top: 32px; border-top: 1px solid var(--line); padding-top: 24px; }
+    .main .comments h4 { font-family: var(--display); font-size: 24px; }
+
+    /* Keep Blogger's native share controls compact and aligned with the article. */
+    .post-share-buttons, .share-buttons, .post-footer-line-3 { display: flex !important; width: 100%; max-width: 100%; flex-flow: row wrap; align-items: center; gap: 5px; overflow: hidden; margin: 16px 0 0; padding-top: 12px; border-top: 1px solid var(--line); }
+    .post-share-buttons a, .share-buttons a, .post-footer-line-3 a, .post-share-buttons .share-button, .share-buttons .share-button { display: inline-flex !important; width: auto !important; max-width: 44px !important; min-width: 0 !important; height: 32px !important; min-height: 32px !important; align-items: center; justify-content: center; margin: 0 !important; padding: 4px 7px !important; overflow: hidden; vertical-align: middle; }
+    .post-share-buttons img, .share-buttons img, .post-footer-line-3 img, .post-share-buttons svg, .share-buttons svg { display: block; width: 20px !important; height: 20px !important; max-width: 20px !important; max-height: 20px !important; }
+    .post-share-buttons .share-button-link-text, .share-buttons .share-button-link-text, .post-footer-line-3 .share-button-link-text { display: none !important; }
+    .post-body .share-buttons, .post-body .post-share-buttons { display: flex !important; width: 100% !important; height: auto !important; }
+
+    .ac-widget { margin: 0 0 26px; border-top: 3px solid var(--teal); background: var(--parchment-deep); padding: 18px; }
+    .ac-widget h2, .ac-widget h3 { margin: 0 0 12px; font-family: var(--display); font-size: 22px; }
+    .ac-widget ul { list-style: none; margin: 0; padding: 0; }
+    .ac-widget li { border-bottom: 1px solid var(--line); padding: 8px 0; }
+    .ac-widget li:last-child { border-bottom: 0; }
+    .ac-widget .widget-content { color: var(--stone); font-size: 14px; }
+    .ac-highlight { background: var(--rose); border-top-color: var(--ochre); }
+
+    .ac-footer { margin-top: 60px; background: var(--ink); color: var(--parchment); }
+    .ac-footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 32px; padding: 42px 0; }
+    .ac-footer h2 { margin: 0 0 10px; font-family: var(--display); }
+    .ac-footer p, .ac-footer li { color: rgba(251,249,244,.72); font-size: 13px; }
+    .ac-footer a { color: #fff; }
+    .ac-footer ul { list-style: none; margin: 0; padding: 0; }
+    .ac-footer li { margin: 6px 0; }
+    .ac-footer-bottom { border-top: 1px solid rgba(255,255,255,.18); padding: 15px 0; color: rgba(251,249,244,.58); font-size: 12px; }
+
+    .post-body { max-width: var(--reading); margin: 0 auto; font-size: 17px; }
+    .post-body h2, .post-body h3 { margin-top: 2em; font-family: var(--display); line-height: 1.2; }
+    .post-body blockquote { margin: 24px 0; border-left: 4px solid var(--ochre); background: var(--rose); padding: 16px 20px; color: var(--stone); }
+    .post-body img { margin: 20px 0; }
+    .post-body iframe { max-width: 100%; }
+    .post-body .separator { margin: 20px 0; }
+
+    @media (max-width: 800px) {
+      .ac-header-main { align-items: flex-start; }
+      .ac-tagline { max-width: 220px; }
+      .ac-search { display: none; }
+      .ac-menu { display: block; }
+      .ac-nav ul { display: none; }
+      .ac-nav.is-open ul { display: block; }
+      .ac-nav li { border-top: 1px solid var(--line); }
+      .ac-nav a { padding: 14px 0; }
+      .ac-layout { display: block; }
+      .ac-sidebar { margin-top: 36px; }
+      .ac-hero { padding: 28px 22px; }
+      .ac-footer-grid { grid-template-columns: 1fr; gap: 20px; }
+      .ac-topline .ac-wrap { display: block; }
+      .main .post-title, .main h3.post-title { font-size: 27px; }
+      .main .post-body { font-size: 16px; }
+      .main .post-body img, .main .post-body iframe, .main .post-body table { max-width: 100% !important; }
+      .post-share-buttons, .share-buttons { display: flex !important; flex-direction: row; flex-wrap: wrap; gap: 4px; }
+    }
+  ]]></b:skin>
+</head>
+<body>
+  <a class='ac-skip' href='#main-content'>Skip to content</a>
+  <div class='ac-topline'><div class='ac-wrap'><span>Law, rights, markets, technology and policy</span><a href='/p/about.html'>About Addis Crown</a></div></div>
+  <header class='ac-header'>
+    <div class='ac-wrap ac-header-main'>
+      <div><a class='ac-brand' expr:href='data:blog.homepageUrl'>Addis <span>Crown</span></a><p class='ac-tagline'>Practical context for a changing world.</p></div>
+      <form action='/search' class='ac-search' method='get'><input aria-label='Search' name='q' placeholder='Search the publication' type='search'/><button class='ac-button' type='submit'>Search</button></form>
+      <button aria-controls='primary-nav' aria-expanded='false' class='ac-menu' type='button'>Menu</button>
+    </div>
+    <nav class='ac-nav' id='primary-nav'><div class='ac-wrap'><ul>
+      <li><a expr:href='data:blog.homepageUrl'>Home</a></li>
+      <li><a href='/search?sort=newest'>Latest</a></li>
+      <li><a href='/search?label=Weekly+Brief'>Weekly Brief</a></li>
+      <li><a href='/search?label=Law+%26+Rights'>Law &amp; Rights</a></li>
+      <li><a href='/search?label=Markets+%26+Investment'>Markets &amp; Investment</a></li>
+      <li><a href='/search?label=Technology+%26+AI'>Technology &amp; AI</a></li>
+      <li><a href='/search?label=Migration+%26+Borders'>Migration &amp; Borders</a></li>
+      <li><a href='/search?label=Global+Affairs'>Global Affairs</a></li>
+      <li><a href='/p/about.html'>About</a></li>
+    </ul></div></nav>
+  </header>
+
+  <main class='ac-wrap' id='main-content'>
+    <b:if cond='data:blog.url == data:blog.homepageUrl'>
+      <section class='ac-hero'><p class='ac-kicker'>Addis Crown</p><h1>Understand the forces shaping decisions, rights and opportunity.</h1><p>Source-aware analysis across law, markets, technology, migration and public policy.</p></section>
+    <b:else/>
+      <div class='ac-ad'>Advertisement / reserved placement</div>
+    </b:if>
+
+    <div class='ac-layout'>
+      <section class='ac-main'>
+        <div class='ac-ad'>Advertisement / reserved placement</div>
+        <b:section class='main' id='main' showaddelement='yes'>
+          <b:widget id='Blog1' locked='true' title='Latest from Addis Crown' type='Blog' version='2' visible='true'/>
+        </b:section>
+        <div class='ac-ad'>Advertisement / reserved placement</div>
+      </section>
+
+      <aside class='ac-sidebar'>
+        <b:section class='sidebar' id='sidebar' showaddelement='yes'>
+          <b:widget id='HTML1' locked='false' title='Start here' type='HTML' version='2' visible='true'><b:includable id='main'><div class='ac-widget ac-highlight'><h3><data:title/></h3><div class='widget-content'><p>Begin with the latest analysis, then explore a topic or series.</p><p><a href='/p/about.html'>Read our editorial approach →</a></p></div></div></b:includable></b:widget>
+          <b:widget id='Label1' locked='false' title='Explore topics' type='Label' version='2' visible='true'/>
+          <b:widget id='PopularPosts1' locked='false' title='Popular reading' type='PopularPosts' version='2' visible='true'/>
+          <b:widget id='BlogArchive1' locked='false' title='Archive' type='BlogArchive' version='2' visible='true'/>
+          <b:widget id='HTML2' locked='false' title='Weekly Brief' type='HTML' version='2' visible='true'><b:includable id='main'><div class='ac-widget'><h3><data:title/></h3><div class='widget-content'><p>Short updates on law, markets, policy and technology.</p><a href='/search?label=Weekly+Brief'>Browse the brief →</a></div></div></b:includable></b:widget>
+          <b:widget id='HTML3' locked='false' title='Subscribe' type='HTML' version='2' visible='true'><b:includable id='main'><div class='ac-widget'><h3><data:title/></h3><div class='widget-content'><p>Follow new explainers and practical guides.</p><a class='ac-button' href='/p/contact.html'>Request updates</a></div></div></b:includable></b:widget>
+          <b:widget id='HTML4' locked='false' title='Advertisement' type='HTML' version='2' visible='true'><b:includable id='main'><div class='ac-widget'><h3><data:title/></h3><div class='widget-content'>Reserved ad placement</div></div></b:includable></b:widget>
+        </b:section>
+      </aside>
+    </div>
+  </main>
+
+  <footer class='ac-footer'><div class='ac-wrap ac-footer-grid'><div><h2>Addis Crown</h2><p>Practical, source-aware interpretation of the rules, risks, and changes shaping our world.</p></div><div><h2>Explore</h2><ul><li><a href='/search?label=Weekly+Brief'>Weekly Brief</a></li><li><a href='/search?label=Practical+Guide'>Practical Guides</a></li><li><a href='/p/about.html'>About</a></li></ul></div><div><h2>Trust</h2><ul><li><a href='/p/privacy-policy.html'>Privacy</a></li><li><a href='/p/contact.html'>Contact</a></li><li><a href='/p/editorial-standards.html'>Editorial standards</a></li></ul></div></div><div class='ac-wrap ac-footer-bottom'>© Addis Crown. Informational content; verify important matters with qualified professionals.</div></footer>
+  <script type='text/javascript'>
+    //<![CDATA[
+    (function(){var button=document.querySelector('.ac-menu'),nav=document.querySelector('.ac-nav');if(button&&nav){button.addEventListener('click',function(){var open=nav.classList.toggle('is-open');button.setAttribute('aria-expanded',open?'true':'false');});}}());
+    //]]>
+  </script>
+</body>
+</html>
