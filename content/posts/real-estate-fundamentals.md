@@ -2,7 +2,7 @@
 title: "Real Estate & Housing – A Plain-Language Guide for Buyers, Renters, and Investors in Ethiopia"
 slug: "real-estate-fundamentals"
 date: "2026-09-10"
-category: "real-estate-housing"
+category: "real-estate-fundamentals"
 description: "Key considerations for property transactions, rights, and responsibilities in the Ethiopian context."
 draft: false
 ---

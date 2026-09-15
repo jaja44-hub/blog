@@ -2,7 +2,7 @@
 title: "Markets & Investment – How Ethiopian Markets Work and How to Participate"
 slug: "markets-and-investment"
 date: "2026-09-10"
-category: "markets-investment"
+category: "markets-and-investment"
 description: "A plain-language guide to how Ethiopian markets function and investment opportunities available to ordinary citizens."
 draft: false
 ---

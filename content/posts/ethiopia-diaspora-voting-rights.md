@@ -2,7 +2,7 @@
 title: "Migration & Borders – Understanding Ethiopia's Diaspora Voting Rights"
 slug: "ethiopia-diaspora-voting-rights"
 date: "2026-09-10"
-category: "migration-borders"
+category: "ethiopia-east-africa"
 description: "A plain-language overview of what voting rights Ethiopian diaspora members currently hold, and what reforms are under discussion."
 draft: false
 ---

@@ -2,7 +2,7 @@
 title: "Business & Enterprise – How Ethiopian SMEs Can Scale Responsibly"
 slug: "business-enterprise-fundamentals"
 date: "2026-09-10"
-category: "business-enterprise"
+category: "business-enterprise-fundamentals"
 description: "Key considerations for Ethiopian small and medium enterprises seeking sustainable growth."
 draft: false
 ---

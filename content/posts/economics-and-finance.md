@@ -2,7 +2,7 @@
 title: "Economics & Finance – Plain Language Guide to Key Economic Concepts and Personal Finance in Ethiopia"
 slug: "economics-and-finance"
 date: "2026-09-10"
-category: "economics-finance"
+category: "economics-and-finance"
 description: "Essential economic and financial concepts explained for everyday Ethiopians."
 draft: false
 ---

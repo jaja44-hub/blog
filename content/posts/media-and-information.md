@@ -2,7 +2,7 @@
 title: "Media & Information – How News Works, Fact-Checking, and Your Role as an Informed Citizen in Ethiopia"
 slug: "media-and-information"
 date: "2026-09-10"
-category: "media-information"
+category: "media-and-information"
 description: "A plain-language guide to understanding media, information sources, and fact-checking in the Ethiopian context."
 draft: false
 ---

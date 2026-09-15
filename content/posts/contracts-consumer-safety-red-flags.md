@@ -2,7 +2,7 @@
 title: "Contracts & Consumer Safety – 5 Red Flags to Spot Before Signing"
 slug: "contracts-consumer-safety-red-flags"
 date: "2026-09-10"
-category: "contracts-consumer-safety"
+category: "contracts-and-consumer-safety"
 description: "Five warning signs in consumer contracts that could cost you dearly, and how to protect your rights."
 draft: false
 ---

@@ -40,6 +40,36 @@ const nextConfig = {
         destination: '/privacy-policy',
         permanent: true,
       },
+      {
+        source: '/category/media-information',
+        destination: '/category/media-and-information',
+        permanent: true,
+      },
+      {
+        source: '/category/markets-investment',
+        destination: '/category/markets-and-investment',
+        permanent: true,
+      },
+      {
+        source: '/category/economics-finance',
+        destination: '/category/economics-and-finance',
+        permanent: true,
+      },
+      {
+        source: '/category/business-enterprise',
+        destination: '/category/business-enterprise-fundamentals',
+        permanent: true,
+      },
+      {
+        source: '/category/real-estate-housing',
+        destination: '/category/real-estate-fundamentals',
+        permanent: true,
+      },
+      {
+        source: '/category/contracts-consumer-safety',
+        destination: '/category/contracts-and-consumer-safety',
+        permanent: true,
+      },
     ];
   },
 };
