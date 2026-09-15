@@ -13,12 +13,12 @@ export default function HomePage() {
     <div className="bg-parchment min-h-screen overflow-x-hidden">
       <main>
         <section className="bg-ink border-b border-line">
-          <div className="mx-auto max-w-7xl px-3 md:px-5 py-2 md:py-3 lg:py-4">
+          <div className="mx-auto max-w-7xl px-4 md:px-6 py-5 md:py-4 lg:py-6">
             <div className="max-w-4xl">
               <p className="text-[10px] md:text-xs lg:text-sm text-ochre font-semibold uppercase tracking-widest mb-1 md:mb-1.5">
                 Source-aware blogging for real decisions
               </p>
-              <h1 className="font-display text-[30px] md:text-[34px] lg:text-[40px] xl:text-[48px] font-bold italic text-parchment leading-[1.08] md:leading-[1.08] lg:leading-[1.05] mb-2 md:mb-1.5 lg:mb-2">
+              <h1 className="font-display text-[28px] md:text-[34px] lg:text-[40px] xl:text-[48px] font-bold italic text-parchment leading-[1.05] md:leading-[1.08] lg:leading-[1.05] mb-2 md:mb-1.5 lg:mb-2">
                 Understand the forces shaping decisions, rights, and opportunity.
               </h1>
               <p className="text-parchment/90 text-sm md:text-sm lg:text-base leading-relaxed mb-3 md:mb-2.5 lg:mb-3 max-w-2xl">

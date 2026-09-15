@@ -74,7 +74,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
           <div className="max-w-4xl">
             <p className="mb-0.5 md:mb-1 text-[8px] md:text-xs lg:text-sm font-semibold uppercase tracking-widest text-ochre">{categoryLabel(post.category)}</p>
-            <h1 className="max-w-3xl font-display text-[24px] md:text-[32px] lg:text-[40px] xl:text-[48px] font-semibold leading-[1.05] md:leading-tight lg:leading-tight text-parchment">{post.title}</h1>
+            <h1 className="max-w-3xl font-display text-[28px] md:text-[32px] lg:text-[40px] xl:text-[48px] font-semibold leading-[1.05] md:leading-tight lg:leading-tight text-parchment">{post.title}</h1>
             <p className="mt-0.5 md:mt-1 lg:mt-2 text-parchment/90 text-[12px] md:text-sm lg:text-base leading-[1.3] md:leading-relaxed lg:leading-relaxed max-w-2xl">{post.description}</p>
             <div className="mt-1 md:mt-2 lg:mt-3 flex flex-wrap items-center gap-1.5 md:gap-2 lg:gap-3 text-[9px] md:text-xs lg:text-sm text-parchment/80">
               <time dateTime={post.date}>{new Date(post.date).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}</time>
