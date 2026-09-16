@@ -163,28 +163,37 @@ export async function updateContentOpportunityStatus(
 }
 
 export async function getAnalyticsSummary() {
-  const regional = await sql`
-    SELECT country_code, SUM(view_count) as total_views, AVG(engagement_rate) as avg_engagement
-    FROM regional_analytics
-    GROUP BY country_code
-    ORDER BY total_views DESC
-    LIMIT 10
-  `;
+  try {
+    const regional = await sql`
+      SELECT country_code, SUM(view_count) as total_views, AVG(engagement_rate) as avg_engagement
+      FROM regional_analytics
+      GROUP BY country_code
+      ORDER BY total_views DESC
+      LIMIT 10
+    `;
 
-  const content = await sql`
-    SELECT COUNT(*) as total_posts, AVG(performance_score) as avg_performance
-    FROM content_performance
-  `;
+    const content = await sql`
+      SELECT COUNT(*) as total_posts, AVG(performance_score) as avg_performance
+      FROM content_performance
+    `;
 
-  const opportunities = await sql`
-    SELECT status, COUNT(*) as count
-    FROM content_opportunities
-    GROUP BY status
-  `;
+    const opportunities = await sql`
+      SELECT status, COUNT(*) as count
+      FROM content_opportunities
+      GROUP BY status
+    `;
 
-  return {
-    regional_analytics: regional,
-    content_performance: content[0],
-    content_opportunities: opportunities
-  };
+    return {
+      regional_analytics: regional,
+      content_performance: content[0] || { total_posts: 0, avg_performance: null },
+      content_opportunities: opportunities
+    };
+  } catch (error) {
+    console.error("Error fetching analytics summary:", error);
+    return {
+      regional_analytics: [],
+      content_performance: { total_posts: 0, avg_performance: null },
+      content_opportunities: []
+    };
+  }
 }
