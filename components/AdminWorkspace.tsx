@@ -43,6 +43,19 @@ type ContentOpportunity = {
   status: string;
 };
 
+type KnowledgeSource = {
+  id: string;
+  title: string | null;
+  url: string | null;
+  source_type: string | null;
+  credibility_score: number | null;
+  link_health: string | null;
+  publisher: string | null;
+  jurisdiction: string | null;
+  content_type: string | null;
+  usage_count: number | null;
+};
+
 export default function AdminWorkspace() {
   const [message, setMessage] = useState("");
   const [drafts, setDrafts] = useState<Draft[]>([]);
@@ -53,6 +66,8 @@ export default function AdminWorkspace() {
   const [opportunities, setOpportunities] = useState<ContentOpportunity[]>([]);
   const [showAnalytics, setShowAnalytics] = useState(false);
   const [analyticsData, setAnalyticsData] = useState<any>(null);
+  const [sources, setSources] = useState<KnowledgeSource[]>([]);
+  const [showSources, setShowSources] = useState(false);
 
   async function loadDrafts() {
     const response = await fetch("/api/admin/drafts");
@@ -115,6 +130,44 @@ export default function AdminWorkspace() {
     if (response.ok) {
       event.currentTarget.reset();
       await loadOpportunities();
+    }
+  }
+
+  async function loadSources() {
+    const response = await fetch("/api/admin/knowledge-sources");
+    const result = await response.json();
+    if (response.ok) {
+      setSources(result.sources ?? []);
+      setShowSources(true);
+    } else {
+      setMessage(result.error ?? "Could not load knowledge sources.");
+    }
+  }
+
+  async function createSource(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const response = await fetch("/api/admin/knowledge-sources", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(Object.fromEntries(form.entries()))
+    });
+    const result = await response.json();
+    setMessage(response.ok ? `Knowledge source created: ${result.source.title}` : result.error ?? "Knowledge source could not be created.");
+    if (response.ok) {
+      event.currentTarget.reset();
+      await loadSources();
+    }
+  }
+
+  async function deleteSource(sourceId: string) {
+    const response = await fetch(`/api/admin/knowledge-sources/${sourceId}`, {
+      method: "DELETE"
+    });
+    const result = await response.json();
+    setMessage(response.ok ? "Knowledge source deleted." : result.error ?? "Knowledge source could not be deleted.");
+    if (response.ok) {
+      await loadSources();
     }
   }
 
@@ -214,6 +267,7 @@ export default function AdminWorkspace() {
           <button type="button" onClick={loadBriefs} className="rounded-md border border-line px-4 py-2 text-sm text-teal hover:border-teal">Load research</button>
           <button type="button" onClick={loadAnalytics} className="rounded-md border border-line px-4 py-2 text-sm text-teal hover:border-teal">Analytics</button>
           <button type="button" onClick={loadOpportunities} className="rounded-md border border-line px-4 py-2 text-sm text-teal hover:border-teal">Content opportunities</button>
+          <button type="button" onClick={loadSources} className="rounded-md border border-line px-4 py-2 text-sm text-teal hover:border-teal">Knowledge sources</button>
         </div>
       </div>
       {drafts.length > 0 && (
@@ -399,6 +453,56 @@ export default function AdminWorkspace() {
           <button type="submit" className="rounded-md bg-teal px-4 py-3 text-sm font-medium text-white hover:bg-tealDeep">Create opportunity</button>
         </form>
       </section>
+      {showSources && (
+        <section className="mt-12 max-w-2xl border-t border-line pt-8">
+          <div className="flex items-center justify-between">
+            <h2 className="mb-5 font-display text-2xl font-semibold text-ink">Knowledge sources library</h2>
+            <button type="button" onClick={() => setShowSources(false)} className="text-sm text-teal underline underline-offset-2">Close</button>
+          </div>
+          {sources.length > 0 && (
+            <div className="mb-6 space-y-3">
+              {sources.map((source) => (
+                <div key={source.id} className="border border-line p-4">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <p className="text-xs uppercase tracking-wide text-ochre">Credibility {source.credibility_score ? source.credibility_score.toFixed(1) : 'N/A'} · {source.source_type || 'General'}</p>
+                      <p className="mt-1 font-display text-lg font-semibold text-ink">{source.title || 'Untitled'}</p>
+                      {source.url && (
+                        <a href={source.url} target="_blank" rel="noopener noreferrer" className="mt-1 block text-sm text-teal underline underline-offset-2">{source.url}</a>
+                      )}
+                      <div className="mt-2 flex gap-4 text-sm text-stone">
+                        <span>Publisher: {source.publisher || 'N/A'}</span>
+                        <span>Jurisdiction: {source.jurisdiction || 'N/A'}</span>
+                        <span>Usage: {source.usage_count || 0}</span>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => deleteSource(source.id)}
+                      className="ml-4 text-sm text-red-600 underline underline-offset-2"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+          <form onSubmit={createSource} className="space-y-4">
+            <input name="title" required placeholder="Source title" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+            <input name="url" required placeholder="Source URL" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+            <div className="grid gap-4 sm:grid-cols-2">
+              <input name="source_type" placeholder="Source type (e.g., academic, legal, official)" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+              <input name="publisher" placeholder="Publisher (e.g., court, government)" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <input name="jurisdiction" placeholder="Jurisdiction (e.g., Ethiopia, East Africa)" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+              <input name="content_type" placeholder="Content type (e.g., law, regulation, case)" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+            </div>
+            <button type="submit" className="rounded-md bg-teal px-4 py-3 text-sm font-medium text-white hover:bg-tealDeep">Add source</button>
+          </form>
+        </section>
+      )}
       {message && <p className="mt-4 text-sm text-stone" role="status">{message}</p>}
     </section>
   );
