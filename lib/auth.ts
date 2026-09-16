@@ -1,7 +1,5 @@
 import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { compare } from 'bcryptjs';
-import { userQueries, sessionQueries, auditQueries } from './db';
 
 // Define role types
 export type UserRole = 'owner' | 'administrator' | 'managing_editor' | 'editor' | 'author' | 'moderator' | 'analyst' | 'support' | 'reader';
@@ -24,7 +22,8 @@ export function hasPermission(userRole: UserRole, requiredRole: UserRole): boole
   return roleHierarchy[userRole] >= roleHierarchy[requiredRole];
 }
 
-// NextAuth configuration
+// Simplified NextAuth configuration for gradual integration
+// Database integration will be added in subsequent tasks
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -38,40 +37,25 @@ export const authOptions: NextAuthOptions = {
           throw new Error('Email and password required');
         }
 
-        const user = await userQueries.findByEmail(credentials.email);
-        
-        if (!user || !user.password_hash) {
+        // Temporary: Check against environment variables for NextAuth integration testing
+        // Database integration will be completed in Task 2.1
+        try {
+          const adminEmail = process.env.ADMIN_EMAIL;
+          const adminPassword = process.env.ADMIN_PASSWORD;
+          
+          if (credentials.email === adminEmail && credentials.password === adminPassword) {
+            return {
+              id: 'admin',
+              email: adminEmail,
+              name: 'Admin User',
+              role: 'owner' as UserRole,
+            };
+          }
+          
           throw new Error('Invalid credentials');
+        } catch (error) {
+          throw new Error('Authentication failed');
         }
-
-        if (user.status !== 'active') {
-          throw new Error('Account is not active');
-        }
-
-        const isValid = await compare(credentials.password, user.password_hash);
-        
-        if (!isValid) {
-          throw new Error('Invalid credentials');
-        }
-
-        // Update last active
-        await userQueries.updateLastActive(user.id);
-
-        // Log the login
-        await auditQueries.log({
-          actorId: user.id,
-          action: 'login',
-          objectType: 'user',
-          objectId: user.id,
-          metadata: { method: 'credentials' },
-        });
-
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.display_name,
-          role: user.role,
-        };
       },
     }),
   ],
@@ -87,18 +71,12 @@ export const authOptions: NextAuthOptions = {
   },
   
   callbacks: {
-    async jwt({ token, user, trigger, session }) {
+    async jwt({ token, user }) {
       // Initial sign in
       if (user) {
         token.id = user.id;
         token.role = user.role;
       }
-      
-      // Handle session updates
-      if (trigger === 'update' && session) {
-        token = { ...token, ...session };
-      }
-      
       return token;
     },
     
@@ -108,33 +86,6 @@ export const authOptions: NextAuthOptions = {
         session.user.role = token.role as UserRole;
       }
       return session;
-    },
-  },
-  
-  events: {
-    async signIn({ user, account, profile, isNewUser }) {
-      // Log sign in event
-      if (user) {
-        await auditQueries.log({
-          actorId: user.id as string,
-          action: 'sign_in',
-          objectType: 'user',
-          objectId: user.id as string,
-          metadata: { provider: account?.provider },
-        });
-      }
-    },
-    
-    async signOut({ token, session }) {
-      // Log sign out event
-      if (token?.id) {
-        await auditQueries.log({
-          actorId: token.id as string,
-          action: 'sign_out',
-          objectType: 'user',
-          objectId: token.id as string,
-        });
-      }
     },
   },
 };

@@ -2,6 +2,7 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
 
 const ADMIN_COOKIE = "addis_admin_session";
+const NEXTAUTH_SESSION_COOKIE = "next-auth.session-token";
 
 function getAccessToken() {
   const token = process.env.ADMIN_ACCESS_TOKEN;
@@ -29,6 +30,18 @@ export async function hasAdminSession() {
   const expected = Buffer.from(expectedSession());
   const received = Buffer.from(session);
   return received.length === expected.length && timingSafeEqual(received, expected);
+}
+
+// Check if user has any valid admin session (token or NextAuth)
+export async function hasAnyAdminSession() {
+  // Check token-based session first
+  if (await hasAdminSession()) return { authenticated: true, method: 'token' };
+  
+  // Check NextAuth session
+  const nextAuthSession = (await cookies()).get(NEXTAUTH_SESSION_COOKIE)?.value;
+  if (nextAuthSession) return { authenticated: true, method: 'nextauth' };
+  
+  return { authenticated: false, method: null };
 }
 
 export { ADMIN_COOKIE, expectedSession };

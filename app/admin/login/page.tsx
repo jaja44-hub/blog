@@ -1,9 +1,10 @@
 import { redirect } from "next/navigation";
-import { hasAdminSession } from "@/lib/admin-auth";
+import { hasAnyAdminSession } from "@/lib/admin-auth";
 import AdminLoginForm from "@/components/AdminLoginForm";
 
 export default async function AdminLoginPage() {
-  if (await hasAdminSession()) redirect("/admin");
+  const authStatus = await hasAnyAdminSession();
+  if (authStatus.authenticated) redirect("/admin");
 
   return (
     <main className="mx-auto max-w-md px-6 py-16">
