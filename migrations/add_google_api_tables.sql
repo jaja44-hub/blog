@@ -275,12 +275,12 @@ CREATE TABLE IF NOT EXISTS research_briefs (
 -- Add missing post revisions table if it doesn't exist
 CREATE TABLE IF NOT EXISTS post_revisions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  post_id UUID REFERENCES posts(id),
-  revision_number INTEGER NOT NULL,
-  title VARCHAR(500),
-  description TEXT,
-  body_markdown TEXT,
-  changed_by UUID REFERENCES users(id),
+  post_id UUID REFERENCES posts(id) ON DELETE CASCADE,
+  version INTEGER NOT NULL,
+  body_snapshot TEXT NOT NULL,
+  title_snapshot VARCHAR(500),
+  editor_id UUID REFERENCES users(id),
+  change_note TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 

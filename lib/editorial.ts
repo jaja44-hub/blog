@@ -115,27 +115,27 @@ export async function updateEditorialPost(
   if (!post) return null;
 
   const revisionRows = (await sql`
-    SELECT COALESCE(MAX(revision_number), 0) + 1 AS revision_number
+    SELECT COALESCE(MAX(version), 0) + 1 AS next_version
     FROM post_revisions
     WHERE post_id = ${postId}::uuid
-  `) as Array<{ revision_number: number }>;
+  `) as Array<{ next_version: number }>;
 
   await sql`
     INSERT INTO post_revisions (
       post_id,
-      revision_number,
-      title,
-      description,
-      body_markdown,
-      changed_by
+      version,
+      body_snapshot,
+      title_snapshot,
+      editor_id,
+      change_note
     )
     VALUES (
       ${postId}::uuid,
-      ${revisionRows[0].revision_number},
-      ${post.title},
-      ${post.description},
+      ${revisionRows[0].next_version},
       ${post.body_markdown},
-      ${input.actorId ?? null}::uuid
+      ${post.title},
+      ${input.actorId ?? null}::uuid,
+      'Editorial update'
     )
   `;
 
@@ -218,6 +218,26 @@ export type ResearchBrief = {
   created_at: string;
   updated_at: string;
 };
+
+export type PostRevision = {
+  id: string;
+  post_id: string;
+  version: number;
+  body_snapshot: string;
+  title_snapshot: string | null;
+  editor_id: string | null;
+  change_note: string | null;
+  created_at: string;
+};
+
+export async function getPostRevisions(postId: string) {
+  return (await sql`
+    SELECT id, post_id, version, body_snapshot, title_snapshot, editor_id, change_note, created_at
+    FROM post_revisions
+    WHERE post_id = ${postId}::uuid
+    ORDER BY version DESC
+  `) as PostRevision[];
+}
 
 export async function listResearchBriefs() {
   return (await sql`

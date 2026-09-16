@@ -21,11 +21,24 @@ type ResearchBrief = {
   status: string;
 };
 
+type PostRevision = {
+  id: string;
+  post_id: string;
+  version: number;
+  body_snapshot: string;
+  title_snapshot: string | null;
+  editor_id: string | null;
+  change_note: string | null;
+  created_at: string;
+};
+
 export default function AdminWorkspace() {
   const [message, setMessage] = useState("");
   const [drafts, setDrafts] = useState<Draft[]>([]);
   const [selectedDraft, setSelectedDraft] = useState<Draft | null>(null);
   const [briefs, setBriefs] = useState<ResearchBrief[]>([]);
+  const [revisions, setRevisions] = useState<PostRevision[]>([]);
+  const [showRevisions, setShowRevisions] = useState(false);
 
   async function loadDrafts() {
     const response = await fetch("/api/admin/drafts");
@@ -41,6 +54,17 @@ export default function AdminWorkspace() {
     const response = await fetch("/api/admin/research");
     const result = await response.json();
     if (response.ok) setBriefs(result.briefs ?? []);
+  }
+
+  async function loadRevisions(draftId: string) {
+    const response = await fetch(`/api/admin/drafts/${draftId}/revisions`);
+    const result = await response.json();
+    if (response.ok) {
+      setRevisions(result.revisions ?? []);
+      setShowRevisions(true);
+    } else {
+      setMessage(result.error ?? "Could not load revision history.");
+    }
   }
 
   async function createDraft(event: React.FormEvent<HTMLFormElement>) {
@@ -169,8 +193,33 @@ export default function AdminWorkspace() {
               const scheduledFor = window.prompt("Enter a future ISO time, e.g. 2026-12-01T09:00:00Z");
               if (scheduledFor) fetch(`/api/admin/drafts/${selectedDraft.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ scheduledFor }) }).then(() => loadDrafts());
             }} className="rounded-md border border-line px-4 py-3 text-sm text-teal hover:border-teal">Schedule</button>}
+            <button type="button" onClick={() => loadRevisions(selectedDraft.id)} className="rounded-md border border-line px-4 py-3 text-sm text-teal hover:border-teal">View revisions</button>
           </div>
         </form>
+      )}
+      {showRevisions && selectedDraft && (
+        <div className="mb-12 max-w-2xl space-y-4 border-y border-line py-8">
+          <div className="flex items-center justify-between">
+            <h2 className="font-display text-2xl font-semibold text-ink">Revision history</h2>
+            <button type="button" onClick={() => setShowRevisions(false)} className="text-sm text-teal underline underline-offset-2">Close</button>
+          </div>
+          {revisions.length > 0 ? (
+            <div className="space-y-3">
+              {revisions.map((revision) => (
+                <div key={revision.id} className="border border-line p-4">
+                  <p className="text-xs uppercase tracking-wide text-ochre">Version {revision.version} · {new Date(revision.created_at).toLocaleString()}</p>
+                  <p className="mt-1 font-display text-lg font-semibold text-ink">{revision.title_snapshot || "Untitled"}</p>
+                  {revision.change_note && <p className="mt-1 text-sm text-stone">{revision.change_note}</p>}
+                  <div className="mt-2 max-h-40 overflow-y-auto rounded-md bg-parchment p-3 text-sm text-stone">
+                    <pre className="whitespace-pre-wrap">{revision.body_snapshot.substring(0, 500)}{revision.body_snapshot.length > 500 ? "..." : ""}</pre>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm text-stone">No revision history available.</p>
+          )}
+        </div>
       )}
       <div className="max-w-2xl">
       <h2 className="mb-5 font-display text-2xl font-semibold text-ink">New draft</h2>

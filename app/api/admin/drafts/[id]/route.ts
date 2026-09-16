@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { hasAdminSession } from "@/lib/admin-auth";
-import { getEditorialPostBySlug, scheduleEditorialPost, updateEditorialPost, updateEditorialPostStatus } from "@/lib/editorial";
+import { getEditorialPostBySlug, scheduleEditorialPost, updateEditorialPost, updateEditorialPostStatus, getPostRevisions } from "@/lib/editorial";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
