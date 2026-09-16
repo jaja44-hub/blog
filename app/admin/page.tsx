@@ -1,10 +1,9 @@
 import { redirect } from "next/navigation";
-import { hasAnyAdminSession } from "@/lib/admin-auth";
+import { hasAdminSession } from "@/lib/admin-auth";
 import AdminWorkspace from "@/components/AdminWorkspace";
 
 export default async function AdminPage() {
-  const authStatus = await hasAnyAdminSession();
-  if (!authStatus.authenticated) redirect("/admin/login");
+  if (!(await hasAdminSession())) redirect("/admin/login");
 
   return (
     <main className="mx-auto max-w-5xl px-6 py-12">
