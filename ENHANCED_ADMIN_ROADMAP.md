@@ -1,9 +1,11 @@
 # Addis Crown Enhanced Admin System Roadmap
 
-**Version**: 2.0  
+**Version**: 3.0 (Integrated with Google API Research)  
 **Date**: 2026-09-16  
 **Status**: Integration Phase - Option A Implementation  
-**Previous Documentation**: Database Platform Plan, Backend Roadmap, Blueprint
+**Previous Documentation**: Database Platform Plan, Backend Roadmap, Blueprint  
+**Google API Research**: GOOGLE_API_INTEGRATION_RESEARCH.md  
+**Cloud Strategy**: Option A - Reuse Existing Google Cloud Project from Legal App
 
 ---
 
@@ -306,11 +308,71 @@ CREATE TABLE editorial_calendar (
 
 ---
 
-## Phase 4: Google Ads Integration
+## Phase 4: Google API Integration (Consolidated)
 
-### 4.1 Google Ads Campaign Management
+### 4.1 Google Cloud Strategy: Option A - Reuse Existing Project
 
-#### 4.1.1 Campaign Database
+**Decision**: Reuse existing Google Cloud project from legal app
+**Rationale**: Unified credential management, cost efficiency, domain synergy, administrative simplicity
+**Implementation**: Extend existing project with blog-specific configurations
+
+**Placeholders for Future Credentials**:
+```typescript
+// Google Cloud Project Configuration (TO BE PROVIDED)
+const GOOGLE_CLOUD_CONFIG = {
+  projectId: process.env.GOOGLE_CLOUD_PROJECT_ID, // From legal app
+  oauthClientId: process.env.GOOGLE_OAUTH_CLIENT_ID, // From legal app
+  oauthClientSecret: process.env.GOOGLE_OAUTH_CLIENT_SECRET, // From legal app
+  developerToken: process.env.GOOGLE_ADS_DEVELOPER_TOKEN, // To be provided
+  refreshToken: process.env.GOOGLE_REFRESH_TOKEN, // To be provided
+  customerId: process.env.GOOGLE_ADS_CUSTOMER_ID, // To be provided
+};
+```
+
+### 4.2 Google Ads Integration
+
+#### 4.2.1 Technical Setup
+- **SDK Choice**: google-ads-kit (REST-based, works with Next.js/Vercel)
+- **Authentication**: OAuth 2.0 with existing legal app credentials
+- **Developer Token**: To be provided when available
+- **Budget**: $500 free credit allocation
+
+#### 4.2.2 Integration Scope
+- Campaign management dashboard
+- Geographic targeting system
+- Performance reporting and analytics
+- Automated recommendations implementation
+- Budget optimization and forecasting
+
+### 4.3 AdSense Integration
+
+#### 4.3.1 Technical Setup
+- **API**: AdSense Management API v2
+- **Authentication**: OAuth 2.0 (user-based, no service accounts)
+- **Challenge**: Requires manual OAuth setup
+- **Solution**: Token refresh mechanism with caching
+
+#### 4.3.2 Integration Scope
+- Revenue tracking dashboard
+- Ad unit performance monitoring
+- Geographic revenue analysis
+- Placement optimization recommendations
+- RPM and CTR metrics tracking
+
+### 4.4 Search Console Integration
+
+#### 4.4.1 Technical Setup
+- **API**: Search Console API v1
+- **Authentication**: OAuth 2.0 with official Node.js client library
+- **Domain**: blog.addiscrown.et (to be added to existing project)
+- **Verification**: DNS or HTML file verification
+
+#### 4.4.2 Integration Scope
+- Search analytics by category and geography
+- Keyword opportunity identification
+- Content gap analysis
+- SEO performance tracking
+- Query performance monitoring
 ```sql
 CREATE TABLE google_ads_campaigns (
   id UUID PRIMARY KEY,
@@ -595,43 +657,157 @@ CREATE TABLE campaign_recommendations (
 
 ---
 
-## Implementation Timeline
+## Implementation Timeline: Test-Driven Development Approach
 
-### Week 1-2: Authentication Migration
-- NextAuth integration with existing system
-- Role-based access control implementation
-- Preserving Addis Crown design system
-- Testing and validation
+### Week 1-2: Foundation & Authentication (TDD Phase 1)
 
-### Week 3-4: Analytics Foundation
-- Geographic tracking implementation
-- Content performance analytics
-- Reader behavior tracking
-- Dashboard integration
+**Sprint 1: Authentication Migration**
+- **Task 1.1**: Restore original AdminLoginForm component
+  - **Test**: Verify token-based authentication still works
+  - **Evidence**: Successful login with existing token
+- **Task 1.2**: Integrate NextAuth with existing admin-auth
+  - **Test**: Verify both auth systems work during transition
+  - **Evidence**: Dual authentication capability confirmed
+- **Task 1.3**: Update AdminLoginForm to use NextAuth credentials
+  - **Test**: NextAuth login works with database user
+  - **Evidence**: Successful login with admin@addiscrown.et
+- **Task 1.4**: Remove /admin/dashboard route, keep /admin
+  - **Test**: Verify /admin redirects correctly
+  - **Evidence**: Redirect functionality preserved
+- **Task 1.5**: Update middleware for role-based access
+  - **Test**: Verify role hierarchy enforcement
+  - **Evidence**: Access control by role functional
 
-### Week 5-6: Content Intelligence
-- Knowledge sources library
-- Media library enhancement
-- Content planning system
-- Source management UI
+**Sprint 2: Database Connection Foundation**
+- **Task 2.1**: Migrate existing API routes to use new database
+  - **Test**: Verify draft management works with database
+  - **Evidence**: Draft CRUD operations functional
+- **Task 2.2**: Add 22 new database tables (from Google API research)
+  - **Test**: Verify all tables created successfully
+  - **Evidence**: Database schema validation passed
+- **Task 2.3**: Create credential placeholder tables
+  - **Test**: Verify table structure matches API requirements
+  - **Evidence**: Schema validation passed
 
-### Week 7-8: Google Ads Integration
-- Campaign management system
-- AdSense integration
-- Google Search Console integration
-- Performance tracking
+### Week 3-4: Core Admin Features (TDD Phase 2)
 
-### Week 9-10: Advanced Features
-- Automated recommendations
-- Campaign optimization
-- Content planning automation
-- System integration
+**Sprint 3: Enhanced Admin Workspace**
+- **Task 3.1**: Integrate existing AdminWorkspace with new database
+  - **Test**: Verify all existing features still work
+  - **Evidence**: Draft management, research briefs, import/export functional
+- **Task 3.2**: Add database persistence to research briefs
+  - **Test**: Verify research briefs save to database
+  - **Evidence**: Research brief CRUD operations functional
+- **Task 3.3**: Create database-backed draft management
+  - **Test**: Verify drafts persist correctly
+  - **Evidence**: Draft operations database-backed
 
-### Week 11-12: Testing & Deployment
-- End-to-end testing
-- Performance optimization
-- Security validation
-- Production deployment
+**Sprint 4: Geographic Analytics Foundation**
+- **Task 4.1**: Implement IP-based geographic tracking
+  - **Test**: Verify geographic data captured correctly
+  - **Evidence**: Location data accuracy confirmed
+- **Task 4.2**: Create regional analytics tables
+  - **Test**: Verify regional data aggregation works
+  - **Evidence**: Regional analytics calculations correct
+- **Task 4.3**: Build geographic dashboard components
+  - **Test**: Verify geographic dashboard displays data
+  - **Evidence**: Regional performance visualization functional
+
+### Week 5-6: Content Intelligence (TDD Phase 3)
+
+**Sprint 5: Knowledge Sources System**
+- **Task 5.1**: Create knowledge sources database tables
+  - **Test**: Verify source management schema works
+  - **Evidence**: Source CRUD operations functional
+- **Task 5.2**: Build source library UI components
+  - **Test**: Verify source library interface works
+  - **Evidence**: Source management UI functional
+- **Task 5.3**: Implement source credibility scoring
+  - **Test**: Verify credibility scoring algorithm works
+  - **Evidence**: Score calculations accurate
+
+**Sprint 6: Media Library Enhancement**
+- **Task 6.1**: Enhance media assets with performance tracking
+  - **Test**: Verify media usage tracking works
+  - **Evidence**: Media performance data captured correctly
+- **Task 6.2**: Implement smart tagging system
+  - **Test**: Verify automatic tagging functions correctly
+  - **Evidence**: Tag assignment accuracy confirmed
+- **Task 6.3**: Build media management dashboard
+  - **Test**: Verify media library interface works
+  - **Evidence**: Media management operations functional
+
+### Week 7-8: Google API Integration (TDD Phase 4)
+
+**Sprint 7: Google Ads Foundation**
+- **Task 7.1**: Install google-ads-kit and set up authentication scaffolding
+  - **Test**: Verify SDK installation and configuration works
+  - **Evidence**: SDK connectivity test passed
+- **Task 7.2**: Create Google Ads service with placeholder credentials
+  - **Test**: Verify service structure is correct
+  - **Evidence**: Service architecture validated
+- **Task 7.3**: Build campaign management UI scaffolding
+  - **Test**: Verify UI components render correctly
+  - **Evidence**: Campaign interface structure confirmed
+
+**Sprint 8: AdSense & Search Console Foundation**
+- **Task 8.1**: Set up AdSense service scaffolding
+  - **Test**: Verify AdSense service structure works
+  - **Evidence**: Service architecture validated
+- **Task 8.2**: Set up Search Console service scaffolding
+  - **Test**: Verify Search Console service structure works
+  - **Evidence**: Service architecture validated
+- **Task 8.3**: Create unified authentication service
+  - **Test**: Verify unified OAuth management works
+  - **Evidence**: Token refresh mechanism functional
+
+### Week 9-10: Intelligence & Automation (TDD Phase 5)
+
+**Sprint 9: Content Planning Intelligence**
+- **Task 9.1**: Implement content opportunity scoring algorithm
+  - **Test**: Verify scoring logic produces valid results
+  - **Evidence**: Scoring accuracy validated
+- **Task 9.2**: Build content planning dashboard
+  - **Test**: Verify planning interface works correctly
+  - **Evidence**: Content planning UI functional
+- **Task 9.3**: Integrate Search Console data for recommendations
+  - **Test**: Verify SEO-driven suggestions work
+  - **Evidence**: SEO recommendations accurate
+
+**Sprint 10: Cross-API Intelligence**
+- **Task 10.1**: Implement data correlation algorithms
+  - **Test**: Verify cross-API data merging works
+  - **Evidence**: Data correlation accuracy confirmed
+- **Task 10.2**: Build unified intelligence dashboard
+  - **Test**: Verify dashboard displays integrated data
+  - **Evidence**: Cross-API visualization functional
+- **Task 10.3**: Create automated recommendation system
+  - **Test**: Verify recommendation logic works
+  - **Evidence**: Automated suggestions validated
+
+### Week 11-12: Testing & Production Readiness (TDD Phase 6)
+
+**Sprint 11: End-to-End Testing**
+- **Task 11.1**: Perform full admin workflow testing
+  - **Test**: Verify complete admin user journey works
+  - **Evidence**: End-to-end workflow validated
+- **Task 11.2**: Test database integrity and performance
+  - **Test**: Verify database operations under load
+  - **Evidence**: Performance benchmarks met
+- **Task 11.3**: Security and permission testing
+  - **Test**: Verify role-based access control works
+  - **Evidence**: Security validation passed
+
+**Sprint 12: Production Deployment**
+- **Task 12.1**: Configure production environment variables
+  - **Test**: Verify production configuration works
+  - **Evidence**: Production environment validated
+- **Task 12.2**: Deploy to Vercel and verify functionality
+  - **Test**: Verify all features work in production
+  - **Evidence**: Production deployment successful
+- **Task 12.3**: Final documentation and handoff
+  - **Test**: Verify documentation is complete
+  - **Evidence**: Documentation review passed
 
 ---
 
