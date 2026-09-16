@@ -60,58 +60,78 @@ export type TopicPerformance = {
 };
 
 export async function getRegionalAnalytics(postId?: string) {
-  if (postId) {
+  try {
+    if (postId) {
+      return (await sql`
+        SELECT * FROM regional_analytics
+        WHERE post_id = ${postId}::uuid
+        ORDER BY view_count DESC
+      `) as RegionalAnalytics[];
+    }
+
     return (await sql`
       SELECT * FROM regional_analytics
-      WHERE post_id = ${postId}::uuid
       ORDER BY view_count DESC
+      LIMIT 50
     `) as RegionalAnalytics[];
+  } catch (error) {
+    console.error("Error fetching regional analytics:", error);
+    return [];
   }
-
-  return (await sql`
-    SELECT * FROM regional_analytics
-    ORDER BY view_count DESC
-    LIMIT 50
-  `) as RegionalAnalytics[];
 }
 
 export async function getContentPerformance(postId?: string) {
-  if (postId) {
+  try {
+    if (postId) {
+      return (await sql`
+        SELECT * FROM content_performance
+        WHERE post_id = ${postId}::uuid
+        ORDER BY calculated_at DESC
+      `) as ContentPerformance[];
+    }
+
     return (await sql`
       SELECT * FROM content_performance
-      WHERE post_id = ${postId}::uuid
-      ORDER BY calculated_at DESC
+      ORDER BY performance_score DESC NULLS LAST
+      LIMIT 50
     `) as ContentPerformance[];
+  } catch (error) {
+    console.error("Error fetching content performance:", error);
+    return [];
   }
-
-  return (await sql`
-    SELECT * FROM content_performance
-    ORDER BY performance_score DESC NULLS LAST
-    LIMIT 50
-  `) as ContentPerformance[];
 }
 
 export async function getContentOpportunities(status?: string) {
-  if (status) {
+  try {
+    if (status) {
+      return (await sql`
+        SELECT * FROM content_opportunities
+        WHERE status = ${status}
+        ORDER BY priority_score DESC NULLS LAST
+      `) as ContentOpportunity[];
+    }
+
     return (await sql`
       SELECT * FROM content_opportunities
-      WHERE status = ${status}
       ORDER BY priority_score DESC NULLS LAST
+      LIMIT 50
     `) as ContentOpportunity[];
+  } catch (error) {
+    console.error("Error fetching content opportunities:", error);
+    return [];
   }
-
-  return (await sql`
-    SELECT * FROM content_opportunities
-    ORDER BY priority_score DESC NULLS LAST
-    LIMIT 50
-  `) as ContentOpportunity[];
 }
 
 export async function getTopicPerformance() {
-  return (await sql`
-    SELECT * FROM topic_performance
-    ORDER BY opportunity_score DESC NULLS LAST
-  `) as TopicPerformance[];
+  try {
+    return (await sql`
+      SELECT * FROM topic_performance
+      ORDER BY opportunity_score DESC NULLS LAST
+    `) as TopicPerformance[];
+  } catch (error) {
+    console.error("Error fetching topic performance:", error);
+    return [];
+  }
 }
 
 export async function createContentOpportunity(input: {
@@ -123,43 +143,53 @@ export async function createContentOpportunity(input: {
   estimatedEffort?: number;
   status?: string;
 }) {
-  const opportunities = (await sql`
-    INSERT INTO content_opportunities (
-      topic_suggestion,
-      category_id,
-      demand_score,
-      competition_score,
-      monetization_potential,
-      estimated_effort,
-      status
-    )
-    VALUES (
-      ${input.topicSuggestion},
-      ${input.categoryId ?? null}::uuid,
-      ${input.demandScore ?? null},
-      ${input.competitionScore ?? null},
-      ${input.monetizationPotential ?? null},
-      ${input.estimatedEffort ?? null},
-      ${input.status ?? 'suggested'}
-    )
-    RETURNING *
-  `) as ContentOpportunity[];
+  try {
+    const opportunities = (await sql`
+      INSERT INTO content_opportunities (
+        topic_suggestion,
+        category_id,
+        demand_score,
+        competition_score,
+        monetization_potential,
+        estimated_effort,
+        status
+      )
+      VALUES (
+        ${input.topicSuggestion},
+        ${input.categoryId ?? null}::uuid,
+        ${input.demandScore ?? null},
+        ${input.competitionScore ?? null},
+        ${input.monetizationPotential ?? null},
+        ${input.estimatedEffort ?? null},
+        ${input.status ?? 'suggested'}
+      )
+      RETURNING *
+    `) as ContentOpportunity[];
 
-  return opportunities[0];
+    return opportunities[0];
+  } catch (error) {
+    console.error("Error creating content opportunity:", error);
+    throw error;
+  }
 }
 
 export async function updateContentOpportunityStatus(
   opportunityId: string,
   status: 'suggested' | 'planned' | 'in_progress' | 'completed'
 ) {
-  const opportunities = (await sql`
-    UPDATE content_opportunities
-    SET status = ${status}, updated_at = NOW()
-    WHERE id = ${opportunityId}::uuid
-    RETURNING *
-  `) as ContentOpportunity[];
+  try {
+    const opportunities = (await sql`
+      UPDATE content_opportunities
+      SET status = ${status}, updated_at = NOW()
+      WHERE id = ${opportunityId}::uuid
+      RETURNING *
+    `) as ContentOpportunity[];
 
-  return opportunities[0] ?? null;
+    return opportunities[0] ?? null;
+  } catch (error) {
+    console.error("Error updating content opportunity status:", error);
+    throw error;
+  }
 }
 
 export async function getAnalyticsSummary() {
