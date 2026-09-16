@@ -1,10 +1,23 @@
-// Temporary middleware for authentication transition
-// Will be re-enabled with NextAuth v5 compatible implementation after Sprint 1
+// Middleware for admin route protection
+// Currently implements token-based authentication
+// Role-based access will be enhanced in subsequent tasks
 import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
-export function middleware(request: Request) {
-  // For now, allow all requests during authentication migration
-  // Route protection will be re-enabled after Sprint 1 completion
+const ADMIN_COOKIE = "addis_admin_session";
+
+export function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+  
+  // Protect admin routes
+  if (pathname.startsWith('/admin') && pathname !== '/admin/login') {
+    const session = request.cookies.get(ADMIN_COOKIE)?.value;
+    
+    if (!session) {
+      return NextResponse.redirect(new URL('/admin/login', request.url));
+    }
+  }
+  
   return NextResponse.next();
 }
 

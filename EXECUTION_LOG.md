@@ -711,7 +711,7 @@ This document tracks the day-to-day execution of the backend development roadmap
 ## Sprint Tracking
 
 ### Sprint 1: Authentication Migration (Week 1, Days 1-3)
-- **Status**: 🔄 In Progress (Task 1.1 Complete, Task 1.2 Complete, Task 1.3 Starting)
+- **Status**: 🔄 In Progress (Task 1.1 Complete, Task 1.2 Complete, Task 1.3 Complete, Task 1.4 Starting)
 - **Tasks**: 5 tasks (authentication transition)
 - **Success Criteria**: Existing admin features preserved, NextAuth functional, role-based access working
 - **Evidence Required**: Login tests, role verification, UI preservation validation
@@ -755,6 +755,21 @@ This document tracks the day-to-day execution of the backend development roadmap
 **Completion Date**: 2026-09-16
 **Test Method**: Remote production testing (https://blog.addiscrown.et)
 **Note**: NextAuth credentials authentication requires further production verification
+
+#### Task 1.3: Remove /admin/dashboard Route, Keep /admin ✅ COMPLETED
+**Files**: `app/admin/dashboard/page.tsx` (delete)
+**Test**: Verify /admin redirects correctly
+**Evidence**: 
+- ✅ Duplicate dashboard route removed
+- ✅ /admin route preserved as primary admin destination
+- ✅ No duplicate admin paths remaining
+- ✅ AdminWorkspace accessible at /admin
+**Test Environment**: https://blog.addiscrown.et/admin (production only)
+**Dependencies**: Task 1.2
+**Estimated Time**: 1 hour (completed)
+**Actual Time**: 0.5 hours
+**Completion Date**: 2026-09-16
+**Test Method**: Remote production testing (https://blog.addiscrown.et)
 
 ### Sprint 2: Database Connection Foundation (Week 1, Days 4-5)
 - **Status**: ⏳ Not Started
