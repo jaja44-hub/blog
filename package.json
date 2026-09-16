@@ -7,13 +7,20 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "db:verify-editorial": "node scripts/verify-editorial-foundation.mjs"
+    "db:verify-editorial": "node scripts/verify-editorial-foundation.mjs",
+    "create-admin": "tsx scripts/create-admin-user.ts",
+    "test-db": "tsx scripts/test-db-connection.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
+    "@types/bcryptjs": "^2.4.6",
+    "bcryptjs": "^3.0.3",
+    "dotenv": "^17.4.2",
     "googleapis": "^178.1.1",
     "gray-matter": "^4.0.3",
     "next": "15.5.25",
+    "next-auth": "^5.0.0-beta.32",
+    "pg": "^8.23.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-markdown": "^9.0.1",
@@ -26,6 +33,7 @@
     "autoprefixer": "^10",
     "postcss": "^8",
     "tailwindcss": "^3.4.13",
+    "tsx": "^4.7.0",
     "typescript": "^5"
   }
 }

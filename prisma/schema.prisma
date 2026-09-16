@@ -1,0 +1,349 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Users & Authentication
+model User {
+  id            String   @id @default(uuid()) @db.Uuid
+  email         String   @unique
+  displayName   String?
+  passwordHash  String?  @map("password_hash")
+  role          String   @default("reader")
+  status        String   @default("active")
+  emailVerified Boolean  @default(false) @map("email_verified")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  lastActiveAt  DateTime? @map("last_active_at")
+
+  sessions      Session[]
+  authorProfile AuthorProfile?
+  mediaAssets   MediaAsset[] @map("upload_user_id")
+  saves         Save[]
+  readingHistory ReadingHistory[]
+  reactions     Reaction[]
+  subscriptions  Subscription[]
+  contactTickets ContactTicket[] @map("assigned_to")
+  auditEvents   AuditEvent[] @map("actor_id")
+  featureFlags  FeatureFlag[] @map("updated_by")
+
+  @@map("users")
+}
+
+model Session {
+  id          String   @id @default(uuid()) @db.Uuid
+  userId      String   @map("user_id")
+  deviceLabel String?  @map("device_label")
+  ipAddress   String?  @db.Inet @map("ip_address")
+  userAgent   String?  @map("user_agent")
+  createdAt   DateTime @default(now()) @map("created_at")
+  lastSeenAt  DateTime @default(now()) @map("last_seen_at")
+  revokedAt   DateTime? @map("revoked_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+// Author Profiles
+model AuthorProfile {
+  id               String  @id @default(uuid()) @db.Uuid
+  userId            String? @unique @map("user_id")
+  externalIdentity  String? @map("external_identity")
+  name              String
+  bio               String?
+  photoUrl          String? @map("photo_url")
+  websiteUrl        String? @map("website_url")
+  twitterHandle     String? @map("twitter_handle")
+  linkedinUrl        String? @map("linkedin_url")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+  posts  Post[]
+
+  @@map("author_profiles")
+}
+
+// Content Categories
+model Category {
+  id             String   @id @default(uuid()) @db.Uuid
+  name           String
+  slug           String   @unique
+  description    String?
+  color          String?  @db.VarChar(7)
+  seoTitle       String?  @map("seo_title")
+  seoDescription String?  @map("seo_description")
+  status         String   @default("active")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  posts Post[]
+
+  @@map("categories")
+}
+
+// Editorial Series
+model Series {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String
+  slug        String   @unique
+  description String?
+  status      String   @default("active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  posts      Post[]
+  seriesItems SeriesItem[]
+
+  @@map("series")
+}
+
+// Core Posts Table
+model Post {
+  id              String    @id @default(uuid()) @db.Uuid
+  title           String
+  slug            String    @unique
+  dek             String?
+  body            String    @db.Text
+  status          String    @default("draft")
+  authorId        String?   @map("author_id")
+  categoryId      String?   @map("category_id")
+  seriesId        String?   @map("series_id")
+  coverImageUrl   String?   @map("cover_image_url")
+  coverImageAlt   String?   @map("cover_image_alt")
+  seoTitle        String?   @map("seo_title")
+  seoDescription  String?   @map("seo_description")
+  canonicalUrl     String?   @map("canonical_url")
+  readTime        Int?      @map("read_time")
+  publishedAt     DateTime? @map("published_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  scheduledAt     DateTime? @map("scheduled_at")
+  isIndexed       Boolean   @default(true) @map("is_indexed")
+  isFeatured      Boolean   @default(false) @map("is_featured")
+
+  author      AuthorProfile?     @relation(fields: [authorId], references: [id])
+  category    Category?         @relation(fields: [categoryId], references: [id])
+  series      Series?           @relation(fields: [seriesId], references: [id])
+  revisions   PostRevision[]
+  seriesItems SeriesItem[]
+  sources     Source[]
+  saves       Save[]
+  readingHistory ReadingHistory[]
+  reactions   Reaction[]
+  contactTickets ContactTicket[]
+  corrections  Correction[]
+
+  @@index([status])
+  @@index([categoryId])
+  @@index([authorId])
+  @@index([publishedAt(sort: Desc)] where: { status: "published" })
+  @@index([slug])
+  @@map("posts")
+}
+
+// Post Revisions
+model PostRevision {
+  id            String   @id @default(uuid()) @db.Uuid
+  postId        String   @map("post_id")
+  version       Int
+  bodySnapshot  String   @map("body_snapshot")
+  titleSnapshot String?  @map("title_snapshot")
+  editorId      String?  @map("editor_id")
+  changeNote    String?  @map("change_note")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@map("post_revisions")
+}
+
+// Series Ordering
+model SeriesItem {
+  id        String   @id @default(uuid()) @db.Uuid
+  seriesId  String   @map("series_id")
+  postId    String   @map("post_id")
+  ordinal   Int
+  createdAt DateTime @default(now()) @map("created_at")
+
+  series Series @relation(fields: [seriesId], references: [id], onDelete: Cascade)
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([seriesId, postId])
+  @@map("series_items")
+}
+
+// Media Assets
+model MediaAsset {
+  id               String   @id @default(uuid()) @db.Uuid
+  storageKey       String   @map("storage_key")
+  originalFilename String?  @map("original_filename")
+  mimeType         String?  @map("mime_type")
+  fileSize         BigInt?  @map("file_size")
+  width            Int?
+  height           Int?
+  altText          String?  @map("alt_text")
+  caption          String?
+  credit           String?
+  license          String?
+  uploadUserId     String?  @map("upload_user_id")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [uploadUserId], references: [id])
+
+  @@map("media_assets")
+}
+
+// Sources & References
+model Source {
+  id           String   @id @default(uuid()) @db.Uuid
+  postId       String   @map("post_id")
+  label        String?
+  url          String
+  publisher    String?
+  publishedAt   DateTime? @map("published_at")
+  accessDate   DateTime? @map("access_date")
+  sourceType   String?  @map("source_type")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@map("sources")
+}
+
+// Reader Engagement
+model Save {
+  userId    String   @map("user_id")
+  postId    String   @map("post_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@id([userId, postId])
+  @@index([userId])
+  @@map("saves")
+}
+
+model ReadingHistory {
+  userId             String   @map("user_id")
+  postId             String   @map("post_id")
+  firstReadAt        DateTime @default(now()) @map("first_read_at")
+  lastReadAt         DateTime @default(now()) @map("last_read_at")
+  completionEstimate Int?    @map("completion_estimate")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@id([userId, postId])
+  @@index([userId])
+  @@map("reading_history")
+}
+
+model Reaction {
+  id           String   @id @default(uuid()) @db.Uuid
+  userId       String?  @map("user_id")
+  postId       String   @map("post_id")
+  reactionType String   @map("reaction_type")
+  provider     String   @default("internal")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+  post Post @relation(fields: [postId], references: [id], onDelete:Cascade)
+
+  @@unique([userId, postId, reactionType])
+  @@index([postId])
+  @@map("reactions")
+}
+
+// Subscriptions
+model Subscription {
+  id              String   @id @default(uuid()) @db.Uuid
+  userId           String?  @unique @map("user_id")
+  email            String
+  topics           Json     @default("{}")
+  frequency        String   @default("weekly")
+  consentVersion   String   @default("1.0") @map("consent_version")
+  status           String   @default("active")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("subscriptions")
+}
+
+// Contact & Corrections
+model ContactTicket {
+  id           String   @id @default(uuid()) @db.Uuid
+  inquiryType  String   @map("inquiry_type")
+  email        String
+  postId       String?  @map("post_id")
+  body         String
+  status       String   @default("open")
+  assignedTo   String?  @map("assigned_to")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  post   Post?    @relation(fields: [postId], references: [id], onDelete: SetNull)
+  assignedTo User? @relation(fields: [assignedTo], references: [id])
+
+  @@index([status])
+  @@map("contact_tickets")
+}
+
+model Correction {
+  id              String   @id @default(uuid()) @db.Uuid
+  postId          String   @map("post_id")
+  reporter        String
+  claim           String
+  evidence         String?
+  status          String   @default("pending")
+  resolutionNote  String?  @map("resolution_note")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@map("corrections")
+}
+
+// Audit & Operations
+model AuditEvent {
+  id         String   @id @default(uuid()) @db.Uuid
+  actorId    String?  @map("actor_id")
+  action     String
+  objectType  String?  @map("object_type")
+  objectId    String?  @map("object_id")
+  metadata   Json     @default("{}")
+  ipAddress  String?  @db.Inet @map("ip_address")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  actor User? @relation(fields: [actorId], references: [id])
+
+  @@index([actorId])
+  @@index([createdAt(sort: Desc)])
+  @@map("audit_events")
+}
+
+model FeatureFlag {
+  key         String   @id
+  enabled     Boolean  @default(false)
+  scope       String?
+  description String?
+  updatedBy   String?  @map("updated_by")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  updater User? @relation(fields: [updatedBy], references: [id])
+
+  @@map("feature_flags")
+}
