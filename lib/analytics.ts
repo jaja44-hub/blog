@@ -144,27 +144,63 @@ export async function createContentOpportunity(input: {
   status?: string;
 }) {
   try {
-    const opportunities = (await sql`
-      INSERT INTO content_opportunities (
-        topic_suggestion,
-        category_id,
-        demand_score,
-        competition_score,
-        monetization_potential,
-        estimated_effort,
-        status
-      )
-      VALUES (
-        ${input.topicSuggestion},
-        ${input.categoryId ?? null}::uuid,
-        ${input.demandScore ?? null},
-        ${input.competitionScore ?? null},
-        ${input.monetizationPotential ?? null},
-        ${input.estimatedEffort ?? null},
-        ${input.status ?? 'suggested'}
-      )
-      RETURNING *
-    `) as ContentOpportunity[];
+    const demand = input.demandScore ?? 0;
+    const competition = input.competitionScore ?? 0;
+    const monetization = input.monetizationPotential ?? 0;
+    const effort = input.estimatedEffort ?? 1;
+    
+    const priorityScore = (demand * 0.4) + (monetization * 0.3) + ((10 - competition) * 0.2) + ((10 / effort) * 0.1);
+
+    let opportunities;
+    if (input.categoryId) {
+      opportunities = (await sql`
+        INSERT INTO content_opportunities (
+          topic_suggestion,
+          category_id,
+          demand_score,
+          competition_score,
+          monetization_potential,
+          estimated_effort,
+          priority_score,
+          status
+        )
+        VALUES (
+          ${input.topicSuggestion},
+          ${input.categoryId}::uuid,
+          ${input.demandScore ?? null},
+          ${input.competitionScore ?? null},
+          ${input.monetizationPotential ?? null},
+          ${input.estimatedEffort ?? null},
+          ${priorityScore},
+          ${input.status ?? 'suggested'}
+        )
+        RETURNING *
+      `) as ContentOpportunity[];
+    } else {
+      opportunities = (await sql`
+        INSERT INTO content_opportunities (
+          topic_suggestion,
+          category_id,
+          demand_score,
+          competition_score,
+          monetization_potential,
+          estimated_effort,
+          priority_score,
+          status
+        )
+        VALUES (
+          ${input.topicSuggestion},
+          null,
+          ${input.demandScore ?? null},
+          ${input.competitionScore ?? null},
+          ${input.monetizationPotential ?? null},
+          ${input.estimatedEffort ?? null},
+          ${priorityScore},
+          ${input.status ?? 'suggested'}
+        )
+        RETURNING *
+      `) as ContentOpportunity[];
+    }
 
     return opportunities[0];
   } catch (error) {
