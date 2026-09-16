@@ -32,6 +32,17 @@ type PostRevision = {
   created_at: string;
 };
 
+type ContentOpportunity = {
+  id: string;
+  topic_suggestion: string;
+  demand_score: number | null;
+  competition_score: number | null;
+  monetization_potential: number | null;
+  estimated_effort: number | null;
+  priority_score: number | null;
+  status: string;
+};
+
 export default function AdminWorkspace() {
   const [message, setMessage] = useState("");
   const [drafts, setDrafts] = useState<Draft[]>([]);
@@ -39,6 +50,9 @@ export default function AdminWorkspace() {
   const [briefs, setBriefs] = useState<ResearchBrief[]>([]);
   const [revisions, setRevisions] = useState<PostRevision[]>([]);
   const [showRevisions, setShowRevisions] = useState(false);
+  const [opportunities, setOpportunities] = useState<ContentOpportunity[]>([]);
+  const [showAnalytics, setShowAnalytics] = useState(false);
+  const [analyticsData, setAnalyticsData] = useState<any>(null);
 
   async function loadDrafts() {
     const response = await fetch("/api/admin/drafts");
@@ -64,6 +78,43 @@ export default function AdminWorkspace() {
       setShowRevisions(true);
     } else {
       setMessage(result.error ?? "Could not load revision history.");
+    }
+  }
+
+  async function loadAnalytics() {
+    const response = await fetch("/api/admin/analytics");
+    const result = await response.json();
+    if (response.ok) {
+      setAnalyticsData(result.summary);
+      setShowAnalytics(true);
+    } else {
+      setMessage(result.error ?? "Could not load analytics data.");
+    }
+  }
+
+  async function loadOpportunities() {
+    const response = await fetch("/api/admin/analytics/opportunities");
+    const result = await response.json();
+    if (response.ok) {
+      setOpportunities(result.opportunities ?? []);
+    } else {
+      setMessage(result.error ?? "Could not load content opportunities.");
+    }
+  }
+
+  async function createOpportunity(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const response = await fetch("/api/admin/analytics/opportunities", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(Object.fromEntries(form.entries()))
+    });
+    const result = await response.json();
+    setMessage(response.ok ? `Content opportunity created: ${result.opportunity.topic_suggestion}` : result.error ?? "Content opportunity could not be created.");
+    if (response.ok) {
+      event.currentTarget.reset();
+      await loadOpportunities();
     }
   }
 
@@ -161,6 +212,8 @@ export default function AdminWorkspace() {
         <div className="flex flex-wrap gap-3">
           <button type="button" onClick={loadDrafts} className="rounded-md border border-line px-4 py-2 text-sm text-teal hover:border-teal">Load drafts</button>
           <button type="button" onClick={loadBriefs} className="rounded-md border border-line px-4 py-2 text-sm text-teal hover:border-teal">Load research</button>
+          <button type="button" onClick={loadAnalytics} className="rounded-md border border-line px-4 py-2 text-sm text-teal hover:border-teal">Analytics</button>
+          <button type="button" onClick={loadOpportunities} className="rounded-md border border-line px-4 py-2 text-sm text-teal hover:border-teal">Content opportunities</button>
         </div>
       </div>
       {drafts.length > 0 && (
@@ -242,6 +295,108 @@ export default function AdminWorkspace() {
           <div className="grid gap-4 sm:grid-cols-2"><input name="priority" type="number" min="1" max="5" defaultValue="3" className="w-full rounded-md border border-line bg-parchment px-4 py-3" /><input name="targetDate" type="date" className="w-full rounded-md border border-line bg-parchment px-4 py-3" /></div>
           <textarea name="notes" placeholder="Sources, evidence gaps, and editorial notes" rows={4} className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
           <button type="submit" className="rounded-md bg-teal px-4 py-3 text-sm font-medium text-white hover:bg-tealDeep">Save research brief</button>
+        </form>
+      </section>
+      {showAnalytics && analyticsData && (
+        <section className="mt-12 max-w-2xl border-t border-line pt-8">
+          <div className="flex items-center justify-between">
+            <h2 className="mb-5 font-display text-2xl font-semibold text-ink">Analytics overview</h2>
+            <button type="button" onClick={() => setShowAnalytics(false)} className="text-sm text-teal underline underline-offset-2">Close</button>
+          </div>
+          <div className="space-y-4">
+            <div className="border border-line p-4">
+              <h3 className="font-display text-lg font-semibold text-ink">Regional performance</h3>
+              {analyticsData.regional_analytics && analyticsData.regional_analytics.length > 0 ? (
+                <div className="mt-3 space-y-2">
+                  {analyticsData.regional_analytics.map((region: any, index: number) => (
+                    <div key={index} className="flex justify-between text-sm">
+                      <span className="text-stone">{region.country_code || 'Unknown'}</span>
+                      <span className="text-ink">{region.total_views} views</span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="mt-3 text-sm text-stone">No regional data available yet.</p>
+              )}
+            </div>
+            <div className="border border-line p-4">
+              <h3 className="font-display text-lg font-semibold text-ink">Content performance</h3>
+              {analyticsData.content_performance ? (
+                <div className="mt-3 grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <span className="text-stone">Total posts:</span>
+                    <span className="ml-2 text-ink">{analyticsData.content_performance.total_posts || 0}</span>
+                  </div>
+                  <div>
+                    <span className="text-stone">Avg performance:</span>
+                    <span className="ml-2 text-ink">{analyticsData.content_performance.avg_performance ? analyticsData.content_performance.avg_performance.toFixed(2) : 'N/A'}</span>
+                  </div>
+                </div>
+              ) : (
+                <p className="mt-3 text-sm text-stone">No content performance data available yet.</p>
+              )}
+            </div>
+            <div className="border border-line p-4">
+              <h3 className="font-display text-lg font-semibold text-ink">Content opportunities</h3>
+              {analyticsData.content_opportunities && analyticsData.content_opportunities.length > 0 ? (
+                <div className="mt-3 space-y-2">
+                  {analyticsData.content_opportunities.map((opp: any, index: number) => (
+                    <div key={index} className="flex justify-between text-sm">
+                      <span className="text-stone">{opp.status}</span>
+                      <span className="text-ink">{opp.count} opportunities</span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="mt-3 text-sm text-stone">No content opportunities data available yet.</p>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
+      <section className="mt-12 max-w-2xl border-t border-line pt-8">
+        <h2 className="mb-5 font-display text-2xl font-semibold text-ink">Content opportunities</h2>
+        {opportunities.length > 0 && (
+          <div className="mb-6 space-y-3">
+            {opportunities.map((opportunity) => (
+              <div key={opportunity.id} className="border border-line p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs uppercase tracking-wide text-ochre">Priority {opportunity.priority_score || 'N/A'} · {opportunity.status}</p>
+                    <p className="mt-1 font-display text-lg font-semibold text-ink">{opportunity.topic_suggestion}</p>
+                    <div className="mt-2 flex gap-4 text-sm text-stone">
+                      <span>Demand: {opportunity.demand_score || 'N/A'}</span>
+                      <span>Competition: {opportunity.competition_score || 'N/A'}</span>
+                      <span>Monetization: {opportunity.monetization_potential || 'N/A'}</span>
+                    </div>
+                  </div>
+                  {opportunity.status === 'suggested' && (
+                    <button
+                      type="button"
+                      onClick={() => fetch(`/api/admin/analytics/opportunities/${opportunity.id}`, {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ status: 'planned' })
+                      }).then(() => loadOpportunities())}
+                      className="text-sm text-teal underline underline-offset-2"
+                    >
+                      Plan
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+        <form onSubmit={createOpportunity} className="space-y-4">
+          <input name="topicSuggestion" required placeholder="Topic suggestion" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+          <div className="grid gap-4 sm:grid-cols-3">
+            <input name="demandScore" type="number" step="0.1" min="0" max="10" placeholder="Demand score (0-10)" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+            <input name="competitionScore" type="number" step="0.1" min="0" max="10" placeholder="Competition score (0-10)" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+            <input name="monetizationPotential" type="number" step="0.1" min="0" max="10" placeholder="Monetization (0-10)" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+          </div>
+          <input name="estimatedEffort" type="number" min="1" placeholder="Estimated effort (hours)" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+          <button type="submit" className="rounded-md bg-teal px-4 py-3 text-sm font-medium text-white hover:bg-tealDeep">Create opportunity</button>
         </form>
       </section>
       {message && <p className="mt-4 text-sm text-stone" role="status">{message}</p>}
