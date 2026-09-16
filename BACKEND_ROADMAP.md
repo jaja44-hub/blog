@@ -8,6 +8,8 @@
 **Framework:** Next.js 15.5.25, React 18.3.1, TypeScript  
 **Deployment:** Vercel Production
 
+**IMPORTANT**: This document provides the foundational backend roadmap. For advanced admin features including Google Ads integration, geographic analytics, content intelligence, and monetization systems, see [ENHANCED_ADMIN_ROADMAP.md](./ENHANCED_ADMIN_ROADMAP.md)
+
 ---
 
 ## Executive Summary
