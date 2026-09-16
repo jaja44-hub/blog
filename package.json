@@ -9,7 +9,8 @@
     "lint": "next lint",
     "db:verify-editorial": "node scripts/verify-editorial-foundation.mjs",
     "create-admin": "tsx scripts/create-admin-user.ts",
-    "test-db": "tsx scripts/test-db-connection.ts"
+    "test-db": "tsx scripts/test-db-connection.ts",
+    "test-token-auth": "tsx scripts/test-token-auth.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
