@@ -17,18 +17,23 @@
 - Evidence collection before marking tasks complete
 - No assumptions - verify each component before proceeding
 - Progressive development with continuous validation
+- **REMOTE TESTING ONLY** - All tests against https://blog.addiscrown.et
+- **NO LOCAL DEV SERVER** - Deploy to Vercel immediately for testing
+- **Production as Test Environment** - Use genuine environment for verification
 
 **Parallel Development Strategy**:
 - Admin system development and Google API integration proceed in parallel
 - Database schema and UI development synchronized
 - Backend and frontend developed in coordinated sprints
 - Testing integrated throughout development cycle
+- **Vercel as Deployment Target** - Push to GitHub, deploy, test production
 
 **Placeholder Credentials Strategy**:
 - Google Cloud credentials left as placeholders until provided
 - Environment variables configured with empty values
 - Code scaffolding complete without real credentials
 - Integration testing deferred until credentials available
+- **Remote Verification** - Test scaffolding against production
 
 ---
 
@@ -46,10 +51,11 @@
 **Estimated Time**: 2 hours
 
 #### Task 1.2: Integrate NextAuth with Existing Admin-Auth
-**File**: `lib/admin-auth.ts` (modify), `lib/auth.ts` (modify)  
-**Test**: Verify both authentication systems work during transition  
-**Evidence**: Dual authentication capability confirmed  
-**Dependencies**: Task 1.1  
+**File**: `lib/admin-auth.ts` (modify), `lib/auth.ts` (modify)
+**Test**: Verify both authentication systems work during transition
+**Evidence**: Dual authentication capability confirmed
+**Test Environment**: https://blog.addiscrown.et/admin/login (production only)
+**Dependencies**: Task 1.1
 **Estimated Time**: 4 hours
 
 #### Task 1.3: Update AdminLoginForm to Use NextAuth Credentials
