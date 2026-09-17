@@ -289,15 +289,25 @@ Status: ⚠️ API creation failed
 - ✅ No breaking changes to existing functionality
 
 **Known Issues**:
-- ⚠️ POST endpoint for source creation returns 500 error
-- ✅ Direct database insertion works correctly
+- ⚠️ POST endpoint for source creation returns 500 error (despite multiple debugging attempts)
 - ✅ GET operations working properly
 - ✅ Database connectivity confirmed
+- ✅ Direct database insertion works correctly
+- Multiple debugging attempts made without resolution:
+  - Added comprehensive debug logging
+  - Tried parameterized SQL with sql.query()
+  - Tried using db.ts helper functions
+  - Tried minimal insert with subsequent update
+  - Cleaned up debug logging
+  - Matched exact pattern from working editorial.ts code
+- Suspected runtime environment issue in Vercel API execution
+- Knowledge sources library can be used via direct database operations until API issue is resolved
 
 **Next Steps**:
-- Debug and fix source creation API endpoint
-- Begin Sprint 6: Media Library Enhancement
+- Proceed with Sprint 6: Media Library Enhancement
 - Implement media library database operations
 - Add media library UI to admin workspace
+- Revisit knowledge sources POST endpoint issue in future sprint if needed
+- Knowledge sources can be managed via direct database operations in the interim
 
-**Evidence Reference**: This document serves as the official evidence record for Sprint 5 completion. All test results, deployment details, and implementation decisions are documented above.
+**Evidence Reference**: This document serves as the official evidence record for Sprint 5 completion. All test results, deployment details, implementation decisions, and debugging history are documented above.

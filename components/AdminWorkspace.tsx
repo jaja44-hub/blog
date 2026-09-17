@@ -56,6 +56,30 @@ type KnowledgeSource = {
   usage_count: number | null;
 };
 
+type MediaAsset = {
+  id: string;
+  storage_key: string;
+  original_filename: string | null;
+  mime_type: string | null;
+  file_size: number | null;
+  width: number | null;
+  height: number | null;
+  alt_text: string | null;
+  caption: string | null;
+  credit: string | null;
+  license: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+type MediaTag = {
+  id: string;
+  media_id: string | null;
+  tag: string | null;
+  relevance_score: number | null;
+  created_at: string;
+};
+
 export default function AdminWorkspace() {
   const [message, setMessage] = useState("");
   const [drafts, setDrafts] = useState<Draft[]>([]);
@@ -68,6 +92,10 @@ export default function AdminWorkspace() {
   const [analyticsData, setAnalyticsData] = useState<any>(null);
   const [sources, setSources] = useState<KnowledgeSource[]>([]);
   const [showSources, setShowSources] = useState(false);
+  const [mediaAssets, setMediaAssets] = useState<MediaAsset[]>([]);
+  const [showMedia, setShowMedia] = useState(false);
+  const [selectedMedia, setSelectedMedia] = useState<MediaAsset | null>(null);
+  const [mediaTags, setMediaTags] = useState<MediaTag[]>([]);
 
   async function loadDrafts() {
     const response = await fetch("/api/admin/drafts");
@@ -141,6 +169,107 @@ export default function AdminWorkspace() {
       setShowSources(true);
     } else {
       setMessage(result.error ?? "Could not load knowledge sources.");
+    }
+  }
+
+  async function loadMedia() {
+    const response = await fetch("/api/admin/media");
+    const result = await response.json();
+    if (response.ok) {
+      setMediaAssets(result.assets ?? []);
+      setShowMedia(true);
+    } else {
+      setMessage(result.error ?? "Could not load media assets.");
+    }
+  }
+
+  async function loadMediaTags(mediaId: string) {
+    const response = await fetch(`/api/admin/media/tags?media_id=${mediaId}`);
+    const result = await response.json();
+    if (response.ok) {
+      setMediaTags(result.tags ?? []);
+    } else {
+      setMessage(result.error ?? "Could not load media tags.");
+    }
+  }
+
+  async function createMediaAsset(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const response = await fetch("/api/admin/media", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(Object.fromEntries(form.entries()))
+    });
+    const result = await response.json();
+    setMessage(response.ok ? `Media asset created: ${result.asset.original_filename}` : result.error ?? "Media asset could not be created.");
+    if (response.ok) {
+      event.currentTarget.reset();
+      await loadMedia();
+    }
+  }
+
+  async function updateMediaAsset(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!selectedMedia) return;
+    const form = new FormData(event.currentTarget);
+    const response = await fetch("/api/admin/media", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: selectedMedia.id, ...Object.fromEntries(form.entries()) })
+    });
+    const result = await response.json();
+    setMessage(response.ok ? "Media asset updated." : result.error ?? "Media asset could not be updated.");
+    if (response.ok) {
+      await loadMedia();
+      setSelectedMedia(null);
+    }
+  }
+
+  async function deleteMediaAsset(id: string) {
+    const response = await fetch(`/api/admin/media?id=${id}`, {
+      method: "DELETE"
+    });
+    const result = await response.json();
+    setMessage(response.ok ? "Media asset deleted." : result.error ?? "Media asset could not be deleted.");
+    if (response.ok) {
+      await loadMedia();
+    }
+  }
+
+  async function addMediaTag(mediaId: string, tag: string) {
+    const response = await fetch("/api/admin/media/tags", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ media_id: mediaId, tag })
+    });
+    const result = await response.json();
+    setMessage(response.ok ? `Tag added: ${result.tag.tag}` : result.error ?? "Tag could not be added.");
+    if (response.ok) {
+      await loadMediaTags(mediaId);
+    }
+  }
+
+  async function deleteMediaTag(tagId: string, mediaId: string) {
+    const response = await fetch(`/api/admin/media/tags?id=${tagId}`, {
+      method: "DELETE"
+    });
+    const result = await response.json();
+    setMessage(response.ok ? "Tag deleted." : result.error ?? "Tag could not be deleted.");
+    if (response.ok) {
+      await loadMediaTags(mediaId);
+    }
+  }
+
+  async function suggestTags(mediaId: string) {
+    const response = await fetch(`/api/admin/media/suggest-tags?media_id=${mediaId}`);
+    const result = await response.json();
+    if (response.ok && result.suggested_tags && result.suggested_tags.length > 0) {
+      setMessage(`Suggested ${result.suggested_tags.length} tags. Apply them in the tag input.`);
+      return result.suggested_tags;
+    } else {
+      setMessage(result.error ?? "No tag suggestions available.");
+      return [];
     }
   }
 
@@ -268,6 +397,7 @@ export default function AdminWorkspace() {
           <button type="button" onClick={loadAnalytics} className="rounded-md border border-line px-4 py-2 text-sm text-teal hover:border-teal">Analytics</button>
           <button type="button" onClick={loadOpportunities} className="rounded-md border border-line px-4 py-2 text-sm text-teal hover:border-teal">Content opportunities</button>
           <button type="button" onClick={loadSources} className="rounded-md border border-line px-4 py-2 text-sm text-teal hover:border-teal">Knowledge sources</button>
+          <button type="button" onClick={loadMedia} className="rounded-md border border-line px-4 py-2 text-sm text-teal hover:border-teal">Media library</button>
         </div>
       </div>
       {drafts.length > 0 && (
@@ -501,6 +631,146 @@ export default function AdminWorkspace() {
             </div>
             <button type="submit" className="rounded-md bg-teal px-4 py-3 text-sm font-medium text-white hover:bg-tealDeep">Add source</button>
           </form>
+        </section>
+      )}
+      {showMedia && (
+        <section className="mt-12 max-w-2xl border-t border-line pt-8">
+          <div className="flex items-center justify-between">
+            <h2 className="mb-5 font-display text-2xl font-semibold text-ink">Media library</h2>
+            <button type="button" onClick={() => setShowMedia(false)} className="text-sm text-teal underline underline-offset-2">Close</button>
+          </div>
+          {mediaAssets.length > 0 && (
+            <div className="mb-6 space-y-3">
+              {mediaAssets.map((asset) => (
+                <div key={asset.id} className="border border-line p-4">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <p className="text-xs uppercase tracking-wide text-ochre">{asset.mime_type || 'Unknown type'} · {asset.file_size ? `${(asset.file_size / 1024).toFixed(1)} KB` : 'Unknown size'}</p>
+                      <p className="mt-1 font-display text-lg font-semibold text-ink">{asset.original_filename || asset.storage_key}</p>
+                      {asset.width && asset.height && (
+                        <p className="mt-1 text-sm text-stone">Dimensions: {asset.width} × {asset.height}px</p>
+                      )}
+                      {asset.alt_text && (
+                        <p className="mt-1 text-sm text-stone">Alt: {asset.alt_text}</p>
+                      )}
+                      {asset.caption && (
+                        <p className="mt-1 text-sm text-stone">Caption: {asset.caption}</p>
+                      )}
+                      {asset.credit && (
+                        <p className="mt-1 text-sm text-stone">Credit: {asset.credit}</p>
+                      )}
+                      {asset.license && (
+                        <p className="mt-1 text-sm text-stone">License: {asset.license}</p>
+                      )}
+                    </div>
+                    <div className="ml-4 flex gap-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedMedia(asset);
+                          loadMediaTags(asset.id);
+                        }}
+                        className="text-sm text-teal underline underline-offset-2"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => deleteMediaAsset(asset.id)}
+                        className="text-sm text-red-600 underline underline-offset-2"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                  {selectedMedia?.id === asset.id && (
+                    <div className="mt-4 border-t border-line pt-4">
+                      <h3 className="mb-3 font-display text-lg font-semibold text-ink">Edit media asset</h3>
+                      <form onSubmit={updateMediaAsset} className="space-y-3">
+                        <input name="alt_text" defaultValue={asset.alt_text || ''} placeholder="Alt text (accessibility)" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+                        <input name="caption" defaultValue={asset.caption || ''} placeholder="Caption" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+                        <input name="credit" defaultValue={asset.credit || ''} placeholder="Credit/attribution" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+                        <input name="license" defaultValue={asset.license || ''} placeholder="License (e.g., CC BY 4.0)" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+                        <div className="flex gap-3">
+                          <button type="submit" className="rounded-md bg-teal px-4 py-3 text-sm font-medium text-white hover:bg-tealDeep">Save changes</button>
+                          <button type="button" onClick={() => setSelectedMedia(null)} className="rounded-md border border-line px-4 py-3 text-sm text-teal hover:border-teal">Cancel</button>
+                        </div>
+                      </form>
+                      <div className="mt-4">
+                        <h4 className="mb-2 font-display text-sm font-semibold text-ink">Tags</h4>
+                        {mediaTags.length > 0 ? (
+                          <div className="mb-2 flex flex-wrap gap-2">
+                            {mediaTags.map((tag) => (
+                              <span key={tag.id} className="inline-flex items-center gap-1 rounded-full bg-teal/10 px-3 py-1 text-sm text-teal">
+                                {tag.tag}
+                                <button
+                                  type="button"
+                                  onClick={() => deleteMediaTag(tag.id, asset.id)}
+                                  className="text-teal hover:text-red-600"
+                                >
+                                  ×
+                                </button>
+                              </span>
+                            ))}
+                          </div>
+                        ) : (
+                          <p className="mb-2 text-sm text-stone">No tags yet.</p>
+                        )}
+                        <div className="mb-2">
+                          <button
+                            type="button"
+                            onClick={() => suggestTags(asset.id).then(tags => {
+                              if (tags.length > 0) {
+                                tags.forEach(tag => addMediaTag(asset.id, tag));
+                              }
+                            })}
+                            className="text-sm text-teal underline underline-offset-2"
+                          >
+                            Suggest tags
+                          </button>
+                        </div>
+                        <form
+                          onSubmit={(e) => {
+                            e.preventDefault();
+                            const form = e.currentTarget;
+                            const tagInput = form.elements.namedItem('tag') as HTMLInputElement;
+                            if (tagInput.value.trim()) {
+                              addMediaTag(asset.id, tagInput.value.trim());
+                              tagInput.value = '';
+                            }
+                          }}
+                          className="flex gap-2"
+                        >
+                          <input name="tag" placeholder="Add tag" className="flex-1 rounded-md border border-line bg-parchment px-4 py-2 text-sm" />
+                          <button type="submit" className="rounded-md border border-line px-4 py-2 text-sm text-teal hover:border-teal">Add</button>
+                        </form>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+          {!selectedMedia && (
+            <form onSubmit={createMediaAsset} className="space-y-4">
+              <h3 className="font-display text-lg font-semibold text-ink">Add new media asset</h3>
+              <input name="storage_key" required placeholder="Storage key (e.g., /uploads/image.jpg)" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+              <input name="original_filename" placeholder="Original filename" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+              <div className="grid gap-4 sm:grid-cols-2">
+                <input name="mime_type" placeholder="MIME type (e.g., image/jpeg)" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+                <input name="file_size" type="number" placeholder="File size (bytes)" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+              </div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <input name="width" type="number" placeholder="Width (px)" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+                <input name="height" type="number" placeholder="Height (px)" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+              </div>
+              <input name="alt_text" placeholder="Alt text (accessibility)" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+              <input name="caption" placeholder="Caption" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+              <input name="credit" placeholder="Credit/attribution" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+              <input name="license" placeholder="License (e.g., CC BY 4.0)" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+              <button type="submit" className="rounded-md bg-teal px-4 py-3 text-sm font-medium text-white hover:bg-tealDeep">Add media asset</button>
+            </form>
+          )}
         </section>
       )}
       {message && <p className="mt-4 text-sm text-stone" role="status">{message}</p>}
