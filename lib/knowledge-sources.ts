@@ -66,10 +66,7 @@ export async function createKnowledgeSource(input: {
 }) {
   try {
     const credibilityScore = calculateCredibilityScore(input);
-    console.log("Creating knowledge source with credibility score:", credibilityScore);
-    console.log("Input data:", JSON.stringify(input, null, 2));
     
-    // Match exact pattern from editorial.ts
     const sources = (await sql`
       INSERT INTO knowledge_sources (
         title,
@@ -103,8 +100,6 @@ export async function createKnowledgeSource(input: {
     return sources[0];
   } catch (error) {
     console.error("Error creating knowledge source:", error);
-    console.error("Error type:", error instanceof Error ? error.constructor.name : typeof error);
-    console.error("Error message:", error instanceof Error ? error.message : String(error));
     throw error;
   }
 }
