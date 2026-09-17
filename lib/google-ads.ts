@@ -237,7 +237,7 @@ export async function createGoogleAdsPerformance(input: {
         roas
       )
       VALUES (
-        ${input.campaign_id}::uuid,
+        ${input.campaign_id},
         ${input.date},
         ${input.impressions ?? null},
         ${input.clicks ?? null},
@@ -346,7 +346,7 @@ export async function createAdCreative(input: {
         status
       )
       VALUES (
-        ${input.campaign_id}::uuid,
+        ${input.campaign_id},
         ${input.creative_type},
         ${input.headline},
         ${input.description ?? null},

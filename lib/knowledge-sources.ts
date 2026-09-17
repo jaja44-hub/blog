@@ -164,8 +164,8 @@ export async function createSourceUsage(input: {
         verification_notes
       )
       VALUES (
-        ${input.source_id}::uuid,
-        ${input.post_id}::uuid,
+        ${input.source_id},
+        ${input.post_id},
         ${input.context ?? null},
         ${input.claim_verified ?? null},
         ${input.verification_notes ?? null}

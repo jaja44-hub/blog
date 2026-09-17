@@ -183,8 +183,8 @@ export async function createMediaUsage(input: {
         performance_score
       )
       VALUES (
-        ${input.media_id}::uuid,
-        ${input.post_id}::uuid,
+        ${input.media_id},
+        ${input.post_id},
         ${input.usage_context ?? null},
         ${input.placement ?? null},
         ${input.performance_score ?? null}
@@ -217,7 +217,7 @@ export async function createMediaTag(input: {
   try {
     const tags = (await sql`
       INSERT INTO media_tags (media_id, tag, relevance_score)
-      VALUES (${input.media_id}::uuid, ${input.tag}, ${input.relevance_score ?? null})
+      VALUES (${input.media_id}, ${input.tag}, ${input.relevance_score ?? null})
       RETURNING *
     `) as MediaTag[];
     return tags[0];

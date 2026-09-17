@@ -82,7 +82,7 @@ export async function createSearchConsoleData(input: {
         queries
       )
       VALUES (
-        ${input.post_id ?? null}::uuid,
+        ${input.post_id ?? null},
         ${input.date},
         ${input.impressions ?? null},
         ${input.clicks ?? null},
