@@ -1,4 +1,5 @@
 import { neon } from "@neondatabase/serverless";
+import { query, queryOne } from "@/lib/db";
 
 const sql = neon(process.env.DATABASE_URL!);
 
@@ -32,11 +33,11 @@ export type SourceUsage = {
 
 export async function getKnowledgeSources() {
   try {
-    return (await sql`
-      SELECT * FROM knowledge_sources 
-      ORDER BY credibility_score DESC NULLS LAST, usage_count DESC NULLS LAST 
-      LIMIT 50
-    `) as KnowledgeSource[];
+    return await query<KnowledgeSource>(
+      `SELECT * FROM knowledge_sources 
+       ORDER BY credibility_score DESC NULLS LAST, usage_count DESC NULLS LAST 
+       LIMIT 50`
+    );
   } catch (error) {
     console.error("Error fetching knowledge sources:", error);
     return [];
@@ -45,10 +46,10 @@ export async function getKnowledgeSources() {
 
 export async function getKnowledgeSourceById(id: string) {
   try {
-    const sources = (await sql`
-      SELECT * FROM knowledge_sources WHERE id = ${id}::uuid
-    `) as KnowledgeSource[];
-    return sources[0] ?? null;
+    return await queryOne<KnowledgeSource>(
+      'SELECT * FROM knowledge_sources WHERE id = $1',
+      [id]
+    );
   } catch (error) {
     console.error("Error fetching knowledge source by ID:", error);
     return null;
@@ -68,7 +69,7 @@ export async function createKnowledgeSource(input: {
     const credibilityScore = calculateCredibilityScore(input);
     console.log("Creating knowledge source with credibility score:", credibilityScore);
     
-    const result = await sql.query(
+    const result = await queryOne<KnowledgeSource>(
       `INSERT INTO knowledge_sources (title, url, source_type, credibility_score, publisher, jurisdiction, content_type, tags, usage_count) 
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
        RETURNING *`,
@@ -83,9 +84,13 @@ export async function createKnowledgeSource(input: {
         input.tags ?? null,
         0
       ]
-    ) as KnowledgeSource[];
+    );
 
-    return result[0];
+    if (!result) {
+      throw new Error('Failed to create knowledge source');
+    }
+
+    return result;
   } catch (error) {
     console.error("Error creating knowledge source:", error);
     console.error("Input data:", input);
@@ -95,9 +100,10 @@ export async function createKnowledgeSource(input: {
 
 export async function deleteKnowledgeSource(id: string) {
   try {
-    await sql`
-      DELETE FROM knowledge_sources WHERE id = ${id}::uuid
-    `;
+    await query(
+      'DELETE FROM knowledge_sources WHERE id = $1',
+      [id]
+    );
     return true;
   } catch (error) {
     console.error("Error deleting knowledge source:", error);
@@ -107,13 +113,13 @@ export async function deleteKnowledgeSource(id: string) {
 
 export async function incrementSourceUsage(sourceId: string) {
   try {
-    const sources = (await sql`
-      UPDATE knowledge_sources
-      SET usage_count = COALESCE(usage_count, 0) + 1, updated_at = NOW()
-      WHERE id = ${sourceId}::uuid
-      RETURNING *
-    `) as KnowledgeSource[];
-    return sources[0] ?? null;
+    return await queryOne<KnowledgeSource>(
+      `UPDATE knowledge_sources
+       SET usage_count = COALESCE(usage_count, 0) + 1, updated_at = NOW()
+       WHERE id = $1
+       RETURNING *`,
+      [sourceId]
+    );
   } catch (error) {
     console.error("Error incrementing source usage:", error);
     throw error;
@@ -122,14 +128,14 @@ export async function incrementSourceUsage(sourceId: string) {
 
 export async function getSourceUsageByPost(postId: string) {
   try {
-    const usage = (await sql`
-      SELECT su.*, ks.title, ks.url, ks.publisher
-      FROM source_usage su
-      JOIN knowledge_sources ks ON su.source_id = ks.id
-      WHERE su.post_id = ${postId}::uuid
-      ORDER BY su.created_at DESC
-    `) as any[];
-    return usage;
+    return await query<any>(
+      `SELECT su.*, ks.title, ks.url, ks.publisher
+       FROM source_usage su
+       JOIN knowledge_sources ks ON su.source_id = ks.id
+       WHERE su.post_id = $1
+       ORDER BY su.created_at DESC`,
+      [postId]
+    );
   } catch (error) {
     console.error("Error fetching source usage by post:", error);
     return [];
@@ -144,26 +150,21 @@ export async function createSourceUsage(input: {
   verification_notes?: string;
 }) {
   try {
-    const usage = (await sql`
-      INSERT INTO source_usage (
-        source_id,
-        post_id,
-        context,
-        claim_verified,
-        verification_notes
-      )
-      VALUES (
-        ${input.source_id}::uuid,
-        ${input.post_id}::uuid,
-        ${input.context ?? null},
-        ${input.claim_verified ?? null},
-        ${input.verification_notes ?? null}
-      )
-      RETURNING *
-    `) as SourceUsage[];
+    const usage = await queryOne<SourceUsage>(
+      `INSERT INTO source_usage (source_id, post_id, context, claim_verified, verification_notes)
+       VALUES ($1, $2, $3, $4, $5)
+       RETURNING *`,
+      [
+        input.source_id,
+        input.post_id,
+        input.context ?? null,
+        input.claim_verified ?? null,
+        input.verification_notes ?? null
+      ]
+    );
 
     await incrementSourceUsage(input.source_id);
-    return usage[0];
+    return usage;
   } catch (error) {
     console.error("Error creating source usage:", error);
     throw error;
