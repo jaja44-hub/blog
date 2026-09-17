@@ -68,33 +68,24 @@ export async function createKnowledgeSource(input: {
     const credibilityScore = calculateCredibilityScore(input);
     console.log("Creating knowledge source with credibility score:", credibilityScore);
     
-    const sources = (await sql`
-      INSERT INTO knowledge_sources (
-        title,
-        url,
-        source_type,
-        credibility_score,
-        publisher,
-        jurisdiction,
-        content_type,
-        tags,
-        usage_count
-      )
-      VALUES (
-        ${input.title},
-        ${input.url},
-        ${input.source_type ?? null},
-        ${credibilityScore},
-        ${input.publisher ?? null},
-        ${input.jurisdiction ?? null},
-        ${input.content_type ?? null},
-        ${input.tags ?? null},
+    const result = await sql.query(
+      `INSERT INTO knowledge_sources (title, url, source_type, credibility_score, publisher, jurisdiction, content_type, tags, usage_count) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
+       RETURNING *`,
+      [
+        input.title,
+        input.url,
+        input.source_type ?? null,
+        credibilityScore,
+        input.publisher ?? null,
+        input.jurisdiction ?? null,
+        input.content_type ?? null,
+        input.tags ?? null,
         0
-      )
-      RETURNING *
-    `) as KnowledgeSource[];
+      ]
+    ) as KnowledgeSource[];
 
-    return sources[0];
+    return result[0];
   } catch (error) {
     console.error("Error creating knowledge source:", error);
     console.error("Input data:", input);
