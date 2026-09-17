@@ -70,20 +70,14 @@ export async function createKnowledgeSource(input: {
     console.log("Creating knowledge source with credibility score:", credibilityScore);
     console.log("Input data:", JSON.stringify(input, null, 2));
     
-    // Start with minimal insert
-    const result = await queryOne<KnowledgeSource>(
-      `INSERT INTO knowledge_sources (title, url, credibility_score, usage_count) 
-       VALUES ($1, $2, $3, $4) 
-       RETURNING *`,
-      [
-        input.title,
-        input.url,
-        credibilityScore,
-        0
-      ]
-    );
+    // Use direct sql neon call for insert
+    const result = (await sql`
+      INSERT INTO knowledge_sources (title, url, credibility_score, usage_count)
+      VALUES (${input.title}, ${input.url}, ${credibilityScore}, 0)
+      RETURNING *
+    `) as KnowledgeSource[];
 
-    if (!result) {
+    if (!result || result.length === 0) {
       throw new Error('Failed to create knowledge source');
     }
 
@@ -98,11 +92,11 @@ export async function createKnowledgeSource(input: {
              tags = COALESCE($6, tags),
              updated_at = NOW()
          WHERE id = $1`,
-        [result.id, input.source_type, input.publisher, input.jurisdiction, input.content_type, input.tags]
+        [result[0].id, input.source_type, input.publisher, input.jurisdiction, input.content_type, input.tags]
       );
     }
 
-    return result;
+    return result[0];
   } catch (error) {
     console.error("Error creating knowledge source:", error);
     console.error("Error type:", error instanceof Error ? error.constructor.name : typeof error);
