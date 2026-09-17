@@ -132,6 +132,11 @@ export default function AdminWorkspace() {
   const [showGoogleAds, setShowGoogleAds] = useState(false);
   const [selectedCampaign, setSelectedCampaign] = useState<GoogleAdsCampaign | null>(null);
   const [campaignPerformance, setCampaignPerformance] = useState<GoogleAdsPerformance[]>([]);
+  const [adSenseUnits, setAdSenseUnits] = useState<any[]>([]);
+  const [showAdSense, setShowAdSense] = useState(false);
+  const [adSensePerformance, setAdSensePerformance] = useState<any[]>([]);
+  const [searchConsoleData, setSearchConsoleData] = useState<any[]>([]);
+  const [showSearchConsole, setShowSearchConsole] = useState(false);
 
   async function loadDrafts() {
     const response = await fetch("/api/admin/drafts");
@@ -375,6 +380,92 @@ export default function AdminWorkspace() {
     }
   }
 
+  async function loadAdSense() {
+    const response = await fetch("/api/admin/adsense/ad-units");
+    const result = await response.json();
+    if (response.ok) {
+      setAdSenseUnits(result.units ?? []);
+      setShowAdSense(true);
+    } else {
+      setMessage(result.error ?? "Could not load AdSense ad units.");
+    }
+  }
+
+  async function loadAdSensePerformance(adUnitId?: string) {
+    const response = await fetch(`/api/admin/adsense/performance?ad_unit_id=${adUnitId || ''}`);
+    const result = await response.json();
+    if (response.ok) {
+      setAdSensePerformance(result.performance ?? []);
+    } else {
+      setMessage(result.error ?? "Could not load AdSense performance.");
+    }
+  }
+
+  async function createAdSenseUnit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const response = await fetch("/api/admin/adsense/ad-units", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(Object.fromEntries(form.entries()))
+    });
+    const result = await response.json();
+    setMessage(response.ok ? `Ad unit created: ${result.unit.ad_unit_name}` : result.error ?? "Ad unit could not be created.");
+    if (response.ok) {
+      event.currentTarget.reset();
+      await loadAdSense();
+    }
+  }
+
+  async function deleteAdSenseUnit(id: string) {
+    const response = await fetch(`/api/admin/adsense/ad-units?id=${id}`, {
+      method: "DELETE"
+    });
+    const result = await response.json();
+    setMessage(response.ok ? "Ad unit deleted." : result.error ?? "Ad unit could not be deleted.");
+    if (response.ok) {
+      await loadAdSense();
+    }
+  }
+
+  async function loadSearchConsole() {
+    const response = await fetch("/api/admin/search-console");
+    const result = await response.json();
+    if (response.ok) {
+      setSearchConsoleData(result.data ?? []);
+      setShowSearchConsole(true);
+    } else {
+      setMessage(result.error ?? "Could not load Search Console data.");
+    }
+  }
+
+  async function createSearchConsoleData(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const response = await fetch("/api/admin/search-console", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(Object.fromEntries(form.entries()))
+    });
+    const result = await response.json();
+    setMessage(response.ok ? `Search Console data created for ${result.data.date}` : result.error ?? "Data could not be created.");
+    if (response.ok) {
+      event.currentTarget.reset();
+      await loadSearchConsole();
+    }
+  }
+
+  async function deleteSearchConsoleData(id: string) {
+    const response = await fetch(`/api/admin/search-console?id=${id}`, {
+      method: "DELETE"
+    });
+    const result = await response.json();
+    setMessage(response.ok ? "Search Console data deleted." : result.error ?? "Data could not be deleted.");
+    if (response.ok) {
+      await loadSearchConsole();
+    }
+  }
+
   async function createSource(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
@@ -501,6 +592,8 @@ export default function AdminWorkspace() {
           <button type="button" onClick={loadSources} className="rounded-md border border-line px-4 py-2 text-sm text-teal hover:border-teal">Knowledge sources</button>
           <button type="button" onClick={loadMedia} className="rounded-md border border-line px-4 py-2 text-sm text-teal hover:border-teal">Media library</button>
           <button type="button" onClick={loadGoogleAds} className="rounded-md border border-line px-4 py-2 text-sm text-teal hover:border-teal">Google Ads</button>
+          <button type="button" onClick={loadAdSense} className="rounded-md border border-line px-4 py-2 text-sm text-teal hover:border-teal">AdSense</button>
+          <button type="button" onClick={loadSearchConsole} className="rounded-md border border-line px-4 py-2 text-sm text-teal hover:border-teal">Search Console</button>
         </div>
       </div>
       {drafts.length > 0 && (
@@ -981,6 +1074,99 @@ export default function AdminWorkspace() {
               <button type="submit" className="rounded-md bg-teal px-4 py-3 text-sm font-medium text-white hover:bg-tealDeep">Add campaign</button>
             </form>
           )}
+        </section>
+      )}
+      {showAdSense && (
+        <section className="mt-12 max-w-2xl border-t border-line pt-8">
+          <div className="flex items-center justify-between">
+            <h2 className="mb-5 font-display text-2xl font-semibold text-ink">AdSense ad units</h2>
+            <button type="button" onClick={() => setShowAdSense(false)} className="text-sm text-teal underline underline-offset-2">Close</button>
+          </div>
+          {adSenseUnits.length > 0 && (
+            <div className="mb-6 space-y-3">
+              {adSenseUnits.map((unit) => (
+                <div key={unit.id} className="border border-line p-4">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <p className="text-xs uppercase tracking-wide text-ochre">{unit.status || 'Unknown'} · {unit.ad_unit_type || 'General'}</p>
+                      <p className="mt-1 font-display text-lg font-semibold text-ink">{unit.ad_unit_name || 'Untitled Unit'}</p>
+                      {unit.ad_unit_id && (
+                        <p className="mt-1 text-sm text-stone">AdSense ID: {unit.ad_unit_id}</p>
+                      )}
+                      {unit.placement && (
+                        <p className="mt-1 text-sm text-stone">Placement: {unit.placement}</p>
+                      )}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => deleteAdSenseUnit(unit.id)}
+                      className="ml-4 text-sm text-red-600 underline underline-offset-2"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+          <form onSubmit={createAdSenseUnit} className="space-y-4">
+            <h3 className="font-display text-lg font-semibold text-ink">Add new ad unit</h3>
+            <input name="ad_unit_name" required placeholder="Ad unit name" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+            <input name="ad_unit_id" placeholder="AdSense ad unit ID (optional)" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+            <div className="grid gap-4 sm:grid-cols-2">
+              <input name="ad_unit_type" placeholder="Ad unit type (e.g., display, video)" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+              <input name="placement" placeholder="Placement (e.g., header, sidebar)" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+            </div>
+            <input name="status" placeholder="Status (e.g., active, paused)" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+            <button type="submit" className="rounded-md bg-teal px-4 py-3 text-sm font-medium text-white hover:bg-tealDeep">Add ad unit</button>
+          </form>
+        </section>
+      )}
+      {showSearchConsole && (
+        <section className="mt-12 max-w-2xl border-t border-line pt-8">
+          <div className="flex items-center justify-between">
+            <h2 className="mb-5 font-display text-2xl font-semibold text-ink">Search Console data</h2>
+            <button type="button" onClick={() => setShowSearchConsole(false)} className="text-sm text-teal underline underline-offset-2">Close</button>
+          </div>
+          {searchConsoleData.length > 0 && (
+            <div className="mb-6 space-y-3">
+              {searchConsoleData.map((data) => (
+                <div key={data.id} className="border border-line p-4">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <p className="text-xs uppercase tracking-wide text-ochre">{data.date || 'Unknown date'}</p>
+                      <div className="mt-2 flex gap-4 text-sm text-stone">
+                        <span>Impressions: {data.impressions || 0}</span>
+                        <span>Clicks: {data.clicks || 0}</span>
+                        <span>CTR: {data.ctr ? `${(data.ctr * 100).toFixed(2)}%` : 'N/A'}</span>
+                        <span>Avg Position: {data.avg_position || 'N/A'}</span>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => deleteSearchConsoleData(data.id)}
+                      className="ml-4 text-sm text-red-600 underline underline-offset-2"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+          <form onSubmit={createSearchConsoleData} className="space-y-4">
+            <h3 className="font-display text-lg font-semibold text-ink">Add Search Console data</h3>
+            <input name="date" type="date" required placeholder="Date" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+            <div className="grid gap-4 sm:grid-cols-2">
+              <input name="impressions" type="number" placeholder="Impressions" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+              <input name="clicks" type="number" placeholder="Clicks" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <input name="ctr" type="number" step="0.0001" placeholder="CTR (0-1)" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+              <input name="avg_position" type="number" step="0.1" placeholder="Average position" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+            </div>
+            <button type="submit" className="rounded-md bg-teal px-4 py-3 text-sm font-medium text-white hover:bg-tealDeep">Add data</button>
+          </form>
         </section>
       )}
       {message && <p className="mt-4 text-sm text-stone" role="status">{message}</p>}
