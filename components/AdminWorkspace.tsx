@@ -137,6 +137,9 @@ export default function AdminWorkspace() {
   const [adSensePerformance, setAdSensePerformance] = useState<any[]>([]);
   const [searchConsoleData, setSearchConsoleData] = useState<any[]>([]);
   const [showSearchConsole, setShowSearchConsole] = useState(false);
+  const [showContentPlanning, setShowContentPlanning] = useState(false);
+  const [contentPerformance, setContentPerformance] = useState<any[]>([]);
+  const [seoRecommendations, setSeoRecommendations] = useState<any[]>([]);
 
   async function loadDrafts() {
     const response = await fetch("/api/admin/drafts");
@@ -177,7 +180,7 @@ export default function AdminWorkspace() {
   }
 
   async function loadOpportunities() {
-    const response = await fetch("/api/admin/analytics/opportunities");
+    const response = await fetch("/api/admin/content-opportunities");
     const result = await response.json();
     if (response.ok) {
       setOpportunities(result.opportunities ?? []);
@@ -189,7 +192,7 @@ export default function AdminWorkspace() {
   async function createOpportunity(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
-    const response = await fetch("/api/admin/analytics/opportunities", {
+    const response = await fetch("/api/admin/content-opportunities", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(Object.fromEntries(form.entries()))
@@ -199,6 +202,27 @@ export default function AdminWorkspace() {
     if (response.ok) {
       event.currentTarget.reset();
       await loadOpportunities();
+    }
+  }
+
+  async function loadContentPlanning() {
+    const response = await fetch("/api/admin/content-performance");
+    const result = await response.json();
+    if (response.ok) {
+      setContentPerformance(result.performance ?? []);
+      setShowContentPlanning(true);
+    } else {
+      setMessage(result.error ?? "Could not load content planning data.");
+    }
+  }
+
+  async function loadSEORecommendations() {
+    const response = await fetch("/api/admin/seo-recommendations");
+    const result = await response.json();
+    if (response.ok) {
+      setSeoRecommendations(result.recommendations ?? []);
+    } else {
+      setMessage(result.error ?? "Could not load SEO recommendations.");
     }
   }
 
@@ -594,6 +618,7 @@ export default function AdminWorkspace() {
           <button type="button" onClick={loadGoogleAds} className="rounded-md border border-line px-4 py-2 text-sm text-teal hover:border-teal">Google Ads</button>
           <button type="button" onClick={loadAdSense} className="rounded-md border border-line px-4 py-2 text-sm text-teal hover:border-teal">AdSense</button>
           <button type="button" onClick={loadSearchConsole} className="rounded-md border border-line px-4 py-2 text-sm text-teal hover:border-teal">Search Console</button>
+          <button type="button" onClick={loadContentPlanning} className="rounded-md border border-line px-4 py-2 text-sm text-teal hover:border-teal">Content planning</button>
         </div>
       </div>
       {drafts.length > 0 && (
@@ -1167,6 +1192,58 @@ export default function AdminWorkspace() {
             </div>
             <button type="submit" className="rounded-md bg-teal px-4 py-3 text-sm font-medium text-white hover:bg-tealDeep">Add data</button>
           </form>
+        </section>
+      )}
+      {showContentPlanning && (
+        <section className="mt-12 max-w-3xl border-t border-line pt-8">
+          <div className="flex items-center justify-between">
+            <h2 className="mb-5 font-display text-2xl font-semibold text-ink">Content planning intelligence</h2>
+            <button type="button" onClick={() => setShowContentPlanning(false)} className="text-sm text-teal underline underline-offset-2">Close</button>
+          </div>
+          
+          <div className="mb-6">
+            <button type="button" onClick={loadSEORecommendations} className="rounded-md border border-line px-4 py-2 text-sm text-teal hover:border-teal">Load SEO recommendations</button>
+          </div>
+
+          {seoRecommendations.length > 0 && (
+            <div className="mb-6">
+              <h3 className="font-display text-lg font-semibold text-ink mb-3">SEO recommendations</h3>
+              <div className="space-y-2">
+                {seoRecommendations.map((rec, idx) => (
+                  <div key={idx} className="border border-line p-3 flex items-start justify-between">
+                    <div>
+                      <span className={`text-xs uppercase tracking-wide ${rec.priority === 'high' ? 'text-red-600' : rec.priority === 'medium' ? 'text-ochre' : 'text-stone'}`}>
+                        {rec.priority} priority
+                      </span>
+                      <p className="mt-1 text-sm text-ink">{rec.suggestion}</p>
+                      <p className="mt-1 text-xs text-stone">Impact: {rec.impact}</p>
+                    </div>
+                    <span className="text-xs uppercase text-teal">{rec.type}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {contentPerformance.length > 0 && (
+            <div>
+              <h3 className="font-display text-lg font-semibold text-ink mb-3">Content performance</h3>
+              <div className="space-y-2">
+                {contentPerformance.slice(0, 5).map((perf) => (
+                  <div key={perf.id} className="border border-line p-3">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-stone">Views: {perf.view_count || 0}</span>
+                      <span className="text-stone">Performance: {perf.performance_score?.toFixed(1) || 'N/A'}</span>
+                    </div>
+                    <div className="mt-1 flex justify-between text-sm">
+                      <span className="text-stone">Read time: {perf.avg_read_time || 0}s</span>
+                      <span className="text-stone">Completion: {perf.completion_rate ? (perf.completion_rate * 100).toFixed(1) + '%' : 'N/A'}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </section>
       )}
       {message && <p className="mt-4 text-sm text-stone" role="status">{message}</p>}
