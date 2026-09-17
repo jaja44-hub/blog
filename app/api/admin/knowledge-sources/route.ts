@@ -22,6 +22,8 @@ export async function POST(request: NextRequest) {
   }
 
   const body = await request.json().catch(() => null);
+  console.log("POST request body:", body);
+  
   if (!body || typeof body.title !== "string" || typeof body.url !== "string") {
     return NextResponse.json({ error: "Title and URL are required." }, { status: 400 });
   }
@@ -39,6 +41,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ source }, { status: 201 });
   } catch (error) {
     console.error("Failed to create knowledge source:", error);
+    console.error("Error details:", JSON.stringify(error, null, 2));
     if (error instanceof Error && error.message.includes('duplicate key')) {
       return NextResponse.json({ error: "A source with this URL already exists." }, { status: 409 });
     }

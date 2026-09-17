@@ -66,6 +66,7 @@ export async function createKnowledgeSource(input: {
 }) {
   try {
     const credibilityScore = calculateCredibilityScore(input);
+    console.log("Creating knowledge source with credibility score:", credibilityScore);
     
     const sources = (await sql`
       INSERT INTO knowledge_sources (
@@ -96,6 +97,7 @@ export async function createKnowledgeSource(input: {
     return sources[0];
   } catch (error) {
     console.error("Error creating knowledge source:", error);
+    console.error("Input data:", input);
     throw error;
   }
 }
