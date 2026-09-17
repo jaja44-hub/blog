@@ -68,20 +68,17 @@ export async function createKnowledgeSource(input: {
   try {
     const credibilityScore = calculateCredibilityScore(input);
     console.log("Creating knowledge source with credibility score:", credibilityScore);
+    console.log("Input data:", JSON.stringify(input, null, 2));
     
+    // Start with minimal insert
     const result = await queryOne<KnowledgeSource>(
-      `INSERT INTO knowledge_sources (title, url, source_type, credibility_score, publisher, jurisdiction, content_type, tags, usage_count) 
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
+      `INSERT INTO knowledge_sources (title, url, credibility_score, usage_count) 
+       VALUES ($1, $2, $3, $4) 
        RETURNING *`,
       [
         input.title,
         input.url,
-        input.source_type ?? null,
         credibilityScore,
-        input.publisher ?? null,
-        input.jurisdiction ?? null,
-        input.content_type ?? null,
-        input.tags ?? null,
         0
       ]
     );
@@ -90,10 +87,26 @@ export async function createKnowledgeSource(input: {
       throw new Error('Failed to create knowledge source');
     }
 
+    // If successful, update with additional fields
+    if (input.source_type || input.publisher || input.jurisdiction || input.content_type || input.tags) {
+      await query(
+        `UPDATE knowledge_sources 
+         SET source_type = COALESCE($2, source_type),
+             publisher = COALESCE($3, publisher),
+             jurisdiction = COALESCE($4, jurisdiction),
+             content_type = COALESCE($5, content_type),
+             tags = COALESCE($6, tags),
+             updated_at = NOW()
+         WHERE id = $1`,
+        [result.id, input.source_type, input.publisher, input.jurisdiction, input.content_type, input.tags]
+      );
+    }
+
     return result;
   } catch (error) {
     console.error("Error creating knowledge source:", error);
-    console.error("Input data:", input);
+    console.error("Error type:", error instanceof Error ? error.constructor.name : typeof error);
+    console.error("Error message:", error instanceof Error ? error.message : String(error));
     throw error;
   }
 }
