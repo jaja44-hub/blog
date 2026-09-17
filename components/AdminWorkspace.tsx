@@ -265,11 +265,12 @@ export default function AdminWorkspace() {
     const response = await fetch(`/api/admin/media/suggest-tags?media_id=${mediaId}`);
     const result = await response.json();
     if (response.ok && result.suggested_tags && result.suggested_tags.length > 0) {
-      setMessage(`Suggested ${result.suggested_tags.length} tags. Apply them in the tag input.`);
-      return result.suggested_tags;
+      setMessage(`Suggested ${result.suggested_tags.length} tags. Applying them now.`);
+      for (const tag of result.suggested_tags) {
+        await addMediaTag(mediaId, tag);
+      }
     } else {
       setMessage(result.error ?? "No tag suggestions available.");
-      return [];
     }
   }
 
@@ -719,11 +720,7 @@ export default function AdminWorkspace() {
                         <div className="mb-2">
                           <button
                             type="button"
-                            onClick={() => suggestTags(asset.id).then(tags => {
-                              if (tags.length > 0) {
-                                tags.forEach(tag => addMediaTag(asset.id, tag));
-                              }
-                            })}
+                            onClick={() => suggestTags(asset.id)}
                             className="text-sm text-teal underline underline-offset-2"
                           >
                             Suggest tags
