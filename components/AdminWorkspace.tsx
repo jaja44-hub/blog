@@ -80,6 +80,38 @@ type MediaTag = {
   created_at: string;
 };
 
+type GoogleAdsCampaign = {
+  id: string;
+  campaign_name: string | null;
+  campaign_id: string | null;
+  campaign_type: string | null;
+  status: string | null;
+  budget_daily: number | null;
+  budget_total: number | null;
+  start_date: string | null;
+  end_date: string | null;
+  target_locations: any;
+  target_keywords: any;
+  target_audience: any;
+  created_at: string;
+  updated_at: string;
+};
+
+type GoogleAdsPerformance = {
+  id: string;
+  campaign_id: string | null;
+  date: string | null;
+  impressions: number | null;
+  clicks: number | null;
+  cost: number | null;
+  conversions: number | null;
+  conversion_value: number | null;
+  ctr: number | null;
+  cpc: number | null;
+  roas: number | null;
+  created_at: string;
+};
+
 export default function AdminWorkspace() {
   const [message, setMessage] = useState("");
   const [drafts, setDrafts] = useState<Draft[]>([]);
@@ -96,6 +128,10 @@ export default function AdminWorkspace() {
   const [showMedia, setShowMedia] = useState(false);
   const [selectedMedia, setSelectedMedia] = useState<MediaAsset | null>(null);
   const [mediaTags, setMediaTags] = useState<MediaTag[]>([]);
+  const [campaigns, setCampaigns] = useState<GoogleAdsCampaign[]>([]);
+  const [showGoogleAds, setShowGoogleAds] = useState(false);
+  const [selectedCampaign, setSelectedCampaign] = useState<GoogleAdsCampaign | null>(null);
+  const [campaignPerformance, setCampaignPerformance] = useState<GoogleAdsPerformance[]>([]);
 
   async function loadDrafts() {
     const response = await fetch("/api/admin/drafts");
@@ -274,6 +310,71 @@ export default function AdminWorkspace() {
     }
   }
 
+  async function loadGoogleAds() {
+    const response = await fetch("/api/admin/google-ads/campaigns");
+    const result = await response.json();
+    if (response.ok) {
+      setCampaigns(result.campaigns ?? []);
+      setShowGoogleAds(true);
+    } else {
+      setMessage(result.error ?? "Could not load Google Ads campaigns.");
+    }
+  }
+
+  async function loadCampaignPerformance(campaignId: string) {
+    const response = await fetch(`/api/admin/google-ads/performance?campaign_id=${campaignId}`);
+    const result = await response.json();
+    if (response.ok) {
+      setCampaignPerformance(result.performance ?? []);
+    } else {
+      setMessage(result.error ?? "Could not load campaign performance.");
+    }
+  }
+
+  async function createCampaign(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const response = await fetch("/api/admin/google-ads/campaigns", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(Object.fromEntries(form.entries()))
+    });
+    const result = await response.json();
+    setMessage(response.ok ? `Campaign created: ${result.campaign.campaign_name}` : result.error ?? "Campaign could not be created.");
+    if (response.ok) {
+      event.currentTarget.reset();
+      await loadGoogleAds();
+    }
+  }
+
+  async function updateCampaign(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!selectedCampaign) return;
+    const form = new FormData(event.currentTarget);
+    const response = await fetch("/api/admin/google-ads/campaigns", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: selectedCampaign.id, ...Object.fromEntries(form.entries()) })
+    });
+    const result = await response.json();
+    setMessage(response.ok ? "Campaign updated." : result.error ?? "Campaign could not be updated.");
+    if (response.ok) {
+      await loadGoogleAds();
+      setSelectedCampaign(null);
+    }
+  }
+
+  async function deleteCampaign(id: string) {
+    const response = await fetch(`/api/admin/google-ads/campaigns?id=${id}`, {
+      method: "DELETE"
+    });
+    const result = await response.json();
+    setMessage(response.ok ? "Campaign deleted." : result.error ?? "Campaign could not be deleted.");
+    if (response.ok) {
+      await loadGoogleAds();
+    }
+  }
+
   async function createSource(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
@@ -399,6 +500,7 @@ export default function AdminWorkspace() {
           <button type="button" onClick={loadOpportunities} className="rounded-md border border-line px-4 py-2 text-sm text-teal hover:border-teal">Content opportunities</button>
           <button type="button" onClick={loadSources} className="rounded-md border border-line px-4 py-2 text-sm text-teal hover:border-teal">Knowledge sources</button>
           <button type="button" onClick={loadMedia} className="rounded-md border border-line px-4 py-2 text-sm text-teal hover:border-teal">Media library</button>
+          <button type="button" onClick={loadGoogleAds} className="rounded-md border border-line px-4 py-2 text-sm text-teal hover:border-teal">Google Ads</button>
         </div>
       </div>
       {drafts.length > 0 && (
@@ -766,6 +868,117 @@ export default function AdminWorkspace() {
               <input name="credit" placeholder="Credit/attribution" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
               <input name="license" placeholder="License (e.g., CC BY 4.0)" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
               <button type="submit" className="rounded-md bg-teal px-4 py-3 text-sm font-medium text-white hover:bg-tealDeep">Add media asset</button>
+            </form>
+          )}
+        </section>
+      )}
+      {showGoogleAds && (
+        <section className="mt-12 max-w-2xl border-t border-line pt-8">
+          <div className="flex items-center justify-between">
+            <h2 className="mb-5 font-display text-2xl font-semibold text-ink">Google Ads campaigns</h2>
+            <button type="button" onClick={() => setShowGoogleAds(false)} className="text-sm text-teal underline underline-offset-2">Close</button>
+          </div>
+          {campaigns.length > 0 && (
+            <div className="mb-6 space-y-3">
+              {campaigns.map((campaign) => (
+                <div key={campaign.id} className="border border-line p-4">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <p className="text-xs uppercase tracking-wide text-ochre">{campaign.status || 'Unknown'} · {campaign.campaign_type || 'General'}</p>
+                      <p className="mt-1 font-display text-lg font-semibold text-ink">{campaign.campaign_name || 'Untitled Campaign'}</p>
+                      {campaign.campaign_id && (
+                        <p className="mt-1 text-sm text-stone">Google ID: {campaign.campaign_id}</p>
+                      )}
+                      <div className="mt-2 flex gap-4 text-sm text-stone">
+                        <span>Daily Budget: {campaign.budget_daily ? `$${campaign.budget_daily}` : 'N/A'}</span>
+                        <span>Total Budget: {campaign.budget_total ? `$${campaign.budget_total}` : 'N/A'}</span>
+                      </div>
+                      {campaign.start_date && campaign.end_date && (
+                        <p className="mt-1 text-sm text-stone">
+                          {campaign.start_date} to {campaign.end_date}
+                        </p>
+                      )}
+                    </div>
+                    <div className="ml-4 flex gap-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedCampaign(campaign);
+                          loadCampaignPerformance(campaign.id);
+                        }}
+                        className="text-sm text-teal underline underline-offset-2"
+                      >
+                        View
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => deleteCampaign(campaign.id)}
+                        className="text-sm text-red-600 underline underline-offset-2"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                  {selectedCampaign?.id === campaign.id && (
+                    <div className="mt-4 border-t border-line pt-4">
+                      <h3 className="mb-3 font-display text-lg font-semibold text-ink">Campaign details</h3>
+                      <form onSubmit={updateCampaign} className="space-y-3">
+                        <input name="campaign_name" defaultValue={campaign.campaign_name || ''} placeholder="Campaign name" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+                        <div className="grid gap-4 sm:grid-cols-2">
+                          <input name="budget_daily" type="number" step="0.01" defaultValue={campaign.budget_daily || ''} placeholder="Daily budget" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+                          <input name="budget_total" type="number" step="0.01" defaultValue={campaign.budget_total || ''} placeholder="Total budget" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+                        </div>
+                        <div className="grid gap-4 sm:grid-cols-2">
+                          <input name="start_date" type="date" defaultValue={campaign.start_date || ''} className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+                          <input name="end_date" type="date" defaultValue={campaign.end_date || ''} className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+                        </div>
+                        <div className="flex gap-3">
+                          <button type="submit" className="rounded-md bg-teal px-4 py-3 text-sm font-medium text-white hover:bg-tealDeep">Save changes</button>
+                          <button type="button" onClick={() => setSelectedCampaign(null)} className="rounded-md border border-line px-4 py-3 text-sm text-teal hover:border-teal">Cancel</button>
+                        </div>
+                      </form>
+                      <div className="mt-4">
+                        <h4 className="mb-2 font-display text-sm font-semibold text-ink">Performance</h4>
+                        {campaignPerformance.length > 0 ? (
+                          <div className="space-y-2">
+                            {campaignPerformance.slice(0, 7).map((perf) => (
+                              <div key={perf.id} className="text-sm text-stone border-b border-line pb-2">
+                                <span className="font-medium">{perf.date}</span>
+                                <span className="ml-4">Impressions: {perf.impressions || 0}</span>
+                                <span className="ml-4">Clicks: {perf.clicks || 0}</span>
+                                <span className="ml-4">Cost: ${perf.cost || 0}</span>
+                                <span className="ml-4">CTR: {perf.ctr ? `${(perf.ctr * 100).toFixed(2)}%` : 'N/A'}</span>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <p className="text-sm text-stone">No performance data yet.</p>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+          {!selectedCampaign && (
+            <form onSubmit={createCampaign} className="space-y-4">
+              <h3 className="font-display text-lg font-semibold text-ink">Add new campaign</h3>
+              <input name="campaign_name" required placeholder="Campaign name" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+              <input name="campaign_id" placeholder="Google Ads campaign ID (optional)" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+              <div className="grid gap-4 sm:grid-cols-2">
+                <input name="campaign_type" placeholder="Campaign type (e.g., search, display)" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+                <input name="status" placeholder="Status (e.g., active, paused)" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+              </div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <input name="budget_daily" type="number" step="0.01" placeholder="Daily budget" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+                <input name="budget_total" type="number" step="0.01" placeholder="Total budget" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+              </div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <input name="start_date" type="date" placeholder="Start date" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+                <input name="end_date" type="date" placeholder="End date" className="w-full rounded-md border border-line bg-parchment px-4 py-3" />
+              </div>
+              <button type="submit" className="rounded-md bg-teal px-4 py-3 text-sm font-medium text-white hover:bg-tealDeep">Add campaign</button>
             </form>
           )}
         </section>
