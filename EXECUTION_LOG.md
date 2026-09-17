@@ -1116,14 +1116,16 @@ This document tracks the day-to-day execution of the backend development roadmap
 25. ✅ Sprint 7: Google Ads Foundation completed (5/5 tasks, with known POST limitation)
 26. ✅ Sprint 8: AdSense and Search Console scaffolding completed (5/5 tasks, with known POST limitation)
 27. ⏭️ Investigate POST endpoint failure pattern (priority issue affecting Sprint 5, 6, 7, 8)
-28. ⏳ Re-enable NextAuth integration with v5-compatible setup
-29. ⏳ Awaiting Google Cloud project credentials from legal app (no blocking impact)
+28. ❌ POST endpoint fix attempt failed - UUID casting hypothesis disproven (see POST_FIX_VERIFICATION_REPORT.md)
+29. ⏭️ Add detailed logging to failing POST endpoints to capture real error messages
+30. ⏳ Re-enable NextAuth integration with v5-compatible setup
+31. ⏳ Awaiting Google Cloud project credentials from legal app (no blocking impact)
 
 ---
 
 **Last Updated**: 2026-09-17
 **Updated By**: Development Team
-**Next Review**: After Sprint 8 completion
+**Next Review**: After POST endpoint logging and Vercel function log investigation
 **Deployment Recovery**: See VERCEL_DEPLOYMENT_RECOVERY.md for full details
 **Sprint 2 Evidence**: See EVIDENCE_SPRINT_2_DATABASE_FOUNDATION.md for full details
 **Sprint 3 Evidence**: See EVIDENCE_SPRINT_3_ENHANCED_ADMIN.md for full details
@@ -1132,3 +1134,5 @@ This document tracks the day-to-day execution of the backend development roadmap
 **Sprint 6 Evidence**: See EVIDENCE_SPRINT_6_MEDIA_LIBRARY.md for full details
 **Sprint 7 Evidence**: See EVIDENCE_SPRINT_7_GOOGLE_ADS.md for full details
 **Sprint 8 Evidence**: See EVIDENCE_SPRINT_8_ADSENSE_SEARCH_CONSOLE.md for full details
+**POST Investigation**: See POST_ENDPOINT_INVESTIGATION_REPORT.md for full details
+**POST Fix Verification**: See POST_FIX_VERIFICATION_REPORT.md for full details
