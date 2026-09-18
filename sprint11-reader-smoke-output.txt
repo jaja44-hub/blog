@@ -1,0 +1,20 @@
+/                                          200 https://blog.addiscrown.et/ text/html; charset=utf-8
+/latest                                    200 https://blog.addiscrown.et/latest text/html; charset=utf-8
+/new-this-week                             200 https://blog.addiscrown.et/new-this-week text/html; charset=utf-8
+/popular                                   200 https://blog.addiscrown.et/popular text/html; charset=utf-8
+/contact                                   200 https://blog.addiscrown.et/contact text/html; charset=utf-8
+/search                                    200 https://blog.addiscrown.et/search text/html; charset=utf-8
+/about                                     200 https://blog.addiscrown.et/about text/html; charset=utf-8
+/corrections                               200 https://blog.addiscrown.et/corrections text/html; charset=utf-8
+/accessibility                             200 https://blog.addiscrown.et/accessibility text/html; charset=utf-8
+/privacy-policy                            200 https://blog.addiscrown.et/privacy-policy text/html; charset=utf-8
+/terms                                     200 https://blog.addiscrown.et/terms text/html; charset=utf-8
+/feed.xml                                  200 https://blog.addiscrown.et/feed.xml application/xml
+/robots.txt                                200 https://blog.addiscrown.et/robots.txt text/plain
+/sitemap.xml                               200 https://blog.addiscrown.et/sitemap.xml application/xml
+/posts/public-policy-institutions          200 https://blog.addiscrown.et/posts/public-policy-institutions text/html; charset=utf-8
+/posts/media-and-information               200 https://blog.addiscrown.et/posts/media-and-information text/html; charset=utf-8
+/posts/markets-and-investment              200 https://blog.addiscrown.et/posts/markets-and-investment text/html; charset=utf-8
+/category/legal-rights                     200 https://blog.addiscrown.et/category/legal-rights text/html; charset=utf-8
+/category/technology-ai                    200 https://blog.addiscrown.et/category/technology-ai text/html; charset=utf-8
+/category/economics-and-finance            200 https://blog.addiscrown.et/category/economics-and-finance text/html; charset=utf-8
