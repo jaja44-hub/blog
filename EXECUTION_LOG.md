@@ -11,7 +11,7 @@
 **Integration Strategy:** Option A - NextAuth Integration with Existing System  
 **Cloud Strategy**: Option A - Reuse Existing Google Cloud Project  
 **Development Approach**: Test-Driven Development (TDD)  
-**Timeline**: 12 weeks (6 sprints)
+**Timeline**: 13 weeks (7 sprints core + 1 sprint research/integration)
 
 ---
 
@@ -1120,6 +1120,92 @@ This document tracks the day-to-day execution of the backend development roadmap
 - **Success Criteria**: Environment configured, deployment successful, documentation complete
 - **Evidence Required**: Configuration validation, production verification, documentation review
 
+### Sprint 13: Google API Production Integration & Legal App Brand Extension (Week 7, Days 1-5)
+- **Status**: ⏳ Not Started - **REQUIRES RESEARCH AND DISCUSSION WITH USER BEFORE ANY ACTION BY ANY AGENT**
+- **Tasks**: Research and planning phase (no direct implementation without user confirmation)
+- **Scope**: Strategic integration between blog site and legal app (www.addiscrown.et)
+- **Legal App Production**: https://www.addiscrown.et (Vercel deployment: studio-legacy-updates-ouodmtr72-jafers-projects-761b2f62.vercel.app)
+- **Legal App GitHub**: github/jaja44-hub (branch: main, commit: 35b2ee5)
+- **Success Criteria**: Research completed, feasibility confirmed, execution path approved by user
+- **Evidence Required**: Research findings, feasibility analysis, proposed implementation options
+
+#### Sprint 13 Research Objectives (NEEDS USER CONFIRMATION BEFORE ANY IMPLEMENTATION):
+
+**13.1 Brand Identity & Domain Integration Strategy**
+- **Objective**: Establish blog site as independent but brand-connected extension of legal app
+- **Research Points**:
+  - How to maintain separate backend/database while sharing brand identity
+  - Domain ownership flags signaling both services owned by addiscrown.et
+  - Brand consistency across both platforms while maintaining independence
+  - User perception of connected vs. separate services
+- **Needs**: User confirmation on brand strategy before implementation
+
+**13.2 Google Ads API Unified Integration**
+- **Objective**: Single Google Ads API for both blog and legal app
+- **Research Points**:
+  - Feasibility of using one Google Ads API for multiple domains
+  - How to share Google Ads campaign data across blog and legal app
+  - Targeting strategy: legal app users as potential blog revenue source
+  - Legal app UI integration for Google Ads display (when app is updated)
+  - Revenue sharing models between blog and legal app
+  - API credential management for shared access
+- **Aspired Vision**: Users of legal app can be targeted for Google Ads revenue generation, even without clicks, by hosting Google promotions in reserved app UI space
+- **Needs**: Research on Google Ads multi-domain API capabilities, user confirmation on revenue strategy
+
+**13.3 Logo & Brand Asset Sharing**
+- **Objective**: Use existing Google Cloud project legal app logo for blog site
+- **Research Points**:
+  - How to reference legal app's Google Cloud registered logo from blog site
+  - Avoiding duplicate logo setup for blog site
+  - Logo discoverability and theme handling through shared assets
+  - Brand asset management across separate backends
+- **Aspired Vision**: Blog site uses legal app's existing Google Cloud logo and brand assets without additional setup
+- **Needs**: Feasibility research on cross-platform asset sharing
+
+**13.4 Vercel Microfrontend Integration**
+- **Objective**: Explore Vercel microfrontend options for blog-legal app connection
+- **Research Points**:
+  - Vercel microfrontend capabilities and limitations
+  - How to connect blog site with legal app via microfrontends
+  - Common administration benefits of microfrontend architecture
+  - Security implications of microfrontend integration
+  - Performance impact of microfrontend architecture
+- **Aspired Vision**: Use Vercel microfrontend settings to easily connect blog and legal app for common administration, brand identity, and unified Google Ads API
+- **Needs**: Research on Vercel microfrontend capabilities, user confirmation on architecture approach
+
+**13.5 Google Cloud Project Integration**
+- **Objective**: Leverage existing Google Cloud project connected to legal app
+- **Research Points**:
+  - How to connect blog site to existing Google Cloud project
+  - Authentication and authorization for shared Google Cloud resources
+  - Service account management for both platforms
+  - API access control and security boundaries
+- **Aspired Vision**: Blog site inherits Google Cloud authenticated services without additional development setup
+- **Needs**: Research on Google Cloud multi-project integration, security implications
+
+**13.6 Revenue Generation Strategy**
+- **Objective**: Unified monetization across blog and legal app
+- **Research Points**:
+  - Google Ads revenue sharing between blog and legal app
+  - Ad placement strategy for legal app UI (when updated)
+  - User targeting across both platforms
+  - Performance tracking and attribution
+- **Aspired Vision**: Leverage legal app users with Google Ads campaigns, earn revenue from hosting Google promotions in app UI space
+- **Needs**: Research on Google Ads multi-platform revenue models, user confirmation on monetization strategy
+
+#### Sprint 13 Execution Approach
+- **Phase 1**: Research each objective above with feasibility analysis
+- **Phase 2**: Present findings to user for discussion and confirmation
+- **Phase 3**: Only after user approval, proceed with confirmed implementation path
+- **Critical Constraint**: NO implementation actions without explicit user confirmation after research phase
+
+#### Sprint 13 Success Criteria
+- All research objectives completed with documented findings
+- Feasibility analysis presented to user
+- User confirmation received on preferred implementation path
+- Implementation approach documented before any code changes
+- Security implications reviewed and approved
+
 ---
 
 ## Next Immediate Actions
@@ -1159,7 +1245,8 @@ This document tracks the day-to-day execution of the backend development roadmap
 33. ✅ Sprint 9: Content Planning Intelligence completed (5/5 tasks, with known POST limitation)
 34. ❌ Sprint 10: Cross-API Intelligence failed - build errors, force-rolled back to Sprint 9
 35. ⏳ Sprint 11: End-to-End Testing (next sprint - requires production stability)
-36. ⏳ Sprint 12: Production Deployment (final sprint - requires all previous sprints complete)
+36. ⏳ Sprint 12: Production Deployment (requires Sprint 11 complete)
+37. ⏳ Sprint 13: Google API Production Integration & Legal App Brand Extension (research phase - requires user discussion before any implementation)
 
 ---
 

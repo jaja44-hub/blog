@@ -14,20 +14,24 @@
 ### Production Admin Access
 - **Admin Login URL**: https://blog.addiscrown.et/admin/login
 - **Admin Workspace URL**: https://blog.addiscrown.et/admin
-- **Admin Email**: `admin@addiscrown.et`
-- **Admin Password**: `AddisCrown2024!`
 - **Admin API Token**: `19e291fa78cc1f87016694bbd50a40c6f2035250e4e1b528191f5c1745a4f735`
 
 ### Admin API Authentication Flow
 ```bash
-# 1. Authenticate with admin token
+# 1. Authenticate with admin token (POST to /api/admin/session)
 curl -X POST https://blog.addiscrown.et/api/admin/session \
   -H "Content-Type: application/json" \
   -d '{"token":"19e291fa78cc1f87016694bbd50a40c6f2035250e4e1b528191f5c1745a4f735"}'
 
-# 2. Response includes cookie for subsequent requests
+# 2. Response includes addis_admin_session cookie for subsequent requests
 # 3. Use returned cookie for protected API calls
 ```
+
+### Important Notes
+- The system uses **token-based authentication** (not email/password)
+- Email/password in .env.local are NextAuth placeholders (never activated)
+- Always use the API token for authentication
+- The admin login UI at /admin/login accepts the token for session creation
 
 ---
 
@@ -83,9 +87,10 @@ curl -X POST https://blog.addiscrown.et/api/admin/session \
 ### Failed Sprint (10)
 - ❌ **Sprint 10**: Cross-API Intelligence (build errors, force-rolled back)
 
-### Remaining Sprints (11-12)
+### Remaining Sprints (11-13)
 - ⏳ **Sprint 11**: End-to-End Testing (not started)
 - ⏳ **Sprint 12**: Production Deployment (not started)
+- ⏳ **Sprint 13**: Google API Production Integration & Legal App Brand Extension (research phase - REQUIRES USER DISCUSSION BEFORE ANY IMPLEMENTATION)
 
 ---
 
@@ -116,10 +121,24 @@ curl -X POST https://blog.addiscrown.et/api/admin/session \
 **Recommendation**: Requires agent with direct platform access to diagnose type/import compatibility
 
 ### Priority 4: Google API Credentials
-**Status**: Placeholders only  
-**Tables**: google_api_credentials with placeholder entries  
-**Requirements**: Real credentials from legal app (no blocking impact)  
+**Status**: Placeholders only
+**Tables**: google_api_credentials with placeholder entries
+**Requirements**: Real credentials from legal app (no blocking impact)
 **Recommendation**: Coordinate with legal team for credential handoff
+
+### Priority 5: Legal App Integration Planning (Sprint 13)
+**Status**: Research phase only - NO implementation without user confirmation
+**Legal App Production**: https://www.addiscrown.et
+**Legal App Vercel**: studio-legacy-updates-ouodmtr72-jafers-projects-761b2f62.vercel.app
+**Legal App GitHub**: github/jaja44-hub (branch: main, commit: 35b2ee5)
+**Research Requirements**:
+- Brand identity integration between blog and legal app
+- Unified Google Ads API for both platforms
+- Logo and brand asset sharing from Google Cloud project
+- Vercel microfrontend integration options
+- Revenue generation strategy across both platforms
+- **CRITICAL**: All research requires user discussion and confirmation before any implementation
+**Recommendation**: Sprint 13 is research-only phase. Do not implement without explicit user approval.
 
 ---
 
@@ -201,21 +220,20 @@ curl -X POST https://blog.addiscrown.et/api/admin/session \
 - Database connection stable
 - Domain configuration correct
 
-#### Task 12.2: Google API Integration Finalization
+#### Task 12.2: Google API Placeholder Preparation
 **Requirements**:
-- Obtain real Google credentials from legal team
-- Configure Google Ads API
-- Configure AdSense API
-- Configure Search Console API
-- Test API connections
-- Implement credential rotation
-- Test data synchronization
+- Ensure all Google API placeholder functions are ready for Sprint 13
+- Verify database tables for Google API integration are complete
+- Document all Google API integration points
+- Prepare credential storage mechanism for Sprint 13
 
 **Success Criteria**:
-- All Google APIs connected
-- Credentials secured and rotated
-- Data synchronization working
-- Placeholder functions replaced with real API calls
+- All placeholder functions documented
+- Database tables verified
+- Integration points mapped
+- Ready for Sprint 13 research phase
+
+**Note**: Actual Google API integration moved to Sprint 13 (research phase)
 
 #### Task 12.3: Final Security and Performance Audit
 **Requirements**:
@@ -308,6 +326,88 @@ curl -X POST https://blog.addiscrown.et/api/admin/session \
 
 ---
 
+## SPRINT 13: GOOGLE API PRODUCTION INTEGRATION & LEGAL APP BRAND EXTENSION
+
+### Critical Note: RESEARCH-ONLY SPRINT
+**This sprint is for RESEARCH and DISCUSSION ONLY. NO implementation actions without explicit user confirmation.**
+
+### Sprint 13 Scope
+**Duration**: Week 7 (5 days)  
+**Status**: Not Started  
+**Type**: Research and Planning Phase  
+
+### Legal App Production Details
+- **Production URL**: https://www.addiscrown.et
+- **Vercel Deployment**: studio-legacy-updates-ouodmtr72-jafers-projects-761b2f62.vercel.app
+- **GitHub Repository**: github/jaja44-hub
+- **Branch**: main
+- **Commit**: 35b2ee5
+- **Last Update**: "fix: Restore original authentic Amharic legal rhetoric in preview sect…"
+
+### Research Objectives (NEEDS USER CONFIRMATION)
+
+#### 13.1 Brand Identity & Domain Integration Strategy
+- How to maintain separate backend/database while sharing brand identity
+- Domain ownership flags signaling both services owned by addiscrown.et
+- Brand consistency across both platforms while maintaining independence
+- User perception of connected vs. separate services
+
+#### 13.2 Google Ads API Unified Integration
+- Feasibility of using one Google Ads API for multiple domains
+- How to share Google Ads campaign data across blog and legal app
+- Targeting strategy: legal app users as potential blog revenue source
+- Legal app UI integration for Google Ads display (when app is updated)
+- Revenue sharing models between blog and legal app
+- API credential management for shared access
+
+#### 13.3 Logo & Brand Asset Sharing
+- How to reference legal app's Google Cloud registered logo from blog site
+- Avoiding duplicate logo setup for blog site
+- Logo discoverability and theme handling through shared assets
+- Brand asset management across separate backends
+
+#### 13.4 Vercel Microfrontend Integration
+- Vercel microfrontend capabilities and limitations
+- How to connect blog site with legal app via microfrontends
+- Common administration benefits of microfrontend architecture
+- Security implications of microfrontend integration
+- Performance impact of microfrontend architecture
+
+#### 13.5 Google Cloud Project Integration
+- How to connect blog site to existing Google Cloud project
+- Authentication and authorization for shared Google Cloud resources
+- Service account management for both platforms
+- API access control and security boundaries
+
+#### 13.6 Revenue Generation Strategy
+- Google Ads revenue sharing between blog and legal app
+- Ad placement strategy for legal app UI (when updated)
+- User targeting across both platforms
+- Performance tracking and attribution
+
+### Sprint 13 Execution Approach
+1. **Phase 1**: Research each objective above with feasibility analysis
+2. **Phase 2**: Present findings to user for discussion and confirmation
+3. **Phase 3**: Only after user approval, proceed with confirmed implementation path
+4. **Critical Constraint**: NO implementation actions without explicit user confirmation
+
+### Sprint 13 Success Criteria
+- All research objectives completed with documented findings
+- Feasibility analysis presented to user
+- User confirmation received on preferred implementation path
+- Implementation approach documented before any code changes
+- Security implications reviewed and approved
+
+### Agent Instructions for Sprint 13
+- **DO NOT** implement any code changes during Sprint 13
+- **DO** conduct thorough research on each objective
+- **DO** present findings to user for discussion
+- **DO** wait for explicit user confirmation before any implementation
+- **DO** document all research findings and proposed approaches
+- **DO NOT** proceed to implementation without user approval
+
+---
+
 ## GETTING STARTED PROMPT FOR NEXT AGENT
 
 When you engage the next agent, provide this prompt:
@@ -317,11 +417,11 @@ I need you to complete Sprints 11 and 12 for the Addis Crown Blog Platform proje
 
 REPOSITORY: https://github.com/jaja44-hub/blog.git
 PRODUCTION URL: https://blog.addiscrown.et
-ADMIN CREDENTIALS: admin@addiscrown.et / AddisCrown2024!
+ADMIN AUTHENTICATION: Use token-based authentication (see NEXT_AGENT_GUIDE.md for details)
 
 ESSENTIAL CONTEXT FILES TO READ FIRST:
-1. EXECUTION_LOG.md - Complete execution history
-2. NEXT_AGENT_GUIDE.md - This guide
+1. EXECUTION_LOG.md - Complete execution history (13 sprints total)
+2. NEXT_AGENT_GUIDE.md - Comprehensive guide with credentials and platform details
 3. ENHANCED_ADMIN_ROADMAP.md - Project roadmap
 4. EVIDENCE_SPRINT_9_CONTENT_PLANNING.md - Latest evidence
 5. POST_ENDPOINT_INVESTIGATION_REPORT.md - Known POST issues
@@ -333,8 +433,14 @@ SPRINT 11: End-to-End Testing
 
 SPRINT 12: Production Deployment
 - Platform configuration verification
-- Google API integration finalization
+- Google API placeholder preparation (NOT actual integration)
 - Final security and performance audit
+
+IMPORTANT: DO NOT TOUCH SPRINT 13
+- Sprint 13 is for research and discussion with user only
+- NO implementation actions in Sprint 13 without explicit user confirmation
+- Sprint 13 involves legal app integration planning (www.addiscrown.et)
+- Sprint 13 requires deep research and user approval before any implementation
 
 I will authenticate you via browser for Vercel, GitHub, and Neon access when needed.
 
@@ -342,6 +448,7 @@ Platform Details:
 - Vercel: team_brr8I5k4O1GstQ81Ic0OfaF5, project prj_Ox7kkCUN94CSR14j0I5D3Wjc8cWo
 - Neon: project restless-cake-31725040, branch br-orange-rain-awpyfg18
 - Current Production: Commit 7b25a22 (Sprint 9) - READY
+- Legal App Production: https://www.addiscrown.et (for Sprint 13 research only)
 
 Please read the context files first, then begin with Sprint 11.
 ```
@@ -368,10 +475,11 @@ Please read the context files first, then begin with Sprint 11.
 **Project**: Addis Crown Blog Platform  
 **Objective**: Branded, reader-oriented publication platform covering law, rights, contracts, markets, technology, AI, policy, global affairs, Ethiopia, and East Africa  
 **Architecture**: Next.js/Vercel + Neon PostgreSQL + Google APIs  
-**Status**: 9/12 sprints complete (75%), Sprint 10 failed and rolled back  
+**Status**: 9/13 sprints complete (69%), Sprint 10 failed and rolled back  
 **Current Production**: Stable at Sprint 9 (commit 7b25a22)  
 **Known Issues**: POST endpoint failures (affects 5 sprints), NextAuth deferred, Sprint 10 build errors  
 **Next Steps**: Sprint 11 (End-to-End Testing) with agent capable of direct platform access  
+**Final Sprint**: Sprint 13 (Google API Production Integration & Legal App Brand Extension) - RESEARCH ONLY, requires user discussion before any implementation  
 
 **Contact**: User will provide browser authentication for platform access when needed.
 
