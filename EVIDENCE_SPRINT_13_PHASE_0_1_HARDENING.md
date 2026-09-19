@@ -50,11 +50,13 @@ The security checks passed against the canonical production domain:
 - Unauthenticated `GET /api/admin/knowledge-sources` returned HTTP 401.
 - Production transport security remained active through HSTS.
 
-The authenticated API regression matrix was not rerun in this continuation because the sandbox did not contain a local token copy and the protected Vercel secret was not written to files or exposed in chat. This is an intentional safety boundary, not a production failure. The prior authenticated Sprint 11 and Sprint 12 evidence remains valid, and the next agent can run the existing `scripts/sprint11-api-probe.sh` after loading `ADMIN_ACCESS_TOKEN` from protected environment configuration.
+The final authenticated API regression was run against the canonical production domain using the protected `ADMIN_ACCESS_TOKEN` process environment. The session endpoint succeeded, all nine tested admin GET routes returned HTTP 200 (`drafts`, `research`, `analytics`, `content-opportunities`, `content-performance`, `knowledge-sources`, `media`, `seo-recommendations`, and `search-console`), and all four controlled POST probes returned HTTP 201. Each created probe record was immediately deleted through its API cleanup path with HTTP 200. The token was not written to a file or repository artifact.
+
+Post-run production database verification found zero remaining probe records in `content_opportunities`, `knowledge_sources`, or `media_assets`. The Search Console probe was also deleted through its API cleanup path; its backing relation is `search_console_data`.
 
 ## Remaining follow-up
 
-The hardening commit is deployed and verified. The next low-risk check is an authenticated admin regression using the existing probe script. No database migration is required for Phase 1. Google Cloud ownership, Search Console, AdSense, Google Ads, legal-app branding, shared cookies, and automatic publishing remain outside this phase and remain subject to the revised Sprint 13 roadmap approval boundaries.
+Phase 0 and Phase 1 are now fully verified in production, including authenticated admin reads, writes, and cleanup. No database migration is required for Phase 1. Google Cloud ownership, Search Console/indexing configuration, AdSense, Google Ads, legal-app branding, shared cookies, and automatic publishing remain outside this phase and require the separate Sprint 13 Phase 2 decisions described in the revised roadmap.
 
 ## References
 
@@ -63,4 +65,3 @@ The hardening commit is deployed and verified. The next low-risk check is an aut
 [3]: https://github.com/jaja44-hub/blog/blob/main/SPRINT_13_ROADMAP_PROPOSAL.md "Sprint 13 roadmap proposal"
 [4]: https://github.com/jaja44-hub/blog/blob/main/scripts/sprint11-reader-smoke.sh "Reader smoke script"
 [5]: https://github.com/jaja44-hub/blog/blob/main/scripts/sprint11-api-probe.sh "Authenticated admin API probe"
-

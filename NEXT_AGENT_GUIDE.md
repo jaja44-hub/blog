@@ -116,7 +116,7 @@ Phase 0 production verification and Phase 1 focused blogging/admin hardening are
 **Status**: Implemented and production-verified. The admin UI confirms deletion. The API returns 404 for missing sources and 409 when `source_usage` protects an article-linked source.
 
 ### Priority 1A: Admin request-boundary hardening
-**Status**: Implemented and deployed in commit `8a31667`. Browser-origin checks, request-size limits, defensive response headers, secure production cookies, and bounded recommendation inputs are covered by deterministic tests and production unauthenticated/security checks. The authenticated admin probe remains a recommended follow-up using protected credentials.
+**Status**: Implemented and deployed in commit `8a31667`. Browser-origin checks, request-size limits, defensive response headers, secure production cookies, and bounded recommendation inputs are covered by deterministic tests and production checks. The final authenticated admin probe passed all tested GET/POST/DELETE operations, and post-run database verification found no remaining probe rows.
 
 ### Priority 2: POST Endpoint Failures
 **Affected Routes**: Google Ads, AdSense, and remaining integration scaffolds
