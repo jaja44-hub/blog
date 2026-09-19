@@ -1343,3 +1343,9 @@ See `EVIDENCE_SPRINT_13_PHASE_0_1_HARDENING.md` for the complete sanitized evide
 
 **Last Updated:** 2026-09-20
 **Updated By:** Manus AI
+
+## Sprint 13 Phase 2 Approval — 2026-09-20
+
+The user approved the proposed Phase 2 scope and authorized execution: Addis Crown brand/domain alignment; Google Cloud and property ownership review; Search Console ownership, sitemap, robots, canonical, and indexing readiness; AdSense readiness; and Google Ads ownership/configuration review. The approved approach is manual or agent-assisted configuration first, with no synchronous Google API calls in reader/admin request paths.
+
+The following remain explicitly deferred: shared cookies, cross-domain identity, legal-app audience reuse, automatic publishing, automatic campaign actions, microfrontends, and embedded or recurring automation unless a later decision authorizes them. This approval does not authorize destructive account changes, paid campaigns, purchases, or publication of legal/financial attestations without the required confirmation at the point of action.

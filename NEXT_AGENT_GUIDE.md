@@ -102,11 +102,11 @@ curl -X POST https://blog.addiscrown.et/api/admin/session \
 - ✅ **Sprint 11**: End-to-End Testing and production database-target remediation complete
 - ✅ **Sprint 12**: Read-only intelligence, deterministic correlation tests, and governed recommendation persistence documented and deployed in stages; verify active production state before relying on historical deployment identifiers
 - ✅ **Sprint 13 Phase 0/1**: Production baseline and focused blogging/admin hardening deployed from commit `8a31667` as Vercel deployment `dpl_9qc4yL1cJWiPBDCF7a1eWaad8NpT`; reader and security-boundary checks passed.
-- ⏳ **Sprint 13 remaining phases**: Revised proposal prioritizes common Addis Crown brand and Google ownership setup, Search Console/indexing, and practical AdSense/Google Ads readiness. It explicitly removes Blogger, Microfrontends, shared cookies, shared visitor identity, legal-app audience reuse, automatic publishing/campaign actions, and synchronous Google API calls from normal reader/admin requests.
+- ▶️ **Sprint 13 Phase 2**: **Approved and ready to be executed** as a configuration-led task: common Addis Crown brand/domain alignment, Google Cloud and property ownership review, Search Console/indexing readiness, AdSense readiness, and Google Ads ownership/configuration review. It explicitly defers Blogger, microfrontends, shared cookies, shared visitor identity, legal-app audience reuse, automatic publishing/campaign actions, and synchronous Google API calls from normal reader/admin requests.
 
 ### Sprint 13 execution boundary
 
-Phase 0 production verification and Phase 1 focused blogging/admin hardening are complete. Google account configuration, Search Console, AdSense, Google Ads, or any embedded automation require separate later decisions. The detailed plan is in `SPRINT_13_ROADMAP_PROPOSAL.md`; the plain-language explanation is in `simplified sprint 13 research and recommendations.md`; the implementation evidence is in `EVIDENCE_SPRINT_13_PHASE_0_1_HARDENING.md`.
+Phase 0 production verification and Phase 1 focused blogging/admin hardening are complete. **The user approved Sprint 13 Phase 2 on 2026-09-20 and it is ready for execution.** Keep execution configuration-led and preserve the explicit deferred list above. The detailed plan is in `SPRINT_13_ROADMAP_PROPOSAL.md`; the plain-language explanation is in `simplified sprint 13 research and recommendations.md`; the implementation evidence is in `EVIDENCE_SPRINT_13_PHASE_0_1_HARDENING.md`.
 
 ---
 

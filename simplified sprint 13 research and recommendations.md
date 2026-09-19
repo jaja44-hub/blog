@@ -2,7 +2,7 @@
 
 **Purpose:** Explain the revised Sprint 13 direction from the point of view of an Addis Crown blogger and site owner.
 
-**Status:** Planning document only. This revision does not authorize implementation or account changes.
+**Status:** Phase 0/1 complete. Sprint 13 Phase 2 is **approved and ready to be executed** as configuration-led work. It does not authorize paid campaigns, purchases, destructive account changes, or legal/financial attestations without separate confirmation.
 
 > **Repository continuity rule:** Every roadmap, research result, implementation, test result, known issue, deployment record, and handoff decision must be saved in this repository and committed to GitHub. The repository is the continuity memory for future agents and account handovers. Important project context must not remain only in chat or a temporary sandbox.
 
@@ -142,14 +142,9 @@ The practical order is:
 7. Automate repeated reporting only after manual work proves inefficient.
 
 ## Approval boundary
+**Stage 1 and Stage 2 are complete. Stage 3 / Sprint 13 Phase 2 is approved and ready to be executed.** The approved work covers Addis Crown brand/domain alignment, Google Cloud and property ownership review, Search Console ownership and indexing readiness, AdSense readiness, and Google Ads ownership/configuration review.
 
-The revised immediate approval boundary is **Stage 1 and Stage 2 only**: confirm production reality and protect the existing blogging/admin experience.
-
-A later approval can authorize Stage 3 account and property configuration. This does not require shared cookies or shared visitor login.
-
-A separate later decision can authorize AdSense and Google Ads readiness work. A further decision is required before building embedded Search Console reporting.
-
-No Sprint 13 roadmap execution has started as part of this document update.
+This approval does not include shared cookies, shared visitor login, legal-app audience reuse, automatic publishing or campaign actions, microfrontends, or Google API calls during normal reader/admin requests. Manual or agent-assisted configuration comes first; recurring automation requires a later decision.
 
 The detailed roadmap is in [SPRINT_13_ROADMAP_PROPOSAL.md](SPRINT_13_ROADMAP_PROPOSAL.md). This file is the short product-level explanation for blogger and admin planning.
 

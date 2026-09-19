@@ -1,6 +1,6 @@
 # Sprint 13 Roadmap Proposal: Production Readiness, Google Ownership, and Practical Monetization
 
-**Status:** Proposal only. This document does not authorize implementation. No Sprint 13 code, database migration, external credential connection, or deployment is being executed by this update.
+**Status:** Phase 0/1 complete. Sprint 13 Phase 2 is **approved and ready to be executed** as a configuration-led workstream. This approval does not authorize code changes, database migrations, destructive account changes, paid campaigns, purchases, or legal/financial attestations without separate confirmation at the point of action.
 
 > **REPOSITORY CONTINUITY RULE:** Every plan, research result, implementation, test result, known issue, deployment record, and handoff decision must be saved in this repository and committed to GitHub. The repository is the continuity memory for future agents and account handovers; important context must not remain only in chat or a temporary sandbox.
 
@@ -114,6 +114,8 @@ Also verify the existing recommendation retirement path records the responsible 
 
 ### Phase 2 — Brand, Google Cloud, and property ownership setup
 
+**Approval status (2026-09-20): APPROVED AND READY TO BE EXECUTED.** Execution is limited to configuration-led brand/domain alignment, Google Cloud/property ownership review, Search Console/indexing readiness, AdSense readiness, and Google Ads ownership/configuration review. Shared cookies, cross-domain identity, audience reuse, automatic publishing/campaign actions, microfrontends, and synchronous Google API calls in reader/admin request paths remain deferred.
+
 This phase should be handled mainly through ordinary Google account configuration, manual work, or periodic AI-agent assistance rather than new application features.
 
 Confirm the appropriate Google account or organization owns the Addis Crown properties. Verify both domains in Search Console. Confirm the blog’s canonical domain, sitemap, robots behavior, URL inspection, indexing status, Organization information, logo, and public brand links. Keep the blog and legal application as separate Search Console properties unless Google’s own property model justifies a grouping.
@@ -172,11 +174,9 @@ The project should not create database or queue infrastructure merely because a 
 
 ## Approval checklist
 
-The immediate approval boundary is Phase 0 and Phase 1: verify production reality and harden the existing blogging/admin experience.
+Phase 0 and Phase 1 are complete. Phase 2 account and property configuration is approved and ready to execute. This does not require shared cookies or shared visitor identity.
 
-A later approval may authorize Phase 2 account and property configuration. This does not require shared cookies or shared visitor identity.
-
-A separate later decision is required for Phase 3 AdSense and Google Ads configuration. A further decision is required before any embedded Search Console reporting is built in Phase 4.
+Phase 3 AdSense and Google Ads readiness is included in the approved configuration-led Phase 2 work only to the extent of ownership, policy, and readiness review; paid campaigns, purchases, legal/financial attestations, and irreversible account changes remain separately gated. A further decision is required before embedded Search Console reporting is built in Phase 4.
 
 No Blogger integration, microfrontend work, cross-domain identity work, legal-app audience reuse, synchronous Google calls, automatic campaign actions, or automatic publishing is included in this revised Sprint 13 roadmap.
 

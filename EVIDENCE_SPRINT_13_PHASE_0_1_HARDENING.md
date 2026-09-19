@@ -56,7 +56,13 @@ Post-run production database verification found zero remaining probe records in 
 
 ## Remaining follow-up
 
-Phase 0 and Phase 1 are now fully verified in production, including authenticated admin reads, writes, and cleanup. No database migration is required for Phase 1. Google Cloud ownership, Search Console/indexing configuration, AdSense, Google Ads, legal-app branding, shared cookies, and automatic publishing remain outside this phase and require the separate Sprint 13 Phase 2 decisions described in the revised roadmap.
+Phase 0 and Phase 1 are now fully verified in production, including authenticated admin reads, writes, and cleanup. No database migration is required for Phase 1.
+
+## Sprint 13 Phase 2 approval and execution boundary
+
+**Approved and ready to be executed:** the user approved the following Phase 2 scope on 2026-09-20: (1) Addis Crown brand and domain alignment across the blog, legal app, Google Cloud project, and AdSense account; (2) Search Console ownership, sitemap, robots, canonical, and indexing readiness; (3) AdSense readiness review; (4) Google Cloud and Google Ads ownership/configuration review; and (5) manual or agent-assisted setup before considering recurring automation. The explicitly deferred items remain shared cookies, cross-domain identity, audience reuse, automatic publishing or campaign actions, microfrontends, and synchronous Google API calls in reader/admin request paths.
+
+Phase 2 execution is configuration-led and must not change reader behavior, authentication, database relations, or production code unless a separately approved gap is found. Any external submission or account-ownership change must be reported with its exact result. Remaining items after this session must be recorded in the execution log and handed off through this file.
 
 ## References
 
