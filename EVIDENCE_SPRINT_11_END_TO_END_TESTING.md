@@ -102,6 +102,18 @@ That remediation was **not executed in Sprint 11** because it changes production
 
 **Out of scope and untouched:** Sprint 12 production deployment work; Sprint 13 research, legal-app integration planning, and implementation.
 
+## Sprint 11 Remediation Completion
+
+The follow-up production inspection found that all 18 required relations already existed on Neon production branch `br-orange-rain-awpyfg18`. The table columns, UUID primary keys, relevant foreign keys, unique URL constraint, and nullable probe fields matched the deployed route and library requirements. No database migration was applied because creating duplicate relations would have been unsafe and unnecessary.
+
+The actual production mismatch was the Vercel `DATABASE_URL`: Vercel production pointed to a different Neon endpoint than the verified production branch. The production variable was corrected to the verified Neon production endpoint without recording credentials in the repository. The schema comparison is documented in `EVIDENCE_SPRINT_11_SCHEMA_COMPARISON.md`.
+
+Deployment `dpl_59TQ86NoaA71Y6FM2EFS5SVRadD5` reached `READY` from commit `4d80850177bdb454fc95d7dccc500d512093b98b` and received the `blog.addiscrown.et` alias. Fresh runtime-log inspection for that deployment returned no error entries during the verification window.
+
+The final authenticated production matrix passed. Session creation returned HTTP 200. All tested GET routes returned HTTP 200. Content opportunity, knowledge-source, media, and Search Console POST probes each returned HTTP 201. The content opportunity, media, and Search Console probes were deleted through their API routes. The knowledge-source route returned HTTP 405 for DELETE because it has no DELETE handler; the uniquely identified probe row was removed through an explicitly approved Neon cleanup statement and verified absent. The final regression summary is documented in `EVIDENCE_SPRINT_11_FINAL_REGRESSION.md`.
+
+The reader smoke matrix passed for all 20 tested routes, including reader pages, representative posts, category pages, RSS, robots, and sitemap. Sprint 12 and Sprint 13 remain untouched. No Google production credentials or campaigns were used, no legal-app integration was changed, and `www.addiscrown.et` was not modified.
+
 ## Reproducibility Artifacts
 
 - `scripts/sprint11-api-probe.sh` — authenticated GET matrix and controlled POST probes.

@@ -1275,3 +1275,17 @@ This document tracks the day-to-day execution of the backend development roadmap
 **POST Investigation**: See POST_ENDPOINT_INVESTIGATION_REPORT.md for full details
 **POST Fix Verification**: See POST_FIX_VERIFICATION_REPORT.md for full details
 **POST Root Cause Analysis**: See POST_ROOT_CAUSE_ANALYSIS.md for full details
+
+
+## Sprint 11 Remediation and Production Alignment — 2026-09-19
+
+The Sprint 11 remediation was completed against the centralized GitHub, Neon, and Vercel platforms. Neon production branch `br-orange-rain-awpyfg18` was inspected before any mutation. All 18 relations named in the Sprint 11 finding were present, with the expected columns, UUID primary keys, foreign keys, indexes, and compatible nullable fields. No database migration was applied because the verified branch already contained the required schema and duplicate creation would have been unsafe.
+
+The production failure was traced to configuration drift. Vercel production `DATABASE_URL` pointed to a different Neon endpoint than the verified production branch. After explicit approval, the Vercel production database variable was corrected to the verified Neon production endpoint. The correction was deployed as `dpl_59TQ86NoaA71Y6FM2EFS5SVRadD5`, built from commit `4d80850177bdb454fc95d7dccc500d512093b98b`, and assigned to `blog.addiscrown.et`.
+
+Final verification passed. Admin session creation returned HTTP 200. All authenticated GET probes returned HTTP 200. The four controlled POST probes returned HTTP 201, and all test records were removed. Three records were deleted through their API routes. The knowledge-source route has no DELETE handler, so its uniquely identified probe row was removed through the explicitly approved Neon cleanup statement and verified absent. The reader smoke matrix returned HTTP 200 for all 20 tested routes. Vercel runtime logs for the corrected deployment contained no error entries during the verification window.
+
+Sprint 12 and Sprint 13 were not implemented. No Google production credentials or campaigns were used. No legal-app or `www.addiscrown.et` changes were made. See `EVIDENCE_SPRINT_11_SCHEMA_COMPARISON.md` and `EVIDENCE_SPRINT_11_FINAL_REGRESSION.md` for sanitized evidence.
+
+**Last Updated:** 2026-09-19
+**Updated By:** Manus AI
