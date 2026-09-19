@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { hasAdminSession } from "@/lib/admin-auth";
 import { retireRecommendation } from "@/lib/recommendations";
+import { isBoundedString, isPlainRecord, isUuid } from "@/lib/request-security";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
@@ -11,7 +12,7 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
 
   const { id } = await context.params;
   const body = await request.json().catch(() => null);
-  if (!body || typeof body.reason !== "string" || !body.reason.trim()) {
+  if (!isUuid(id) || !isPlainRecord(body) || !isBoundedString(body.reason, 2_000)) {
     return NextResponse.json({ error: "A retirement reason is required." }, { status: 400 });
   }
 

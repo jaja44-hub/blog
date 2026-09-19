@@ -13,7 +13,8 @@ export async function POST(request: NextRequest) {
   response.cookies.set(ADMIN_COOKIE, expectedSession(), {
     httpOnly: true,
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    secure: process.env.NODE_ENV === "production" || process.env.VERCEL_ENV === "production",
+    priority: "high",
     maxAge: 60 * 60 * 8,
     path: "/"
   });

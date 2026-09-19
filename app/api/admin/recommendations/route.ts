@@ -1,12 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { hasAdminSession } from "@/lib/admin-auth";
 import { createRecommendation, listRecommendations } from "@/lib/recommendations";
+import { isBoundedString, isPlainRecord } from "@/lib/request-security";
 
 export const dynamic = "force-dynamic";
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
-}
 
 export async function GET(request: NextRequest) {
   if (!(await hasAdminSession())) {
@@ -33,11 +30,22 @@ export async function POST(request: NextRequest) {
   }
 
   const body = await request.json().catch(() => null);
-  if (!body || typeof body.recommendationType !== "string" || typeof body.title !== "string" || typeof body.rationale !== "string") {
+  if (!isPlainRecord(body) || !isBoundedString(body.recommendationType, 100) || !isBoundedString(body.title, 500) || !isBoundedString(body.rationale, 10_000)) {
     return NextResponse.json({ error: "Recommendation type, title, and rationale are required." }, { status: 400 });
   }
-  if (!isRecord(body.provenance) || !isRecord(body.sourceSnapshot) || !isRecord(body.sourceTimestamps)) {
+  if (!isPlainRecord(body.provenance) || !isPlainRecord(body.sourceSnapshot) || !isPlainRecord(body.sourceTimestamps)) {
     return NextResponse.json({ error: "Provenance, sourceSnapshot, and sourceTimestamps objects are required." }, { status: 400 });
+  }
+  if (JSON.stringify(body.provenance).length > 50_000 || JSON.stringify(body.sourceSnapshot).length > 50_000 || JSON.stringify(body.sourceTimestamps).length > 50_000) {
+    return NextResponse.json({ error: "Recommendation provenance is too large." }, { status: 413 });
+  }
+  const score = body.score === undefined || body.score === null ? body.score as number | null | undefined : typeof body.score === "number" ? body.score : Number.NaN;
+  const confidence = body.confidence === undefined || body.confidence === null ? body.confidence as number | null | undefined : typeof body.confidence === "number" ? body.confidence : Number.NaN;
+  const generatedAt = body.generatedAt === undefined ? undefined : typeof body.generatedAt === "string" ? body.generatedAt : null;
+  if ((typeof score === "number" && !Number.isFinite(score)) ||
+      (typeof confidence === "number" && !Number.isFinite(confidence)) ||
+      (generatedAt !== undefined && (generatedAt === null || !isBoundedString(generatedAt, 100)))) {
+    return NextResponse.json({ error: "Score, confidence, and generatedAt must use valid bounded values." }, { status: 400 });
   }
 
   try {
@@ -45,12 +53,12 @@ export async function POST(request: NextRequest) {
       recommendationType: body.recommendationType,
       title: body.title,
       rationale: body.rationale,
-      score: body.score,
-      confidence: body.confidence,
+      score,
+      confidence,
       provenance: body.provenance,
       sourceSnapshot: body.sourceSnapshot,
       sourceTimestamps: body.sourceTimestamps as Record<string, string | null>,
-      generatedAt: body.generatedAt,
+      generatedAt: generatedAt ?? undefined,
     });
     return NextResponse.json(result, { status: result.created ? 201 : 200 });
   } catch (error) {
