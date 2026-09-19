@@ -4,8 +4,10 @@
 **Current Production State**: Sprint 11 remediation complete (Commit 7c432b8) - READY
 **Production URL**: https://blog.addiscrown.et
 **Repository**: https://github.com/jaja44-hub/blog.git
-**Vercel Project**: blog (team_brr8I5k4O1GstQ81Ic0OfaF5)
+**Vercel Project**: blog (team_brr8I5k4O1GstQ81Ic0OfaF)
 **Neon Project**: restless-cake-31725040
+
+> **CONTINUITY RULE — THE REPOSITORY IS THE PROJECT MEMORY:** Every plan, research result, implementation, test result, known issue, deployment record, and handoff decision must be saved in this repository and committed to GitHub. Do not leave important project context only in chat or a temporary sandbox. Every future agent or account handover must read the relevant continuity files before changing code, databases, deployments, or external integrations.
 
 ---
 
@@ -61,6 +63,7 @@ curl -X POST https://blog.addiscrown.et/api/admin/session \
 13. **KNOWN_ISSUES.md** - Active issues and safe operating contract
 14. **EVIDENCE_SPRINT_12_READ_ONLY_INTELLIGENCE.md** - Sprint 12 phase-one contract and regression evidence
 15. **SPRINT_13_ROADMAP_PROPOSAL.md** - Research-only Sprint 13 architecture, phased gates, platform findings, and approval checklist
+16. **simplified sprint 13 research and recommendations.md** - Plain-language blogger/admin explanation of current features, gaps, risks, and proposed stages
 
 ### Issue Investigation Documents (READ FOR CONTEXT)
 1. **POST_ENDPOINT_INVESTIGATION_REPORT.md** - POST failure investigation

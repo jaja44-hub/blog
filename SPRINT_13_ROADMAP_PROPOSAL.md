@@ -2,6 +2,8 @@
 
 **Status:** Proposal only. This document does not authorize implementation and no project files have been modified beyond this roadmap and its handoff reference. Sprint 13 remains research/discussion-only until the user explicitly approves a bounded milestone and supplies any required production credentials.
 
+> **REPOSITORY CONTINUITY RULE:** Every plan, research result, implementation, test result, known issue, deployment record, and handoff decision must be saved in this repository and committed to GitHub. The repository is the continuity memory for future agents and account handovers; important context must not remain only in chat or a temporary sandbox.
+
 **Repository target:** Addis Crown Blog at `https://github.com/jaja44-hub/blog`. The reader-facing canonical publication remains `https://blog.addiscrown.et`; the other Addis Crown property remains a separate application and root domain.
 
 ## Executive decision
