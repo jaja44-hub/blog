@@ -112,6 +112,25 @@ type GoogleAdsPerformance = {
   created_at: string;
 };
 
+type IntelligenceOverview = {
+  version: string;
+  status: string;
+  generatedAt: string;
+  window: string;
+  signals: {
+    opportunityCount: number;
+    opportunityPriority: number | null;
+    performanceCount: number;
+    averagePerformanceScore: number | null;
+    searchImpressions: number;
+    searchClicks: number;
+    searchCtr: number | null;
+    adSpend: number;
+    adRevenue: number;
+    returnOnAdSpend: number | null;
+  };
+};
+
 export default function AdminWorkspace() {
   const [message, setMessage] = useState("");
   const [drafts, setDrafts] = useState<Draft[]>([]);
@@ -140,6 +159,7 @@ export default function AdminWorkspace() {
   const [showContentPlanning, setShowContentPlanning] = useState(false);
   const [contentPerformance, setContentPerformance] = useState<any[]>([]);
   const [seoRecommendations, setSeoRecommendations] = useState<any[]>([]);
+  const [intelligenceOverview, setIntelligenceOverview] = useState<IntelligenceOverview | null>(null);
 
   async function loadDrafts() {
     const response = await fetch("/api/admin/drafts");
@@ -223,6 +243,16 @@ export default function AdminWorkspace() {
       setSeoRecommendations(result.recommendations ?? []);
     } else {
       setMessage(result.error ?? "Could not load SEO recommendations.");
+    }
+  }
+
+  async function loadIntelligenceOverview() {
+    const response = await fetch("/api/admin/intelligence/overview");
+    const result = await response.json();
+    if (response.ok) {
+      setIntelligenceOverview(result);
+    } else {
+      setMessage(result.error ?? "Could not load intelligence overview.");
     }
   }
 
@@ -623,6 +653,7 @@ export default function AdminWorkspace() {
           <button type="button" onClick={loadAdSense} className="rounded-md border border-line px-4 py-2 text-sm text-teal hover:border-teal">AdSense</button>
           <button type="button" onClick={loadSearchConsole} className="rounded-md border border-line px-4 py-2 text-sm text-teal hover:border-teal">Search Console</button>
           <button type="button" onClick={loadContentPlanning} className="rounded-md border border-line px-4 py-2 text-sm text-teal hover:border-teal">Content planning</button>
+          <button type="button" onClick={loadIntelligenceOverview} className="rounded-md border border-line px-4 py-2 text-sm text-teal hover:border-teal">Intelligence overview</button>
         </div>
       </div>
       {drafts.length > 0 && (
@@ -1248,6 +1279,25 @@ export default function AdminWorkspace() {
               </div>
             </div>
           )}
+        </section>
+      )}
+      {intelligenceOverview && (
+        <section className="mt-12 max-w-3xl border-t border-line pt-8">
+          <div className="flex items-center justify-between">
+            <h2 className="mb-5 font-display text-2xl font-semibold text-ink">Intelligence overview</h2>
+            <button type="button" onClick={() => setIntelligenceOverview(null)} className="text-sm text-teal underline underline-offset-2">Close</button>
+          </div>
+          <p className="mb-4 text-sm text-stone">Read-only normalized signals · {intelligenceOverview.window} · contract v{intelligenceOverview.version}</p>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="border border-line p-4"><p className="text-xs uppercase tracking-wide text-ochre">Opportunities</p><p className="mt-1 text-2xl font-semibold text-ink">{intelligenceOverview.signals.opportunityCount}</p></div>
+            <div className="border border-line p-4"><p className="text-xs uppercase tracking-wide text-ochre">Performance rows</p><p className="mt-1 text-2xl font-semibold text-ink">{intelligenceOverview.signals.performanceCount}</p></div>
+            <div className="border border-line p-4"><p className="text-xs uppercase tracking-wide text-ochre">Search clicks</p><p className="mt-1 text-2xl font-semibold text-ink">{intelligenceOverview.signals.searchClicks}</p></div>
+            <div className="border border-line p-4"><p className="text-xs uppercase tracking-wide text-ochre">Return on ad spend</p><p className="mt-1 text-2xl font-semibold text-ink">{intelligenceOverview.signals.returnOnAdSpend === null ? "N/A" : intelligenceOverview.signals.returnOnAdSpend.toFixed(2)}</p></div>
+          </div>
+          <div className="mt-4 border border-line p-4 text-sm text-stone">
+            <p>Sources: content opportunities, content performance, Search Console, and advertising are available.</p>
+            <p className="mt-2">This first slice is read-only. It does not create recommendations, call external APIs, or modify database records.</p>
+          </div>
         </section>
       )}
       {message && <p className="mt-4 text-sm text-stone" role="status">{message}</p>}
