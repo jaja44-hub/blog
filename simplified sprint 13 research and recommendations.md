@@ -2,7 +2,7 @@
 
 **Purpose:** Explain the revised Sprint 13 direction from the point of view of an Addis Crown blogger and site owner.
 
-**Status:** Phase 0/1 complete. Sprint 13 Phase 2 is **approved and ready to be executed** as configuration-led work. It does not authorize paid campaigns, purchases, destructive account changes, or legal/financial attestations without separate confirmation.
+**Status:** Phase 0/1 complete. Sprint 13 Phase 2 is **approved; execution started and partially complete** as configuration-led work. It does not authorize paid campaigns, purchases, destructive account changes, or legal/financial attestations without separate confirmation.
 
 > **Repository continuity rule:** Every roadmap, research result, implementation, test result, known issue, deployment record, and handoff decision must be saved in this repository and committed to GitHub. The repository is the continuity memory for future agents and account handovers. Important project context must not remain only in chat or a temporary sandbox.
 

@@ -64,6 +64,18 @@ Phase 0 and Phase 1 are now fully verified in production, including authenticate
 
 Phase 2 execution is configuration-led and must not change reader behavior, authentication, database relations, or production code unless a separately approved gap is found. Any external submission or account-ownership change must be reported with its exact result. Remaining items after this session must be recorded in the execution log and handed off through this file.
 
+## Sprint 13 Phase 2 execution results — 2026-09-20
+
+The public readiness baseline passed without a code change. `https://blog.addiscrown.et/robots.txt` returned HTTP 200 and points to the canonical sitemap. `https://blog.addiscrown.et/sitemap.xml` returned HTTP 200, was valid XML, and contained 24 URLs. The homepage exposed canonical Addis Crown metadata and WebSite structured data for `https://blog.addiscrown.et`.
+
+In the signed-in Google account, Search Console ownership for `https://blog.addiscrown.et/` was auto-verified through the domain-name-provider method. The sitemap `sitemap.xml` was submitted successfully. Google’s immediate table status was **Couldn’t fetch**, with zero discovered pages at that moment; this is now the main Phase 2 follow-up. Independent Googlebot-style retrieval from the live site returned HTTP 200, valid XML, and 24 URLs, so the repository records a Google processing/fetch-status discrepancy rather than a confirmed public sitemap failure.
+
+AdSense onboarding showed that payment information is already present for the account, but the account still requires a connected site. The AdSense “Add Site” form rejected `https://blog.addiscrown.et` because it expects a valid top-level domain and suggested `http://addiscrown.et`. No site was added and no ad code was published. The root-domain versus blog-subdomain ownership choice remains pending and must be resolved before any AdSense submission or site connection.
+
+The read-only Google Ads connector exposed customer `7251926003`, but Google returned `CUSTOMER_NOT_ENABLED` / deactivated-account permission failure. No campaign, budget, billing, or account mutation was attempted.
+
+Remaining Phase 2 work: investigate and retry the Search Console sitemap fetch after processing time; decide whether AdSense should be attached to the root Addis Crown property, the blog property through Google’s supported site model, or a separately verified top-level domain; and resolve the Google Ads customer-status/ownership issue. No application code, database schema, credentials, or paid settings were changed in this phase.
+
 ## References
 
 [1]: https://github.com/jaja44-hub/blog/blob/main/NEXT_AGENT_GUIDE.md "Project handoff guide"
