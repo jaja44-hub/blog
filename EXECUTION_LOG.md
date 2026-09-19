@@ -1081,7 +1081,7 @@ This document tracks the day-to-day execution of the backend development roadmap
 - **Decisions**: Marked Sprint 9 as complete. Core functionality (GET, scoring, recommendations, planning dashboard) working. POST issue is known cross-cutting technical debt.
 
 ### Sprint 10: Cross-API Intelligence (Week 5, Days 4-5)
-- **Status**: ❌ FAILED - Build Errors
+- **Status**: ❌ NOT DELIVERED - rolled back after build failures; independently re-audited 2026-09-19
 - **Assigned**: Development Team
 - **Start Date**: 2026-09-18
 - **End Date**: 2026-09-18
@@ -1099,17 +1099,17 @@ This document tracks the day-to-day execution of the backend development roadmap
   - Commit `74f2cc5`: ERROR - type_error/lint_or_type_error
   - Commit `5ba3e67`: ERROR - lint_or_type_error  
   - Commit `ef9d702`: ERROR - lint_or_type_error
-- **Final Action**: Force-rolled back to commit `7b25a22` (Sprint 9) to restore production stability
+- **Final Action**: Force-rolled back to commit `7b25a22` (Sprint 9) to restore production stability; current production remains on the safe post-Sprint-11 code line and contains no Sprint 10 implementation files
 - **Notes**: Sprint 10 implementation attempted cross-platform data correlation between Google Ads, AdSense, Search Console, content performance, and topic/regional analytics. Created lib/data-correlation.ts with cross-platform correlation algorithms, unified intelligence API route, and AdminWorkspace UI integration. Repeated Vercel build failures due to TypeScript type errors and dynamic import compatibility issues. Multiple fix attempts (removing missing function references, adding null safety guards, removing problematic imports) failed to resolve build errors. Sprint 10 code removed via force rollback to restore production stability. Cross-platform integration deferred until type compatibility can be properly resolved.
 - **Issues**: 
   - Dynamic imports causing type errors in lib/data-correlation.ts
   - Missing function references in AdminWorkspace.tsx (loadAutomatedRecommendations, loadDataAnalysis)
   - TypeScript compilation failures during Vercel build
   - npm run build exit code 1 (lint_or_type_error)
-- **Decisions**: Force-rolled back to Sprint 9 (commit 7b25a22) to restore production stability. Sprint 10 deferred until a more capable agent with direct platform access can diagnose and resolve the type/import compatibility issues. Production deployment restored to Sprint 9 state (READY).
+- **Decisions**: Force-rollback was correct and remains in force. Sprint 10 acceptance criteria are not met: no correlation library, unified intelligence API, automated recommendation engine, or unified dashboard is present in the current branch or production. Reimplementation is deferred to Sprint 12 planning and requires a smaller, read-only vertical slice with explicit tests before any write automation.
 
 ### Sprint 11: End-to-End Testing (Week 6, Days 1-3)
-- **Status**: ✅ Complete (testing and root-cause investigation; POST remediation gated)
+- **Status**: ✅ Complete (production alignment, POST remediation, delete hardening, and regression verification)
 - **Completion Date**: 2026-09-19
 - **Tasks**: 3 tasks (interactive admin workflow, reader-facing experience, POST endpoint deep investigation)
 - **Results**:
@@ -1118,9 +1118,10 @@ This document tracks the day-to-day execution of the backend development roadmap
   - ✅ Authenticated GET API matrix returned HTTP 200 for drafts, research, analytics, content opportunities, content performance, knowledge sources, media, SEO recommendations, and Search Console.
   - ✅ Reader route smoke matrix returned HTTP 200 for homepage, navigation, support pages, representative posts, categories, and feed/metadata routes.
   - ✅ Vercel production logs captured PostgreSQL `42P01` (`undefined_table`) errors for missing integration relations including `media_assets`, `knowledge_sources`, `content_opportunities`, `search_console_data`, and `google_ads_campaigns`.
-  - ⚠️ Controlled POST probes for content opportunities, knowledge sources, media, and Search Console remain HTTP 500 because the production Neon branch lacks required tables. No records were created by the probes.
-  - ⚠️ Historical UUID-casting hypothesis is superseded by the direct Vercel-log finding; the failure is a production schema deployment gap.
-- **Success Criteria**: Reader/admin GET workflows validated; POST success remains blocked pending a separately approved Neon schema migration and regression run.
+  - ✅ Controlled POST probes for content opportunities, knowledge sources, media, and Search Console returned HTTP 201, and all cleanup deletes returned HTTP 200 after correcting Vercel’s production database target.
+  - ✅ Knowledge-source deletion is available from the admin UI with confirmation and safe 404/409 handling; no article evidence is cascaded.
+  - ✅ Historical UUID-casting hypothesis was superseded by the direct Vercel-log finding; the production schema-target gap was corrected without a duplicate migration.
+- **Success Criteria**: Reader/admin GET workflows, controlled POST creation, cleanup, production schema alignment, and reader smoke verification all passed.
 - **Evidence**: `EVIDENCE_SPRINT_11_END_TO_END_TESTING.md`, `sprint11-api-probe-output.txt`, `sprint11-reader-smoke-output.txt`
 - **Scope Guard**: Sprint 12 and Sprint 13 were not implemented or modified.
 
@@ -1242,27 +1243,27 @@ This document tracks the day-to-day execution of the backend development roadmap
 20. ✅ Database schema alignment verified and corrected
 21. ✅ Enhanced admin workspace deployed and functional
 22. ✅ Sprint 4: Advanced Analytics Integration completed (5/5 tasks)
-23. ✅ Sprint 5: Knowledge Sources System completed (5/5 tasks, with known POST limitation)
-24. ✅ Sprint 6: Media Library Enhancement completed (5/5 tasks, with known POST limitation)
-25. ✅ Sprint 7: Google Ads Foundation completed (5/5 tasks, with known POST limitation)
-26. ✅ Sprint 8: AdSense and Search Console scaffolding completed (5/5 tasks, with known POST limitation)
-27. ⏭️ Investigate POST endpoint failure pattern (priority issue affecting Sprint 5, 6, 7, 8)
-28. ❌ POST endpoint fix attempt failed - UUID casting hypothesis disproven (see POST_FIX_VERIFICATION_REPORT.md)
-29. ❌ POST root cause analysis - Not related to Google credentials (see POST_ROOT_CAUSE_ANALYSIS.md)
-30. ⏭️ Add detailed logging to failing POST endpoints to capture real error messages
+23. ✅ Sprint 5: Knowledge Sources System completed; POST and cleanup verified in Sprint 11
+24. ✅ Sprint 6: Media Library Enhancement completed; POST and cleanup verified in Sprint 11
+25. ✅ Sprint 7: Google Ads Foundation completed as a scaffold; placeholder integration remains intentionally unconnected
+26. ✅ Sprint 8: AdSense and Search Console scaffolding completed; Search Console POST and cleanup verified in Sprint 11
+27. ✅ Investigated cross-sprint POST failures and corrected the Vercel-to-Neon production target mismatch
+28. ✅ UUID-casting hypothesis superseded by direct Vercel logs showing a missing-relation/schema-target incident
+29. ✅ Production schema alignment and POST regression verified in Sprint 11 (see POST_ENDPOINT_INVESTIGATION_REPORT.md and Sprint 11 evidence)
+30. ✅ Final runtime logging check completed with no errors for the corrected deployment
 31. ⏳ Re-enable NextAuth integration with v5-compatible setup
 32. ⏳ Awaiting Google Cloud project credentials from legal app (no blocking impact)
 33. ✅ Sprint 9: Content Planning Intelligence completed (5/5 tasks, with known POST limitation)
-34. ❌ Sprint 10: Cross-API Intelligence failed - build errors, force-rolled back to Sprint 9
-35. ⏳ Sprint 11: End-to-End Testing (next sprint - requires production stability)
-36. ⏳ Sprint 12: Production Deployment (requires Sprint 11 complete)
+34. ❌ Sprint 10: Cross-API Intelligence not delivered - build errors, force-rolled back; audited in EVIDENCE_SPRINT_10_AUDIT.md
+35. ✅ Sprint 11: End-to-End Testing, production alignment, POST remediation, and delete hardening completed
+36. 📋 Sprint 12: Read-only intelligence vertical slice, contract tests, observability, and security hardening proposed in SPRINT_12_ROADMAP_PROPOSAL.md
 37. ⏳ Sprint 13: Google API Production Integration & Legal App Brand Extension (research phase - requires user discussion before any implementation)
 
 ---
 
-**Last Updated**: 2026-09-18
+**Last Updated**: 2026-09-19
 **Updated By**: Development Team
-**Next Review**: After Sprint 10 completion
+**Next Review**: After user review of the Sprint 12 roadmap proposal
 **Deployment Recovery**: See VERCEL_DEPLOYMENT_RECOVERY.md for full details
 **Sprint 2 Evidence**: See EVIDENCE_SPRINT_2_DATABASE_FOUNDATION.md for full details
 **Sprint 3 Evidence**: See EVIDENCE_SPRINT_3_ENHANCED_ADMIN.md for full details
@@ -1273,8 +1274,7 @@ This document tracks the day-to-day execution of the backend development roadmap
 **Sprint 8 Evidence**: See EVIDENCE_SPRINT_8_ADSENSE_SEARCH_CONSOLE.md for full details
 **Sprint 9 Evidence**: See EVIDENCE_SPRINT_9_CONTENT_PLANNING.md for full details
 **POST Investigation**: See POST_ENDPOINT_INVESTIGATION_REPORT.md for full details
-**POST Fix Verification**: See POST_FIX_VERIFICATION_REPORT.md for full details
-**POST Root Cause Analysis**: See POST_ROOT_CAUSE_ANALYSIS.md for full details
+**POST Investigation**: See POST_ENDPOINT_INVESTIGATION_REPORT.md and EVIDENCE_SPRINT_11_FINAL_REGRESSION.md for the superseded hypothesis and verified production resolution
 
 
 ## Sprint 11 Remediation and Production Alignment — 2026-09-19
