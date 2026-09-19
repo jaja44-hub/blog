@@ -1125,11 +1125,21 @@ This document tracks the day-to-day execution of the backend development roadmap
 - **Evidence**: `EVIDENCE_SPRINT_11_END_TO_END_TESTING.md`, `sprint11-api-probe-output.txt`, `sprint11-reader-smoke-output.txt`
 - **Scope Guard**: Sprint 12 and Sprint 13 were not implemented or modified.
 
-### Sprint 12: Production Deployment (Week 6, Days 4-5)
-- **Status**: ⏳ Not Started
-- **Tasks**: 3 tasks (production deployment)
-- **Success Criteria**: Environment configured, deployment successful, documentation complete
-- **Evidence Required**: Configuration validation, production verification, documentation review
+### Sprint 12: Read-Only Intelligence Vertical Slice (Week 6, Days 4-5)
+- **Status**: ✅ Phase 1 complete; correlation fixtures and recommendation governance remain
+- **Completion Date**: 2026-09-19
+- **Commit**: `cf7a909`
+- **Production Deployment**: `dpl_AVsmcfKLhCHVJ7wwLShuTh8kTJMb` (READY)
+- **Tasks completed**:
+  1. ✅ Added protected `GET /api/admin/intelligence/overview`
+  2. ✅ Added deterministic normalization and zero-spend handling
+  3. ✅ Added admin read-only Intelligence overview panel
+  4. ✅ Added `test-intelligence` repository test command
+  5. ✅ Preserved existing admin modules and database relations
+  6. ✅ Verified unauthenticated 401 and authenticated 200 endpoint behavior
+  7. ✅ Ran admin and reader regression suites after deployment
+- **Evidence**: `EVIDENCE_SPRINT_12_READ_ONLY_INTELLIGENCE.md`
+- **Deferred within Sprint 12**: fixture-based correlation scoring, partial-data tests, persisted recommendations, live Google API synchronization, and broad dashboard replacement
 
 ### Sprint 13: Google API Production Integration & Legal App Brand Extension (Week 7, Days 1-5)
 - **Status**: ⏳ Not Started - **REQUIRES RESEARCH AND DISCUSSION WITH USER BEFORE ANY ACTION BY ANY AGENT**

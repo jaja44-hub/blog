@@ -59,6 +59,7 @@ curl -X POST https://blog.addiscrown.et/api/admin/session \
 11. **EVIDENCE_SPRINT_11_SCHEMA_COMPARISON.md** - Neon/Vercel target comparison and schema evidence
 12. **SPRINT_11_UPDATE_SUMMARY.md** - Scope, methods, deployment, and handoff summary
 13. **KNOWN_ISSUES.md** - Active issues and safe operating contract
+14. **EVIDENCE_SPRINT_12_READ_ONLY_INTELLIGENCE.md** - Sprint 12 phase-one contract and regression evidence
 
 ### Issue Investigation Documents (READ FOR CONTEXT)
 1. **POST_ENDPOINT_INVESTIGATION_REPORT.md** - POST failure investigation

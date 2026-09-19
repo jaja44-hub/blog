@@ -2,6 +2,8 @@
 
 **Purpose:** Safely progress toward the original Sprint 10 intelligence scope without repeating the failed broad implementation.
 
+**Phase 1 status:** Complete in commit `cf7a909`. The read-only normalized endpoint, deterministic normalization tests, admin panel, production deployment, and regression evidence are now live. The remaining sections are the next Sprint 12 increments.
+
 ## Recommended sequence
 
 ### 12.1 Production contract and observability tests
@@ -34,4 +36,4 @@ Google Ads production credentials, live Google API synchronization, legal-app de
 
 ## Definition of done
 
-Sprint 12 should not be marked complete until the read-only intelligence contract has passing unit tests, a production API smoke test, admin UI verification, reader regression verification, deployment commit evidence, and an updated execution log. The first deliverable should be small enough to roll back without affecting the current blog, admin, or database relations.
+Sprint 12 should not be marked fully complete until the read-only intelligence contract has passing unit tests, a production API smoke test, admin UI verification, reader regression verification, deployment commit evidence, and an updated execution log. Phase 1 met those criteria. The remaining work must stay small enough to roll back without affecting the current blog, admin, or database relations.
