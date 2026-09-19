@@ -60,6 +60,7 @@ curl -X POST https://blog.addiscrown.et/api/admin/session \
 12. **SPRINT_11_UPDATE_SUMMARY.md** - Scope, methods, deployment, and handoff summary
 13. **KNOWN_ISSUES.md** - Active issues and safe operating contract
 14. **EVIDENCE_SPRINT_12_READ_ONLY_INTELLIGENCE.md** - Sprint 12 phase-one contract and regression evidence
+15. **SPRINT_13_ROADMAP_PROPOSAL.md** - Research-only Sprint 13 architecture, phased gates, platform findings, and approval checklist
 
 ### Issue Investigation Documents (READ FOR CONTEXT)
 1. **POST_ENDPOINT_INVESTIGATION_REPORT.md** - POST failure investigation
@@ -67,7 +68,7 @@ curl -X POST https://blog.addiscrown.et/api/admin/session \
 3. **POST_ROOT_CAUSE_ANALYSIS.md** - POST root cause analysis
 4. **VERCEL_DEPLOYMENT_RECOVERY.md** - Vercel deployment recovery details
 
-### Current Production Code (Commit 7c432b8)
+### Current Production Code (Sprint 12 governance line; verify the active deployment before changes)
 - **Admin Workspace**: `components/AdminWorkspace.tsx`
 - **Database Connection**: `lib/db.ts`
 - **Editorial Operations**: `lib/editorial.ts`
