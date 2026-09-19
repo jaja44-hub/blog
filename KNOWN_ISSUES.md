@@ -35,3 +35,8 @@ Resolved in this task. The knowledge-source resource is dynamic and must be dele
 Preserve the verified Neon relation inventory. Do not create duplicate tables to address a runtime failure until the Vercel database target has been compared with the Neon branch. Run the authenticated API probe and reader smoke scripts after deployment. Set `ADMIN_ACCESS_TOKEN` in the shell before running the API probe; never hard-code it. Remove every successful probe record and verify zero test rows remain.
 
 When editing production settings, record the exact deployment ID, commit, target branch, and verification result in `EXECUTION_LOG.md`. Keep Sprint 13 research-only until explicit user approval is present.
+
+
+### Sprint 13 Phase 1 admin-boundary hardening
+
+Phase 1 is deployed in commit `8a31667` and verified by Vercel deployment `dpl_9qc4yL1cJWiPBDCF7a1eWaad8NpT`. Admin browser mutations reject cross-origin requests and oversized request bodies. Defensive response headers are applied by middleware, and the production admin cookie is explicitly secure. Recommendation inputs are bounded and identifier-validated. Deterministic tests and production unauthenticated/security checks passed. The authenticated admin regression remains a follow-up when a protected `ADMIN_ACCESS_TOKEN` is available to the executing agent.

@@ -1327,3 +1327,19 @@ Commit `359d103` hardened the existing admin knowledge-source delete feature wit
 The local production build passed with the verified Neon connection supplied only to the process environment. Vercel deployment `dpl_FTMNDN4PpcVRvj1X376n8Dinhvo7` is READY and built from `359d103`. Final authenticated production verification passed all tested admin GET routes, four controlled POST probes, and four cleanup deletes. Final reader smoke verification passed 21 tested routes with HTTP 200. Vercel runtime logs reported no errors for the deployment. Neon verification reported zero remaining Sprint 11 probe rows.
 
 Continuity artifacts committed in this change: `SPRINT_11_UPDATE_SUMMARY.md`, `KNOWN_ISSUES.md`, updated `NEXT_AGENT_GUIDE.md`, updated `PROGRESS_SUMMARY.md`, updated `docs/PROJECT_HANDOFF_LOG.md`, and sanitized historical evidence files. Next agents must load credentials from protected environment configuration and read the Sprint 11 summary plus known-issues contract before further production changes.
+
+
+## Sprint 13 Phase 0/1 Production Verification and Admin Hardening — 2026-09-20
+
+Phase 0 verified the canonical Vercel deployment, the production Neon target, the active Neon compute on branch `br-orange-rain-awpyfg18`, and the expected production schema without applying a migration. The reader smoke matrix passed all 20 tested public, metadata, post, and category routes with HTTP 200. Unauthenticated admin endpoints correctly returned HTTP 401.
+
+Phase 1 focused on low-risk blogging and admin hardening without changing the editorial data model, reader content, Google integrations, or authentication contract. Commit `8a31667d71271742a2d7c61d9a7ff371c0222d67` added same-origin checks and one-megabyte request limits for admin mutations, defensive response headers, an explicitly secure production admin cookie, bounded recommendation inputs, structured provenance limits, UUID validation, and a deterministic request-security test.
+
+The deterministic intelligence, recommendation-governance, and request-security tests passed. TypeScript validation passed. The local production build compiled and completed with a non-secret build-only database placeholder; the first no-environment build failure was correctly caused by the sandbox lacking `DATABASE_URL` during Next.js page-data collection. Vercel deployment `dpl_9qc4yL1cJWiPBDCF7a1eWaad8NpT` reached READY and owns `blog.addiscrown.et`.
+
+Final production checks passed. A cross-origin `POST /api/admin/session` returned HTTP 403. Unauthenticated intelligence, recommendation, and knowledge-source endpoints returned HTTP 401. HSTS remained active. The 20-route reader smoke passed again. Vercel reported no error or fatal runtime logs for the deployment. The authenticated admin regression was not rerun in this continuation because no local token copy was available and the protected Vercel secret was not written to files or exposed; the existing authenticated probe remains the next agent’s safe follow-up after loading `ADMIN_ACCESS_TOKEN` from protected configuration.
+
+See `EVIDENCE_SPRINT_13_PHASE_0_1_HARDENING.md` for the complete sanitized evidence and `NEXT_AGENT_GUIDE.md` for the updated handoff order.
+
+**Last Updated:** 2026-09-20
+**Updated By:** Manus AI

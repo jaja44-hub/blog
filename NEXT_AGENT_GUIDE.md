@@ -1,7 +1,7 @@
 # Next Agent Guide - Addis Crown Blog Platform
 
 **Generated**: 2026-09-19
-**Current Documentation State**: Sprint 12 governance and Sprint 13 roadmap documents are published; verify the active production deployment and database target before making changes.
+**Current Documentation State**: Sprint 12 governance, the revised Sprint 13 roadmap, and Sprint 13 Phase 0/1 production hardening evidence are published. Verify the active production deployment and database target before making changes.
 **Production URL**: https://blog.addiscrown.et
 **Repository**: https://github.com/jaja44-hub/blog.git
 **Vercel Project**: blog (team_brr8I5k4O1GstQ81Ic0OfaF)
@@ -64,6 +64,7 @@ curl -X POST https://blog.addiscrown.et/api/admin/session \
 14. **EVIDENCE_SPRINT_12_READ_ONLY_INTELLIGENCE.md** - Sprint 12 phase-one contract and regression evidence
 15. **SPRINT_13_ROADMAP_PROPOSAL.md** - Research-only Sprint 13 architecture, phased gates, platform findings, and approval checklist
 16. **simplified sprint 13 research and recommendations.md** - Plain-language blogger/admin explanation of current features, gaps, risks, and proposed stages
+17. **EVIDENCE_SPRINT_13_PHASE_0_1_HARDENING.md** - Phase 0 production baseline, Phase 1 hardening, deployment, and verification evidence
 
 ### Issue Investigation Documents (READ FOR CONTEXT)
 1. **POST_ENDPOINT_INVESTIGATION_REPORT.md** - POST failure investigation
@@ -100,18 +101,22 @@ curl -X POST https://blog.addiscrown.et/api/admin/session \
 ### Recent and Planned Sprints (11-13)
 - ✅ **Sprint 11**: End-to-End Testing and production database-target remediation complete
 - ✅ **Sprint 12**: Read-only intelligence, deterministic correlation tests, and governed recommendation persistence documented and deployed in stages; verify active production state before relying on historical deployment identifiers
-- ⏳ **Sprint 13**: Revised proposal prioritizes production verification, focused blogging/admin hardening, common Addis Crown brand and Google ownership setup, Search Console/indexing, and practical AdSense/Google Ads readiness. It explicitly removes Blogger, Microfrontends, shared cookies, shared visitor identity, legal-app audience reuse, automatic publishing/campaign actions, and synchronous Google API calls from normal reader/admin requests.
+- ✅ **Sprint 13 Phase 0/1**: Production baseline and focused blogging/admin hardening deployed from commit `8a31667` as Vercel deployment `dpl_9qc4yL1cJWiPBDCF7a1eWaad8NpT`; reader and security-boundary checks passed.
+- ⏳ **Sprint 13 remaining phases**: Revised proposal prioritizes common Addis Crown brand and Google ownership setup, Search Console/indexing, and practical AdSense/Google Ads readiness. It explicitly removes Blogger, Microfrontends, shared cookies, shared visitor identity, legal-app audience reuse, automatic publishing/campaign actions, and synchronous Google API calls from normal reader/admin requests.
 
 ### Sprint 13 execution boundary
 
-The revised Sprint 13 roadmap is **planning-only**. No phase has been started by the roadmap update. The immediate proposed approval boundary is Phase 0 production verification and Phase 1 focused blogging/admin hardening. Google account configuration, Search Console, AdSense, Google Ads, or any embedded automation require separate later decisions. The detailed plan is in `SPRINT_13_ROADMAP_PROPOSAL.md`; the plain-language explanation is in `simplified sprint 13 research and recommendations.md`.
+Phase 0 production verification and Phase 1 focused blogging/admin hardening are complete. Google account configuration, Search Console, AdSense, Google Ads, or any embedded automation require separate later decisions. The detailed plan is in `SPRINT_13_ROADMAP_PROPOSAL.md`; the plain-language explanation is in `simplified sprint 13 research and recommendations.md`; the implementation evidence is in `EVIDENCE_SPRINT_13_PHASE_0_1_HARDENING.md`.
 
 ---
 
 ## KNOWN GAPS AND TECHNICAL DEBT
 
 ### Priority 1: Knowledge-source deletion safety
-**Status**: Implemented in code and pending final deployment verification for this change. The admin UI confirms deletion. The API returns 404 for missing sources and 409 when `source_usage` protects an article-linked source.
+**Status**: Implemented and production-verified. The admin UI confirms deletion. The API returns 404 for missing sources and 409 when `source_usage` protects an article-linked source.
+
+### Priority 1A: Admin request-boundary hardening
+**Status**: Implemented and deployed in commit `8a31667`. Browser-origin checks, request-size limits, defensive response headers, secure production cookies, and bounded recommendation inputs are covered by deterministic tests and production unauthenticated/security checks. The authenticated admin probe remains a recommended follow-up using protected credentials.
 
 ### Priority 2: POST Endpoint Failures
 **Affected Routes**: Google Ads, AdSense, and remaining integration scaffolds
