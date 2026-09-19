@@ -1150,6 +1150,16 @@ This document tracks the day-to-day execution of the backend development roadmap
 - **Results**: Deterministic tests passed, TypeScript validation passed, and the full production build passed
 - **Deferred**: persisted recommendations, live Google API synchronization, and broad dashboard replacement remain outside this phase
 
+#### Sprint 12 Phase 3: Recommendation Governance
+- **Status**: ✅ Complete
+- **Commit**: `7e1450a`
+- **Production Deployment**: `dpl_Pi7mm1AgZKhc9Zw4YB3GmbD2fZwF`
+- **Migration**: `migrations/add_recommendation_governance.sql` applied to the verified Neon production branch; `content_recommendations` columns, checks, unique idempotency constraint, and indexes verified
+- **Governance contract**: provenance, source snapshot, source timestamps, generation timestamp, bounded score/confidence, lifecycle status, retirement reason, and deterministic SHA-256 idempotency key
+- **API**: protected list/create route plus reason-required retirement route; duplicate create payloads return the existing record rather than inserting a second record
+- **Verification**: governance tests passed, TypeScript passed, production build passed, create returned HTTP 201, idempotent retry returned HTTP 200 with the same ID, retirement returned HTTP 200, existing admin regression passed, reader smoke passed, and runtime error logs were empty
+- **Safety boundary**: no automatic recommendation generation, external API synchronization, or hard-delete route was enabled; the production probe was retired and preserved as an audit record
+
 ### Sprint 13: Google API Production Integration & Legal App Brand Extension (Week 7, Days 1-5)
 - **Status**: ⏳ Not Started - **REQUIRES RESEARCH AND DISCUSSION WITH USER BEFORE ANY ACTION BY ANY AGENT**
 - **Tasks**: Research and planning phase (no direct implementation without user confirmation)

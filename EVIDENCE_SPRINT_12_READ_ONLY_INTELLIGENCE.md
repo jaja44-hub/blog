@@ -54,3 +54,27 @@ Phase 2 verification passed:
 - Existing zero-spend overview behavior: return on ad spend remains `null`.
 - TypeScript validation: passed.
 - Full production build: passed.
+
+
+## Phase 3: Recommendation governance
+
+Phase 3 adds governed recommendation persistence without automatic generation. The additive `content_recommendations` relation requires a unique deterministic idempotency key and stores the recommendation type, title, rationale, bounded score, confidence, provenance, source snapshot, source timestamps, generation time, lifecycle status, and retirement metadata.
+
+The API is protected by the existing admin session:
+
+- `GET /api/admin/recommendations` lists active or retired records.
+- `POST /api/admin/recommendations` creates a governed record or returns the existing record for the same idempotency key.
+- `PATCH /api/admin/recommendations/[id]` retires an active record and requires a retirement reason.
+
+The Phase 3 governance test proves canonical key stability when object key order changes, key changes when source data changes, SHA-256 key length, and score/confidence bounds. The production probe created one marked governance record, retried the same payload, received HTTP 200 with `created: false` and the same ID, then retired it with HTTP 200. The returned record retained provenance and source timestamps. The probe remains retired as an audit record rather than being hard-deleted.
+
+Phase 3 production verification passed:
+
+- Unauthenticated recommendation listing: protected by the admin session gate.
+- Authenticated recommendation creation: HTTP 201.
+- Idempotent retry: HTTP 200 with the same recommendation ID and `created: false`.
+- Retirement: HTTP 200 with `status: retired` and a recorded reason.
+- Existing admin regression: all prior GET, POST, and cleanup checks passed.
+- Reader regression: all 21 routes passed with HTTP 200.
+- Vercel runtime error logs: no errors for the Phase 3 deployment.
+- Neon migration: relation columns and governance fields verified in production.

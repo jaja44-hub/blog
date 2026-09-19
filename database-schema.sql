@@ -227,6 +227,27 @@ CREATE TABLE feature_flags (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- Governed recommendations (Sprint 12 Phase 3)
+CREATE TABLE content_recommendations (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    idempotency_key VARCHAR(128) NOT NULL UNIQUE,
+    recommendation_type VARCHAR(100) NOT NULL,
+    title VARCHAR(500) NOT NULL,
+    rationale TEXT NOT NULL,
+    score DECIMAL CHECK (score IS NULL OR (score >= 0 AND score <= 100)),
+    confidence DECIMAL CHECK (confidence IS NULL OR (confidence >= 0 AND confidence <= 1)),
+    status VARCHAR(20) NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'retired')),
+    provenance JSONB NOT NULL DEFAULT '{}'::jsonb,
+    source_snapshot JSONB NOT NULL DEFAULT '{}'::jsonb,
+    source_timestamps JSONB NOT NULL DEFAULT '{}'::jsonb,
+    generated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+    retired_at TIMESTAMP WITH TIME ZONE,
+    retired_by UUID REFERENCES users(id),
+    retire_reason TEXT
+);
+
 -- Indexes for performance
 CREATE INDEX idx_posts_status ON posts(status);
 CREATE INDEX idx_posts_category ON posts(category_id);

@@ -4,6 +4,7 @@
 
 **Phase 1 status:** Complete in commit `cf7a909`. The read-only normalized endpoint, deterministic normalization tests, admin panel, production deployment, and regression evidence are live.
 **Phase 2 status:** Complete in the current working change. Deterministic correlation fixtures now cover complete, partial, empty, clamped, and zero-spend inputs. The remaining sections are the next Sprint 12 increments.
+**Phase 3 status:** Complete in commit `7e1450a`. Governed recommendation persistence now includes explainable provenance, source timestamps, bounded scores, deterministic idempotency keys, and reason-required retirement.
 
 ## Recommended sequence
 
@@ -23,9 +24,9 @@ Fixtures now cover opportunity priority, performance score, Search Console CTR, 
 
 Add a small admin panel that displays the normalized endpoint’s status, date window, source availability, and top signals. Include loading, empty, partial-data, and error states. Keep the current separate module sections intact until parity and visual regression checks pass.
 
-### 12.5 Recommendation governance
+### 12.5 Recommendation governance — complete
 
-Only after the read-only slice passes should the project decide whether recommendations are calculated on demand or persisted. Any persisted recommendation feature needs provenance, source timestamps, explainability fields, idempotent keys, and an explicit delete/retire path.
+The governed persistence contract is now implemented. Recommendation generation remains separate from persistence. Any future generator must supply provenance, source timestamps, explainability fields, bounded scores, and an idempotent key through this contract. Retirement is explicit and reason-required; hard deletion is not exposed by the production API.
 
 ### 12.6 Security and operational hardening
 
