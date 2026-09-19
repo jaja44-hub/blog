@@ -1,7 +1,7 @@
 # Next Agent Guide - Addis Crown Blog Platform
 
 **Generated**: 2026-09-19
-**Current Production State**: Sprint 11 remediation complete (Commit 7c432b8) - READY
+**Current Documentation State**: Sprint 12 governance and Sprint 13 roadmap documents are published; verify the active production deployment and database target before making changes.
 **Production URL**: https://blog.addiscrown.et
 **Repository**: https://github.com/jaja44-hub/blog.git
 **Vercel Project**: blog (team_brr8I5k4O1GstQ81Ic0OfaF)
@@ -97,10 +97,14 @@ curl -X POST https://blog.addiscrown.et/api/admin/session \
 ### Failed Sprint (10)
 - ❌ **Sprint 10**: Cross-API Intelligence (build errors, force-rolled back)
 
-### Remaining Sprints (11-13)
+### Recent and Planned Sprints (11-13)
 - ✅ **Sprint 11**: End-to-End Testing and production database-target remediation complete
-- ⏳ **Sprint 12**: Production security/performance hardening and deployment audit
-- ⏳ **Sprint 13**: Google API Production Integration & Legal App Brand Extension (research phase - REQUIRES USER DISCUSSION BEFORE ANY IMPLEMENTATION)
+- ✅ **Sprint 12**: Read-only intelligence, deterministic correlation tests, and governed recommendation persistence documented and deployed in stages; verify active production state before relying on historical deployment identifiers
+- ⏳ **Sprint 13**: Revised proposal prioritizes production verification, focused blogging/admin hardening, common Addis Crown brand and Google ownership setup, Search Console/indexing, and practical AdSense/Google Ads readiness. It explicitly removes Blogger, Microfrontends, shared cookies, shared visitor identity, legal-app audience reuse, automatic publishing/campaign actions, and synchronous Google API calls from normal reader/admin requests.
+
+### Sprint 13 execution boundary
+
+The revised Sprint 13 roadmap is **planning-only**. No phase has been started by the roadmap update. The immediate proposed approval boundary is Phase 0 production verification and Phase 1 focused blogging/admin hardening. Google account configuration, Search Console, AdSense, Google Ads, or any embedded automation require separate later decisions. The detailed plan is in `SPRINT_13_ROADMAP_PROPOSAL.md`; the plain-language explanation is in `simplified sprint 13 research and recommendations.md`.
 
 ---
 
