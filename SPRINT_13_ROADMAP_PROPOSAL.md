@@ -4,8 +4,8 @@
 
 > **REPOSITORY CONTINUITY RULE:** Every plan, research result, implementation, test result, known issue, deployment record, and handoff decision must be saved in this repository and committed to GitHub. The repository is the continuity memory for future agents and account handovers; important context must not remain only in chat or a temporary sandbox.
 
-**Repository:** `https://github.com/jaja44-hub/blog`  
-**Canonical blog:** `https://blog.addiscrown.et`  
+**Repository:** `https://github.com/jaja44-hub/blog`
+**Canonical blog:** `https://blog.addiscrown.et`
 **Other Addis Crown property:** Separate application and root domain.
 
 ## Executive decision
