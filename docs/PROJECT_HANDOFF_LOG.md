@@ -1,5 +1,5 @@
 # Addis Crown Blog — Project Handoff Log
-**Last updated:** September 6, 2026
+**Last updated:** September 19, 2026
 **Status:** Active build — public blog core and editorial workflow are deployed and verified end to end against Neon
 
 ---
@@ -32,6 +32,11 @@ This is the single source of truth for the blog project. If you're picking this 
 - Public search now supports newest/popular sorting, category filtering, and date ranges; favorites emit Neon engagement events when the engagement table is available
 - Latest production deployment `blog-hgd9zf9w7-jafers-projects-761b2f62.vercel.app` is Ready and aliased to `blog.addiscrown.et`; Vercel build generated 22 routes successfully
 - End-to-end production verification passed for login, draft creation, editing, review, scheduling, research brief creation, Markdown import/export, and publishing; temporary records were removed afterward
+- Sprint 11 remediation is complete: Vercel production now targets Neon branch `br-orange-rain-awpyfg18`; deployment commit `7c432b8` is READY and aliased to `blog.addiscrown.et`
+- Sprint 11 evidence files are committed in the repository: `EVIDENCE_SPRINT_11_END_TO_END_TESTING.md`, `EVIDENCE_SPRINT_11_FINAL_REGRESSION.md`, and `EVIDENCE_SPRINT_11_SCHEMA_COMPARISON.md`
+- Admin knowledge-source deletion is implemented at `DELETE /api/admin/knowledge-sources/:id`, with confirmation in `components/AdminWorkspace.tsx`; deletion returns `404` for missing sources and `409` when `source_usage` protects an article-linked source
+- The Sprint 11 probe now cleans knowledge sources through the dynamic `/:id` endpoint. Probe credentials are read from `ADMIN_ACCESS_TOKEN` and are not stored in tracked files
+- The current remaining known issue is NextAuth v5 integration, which remains intentionally deferred; token-based admin authentication is the active production gate
 
 ## Key decisions log
 1. **Blog platform:** Next.js 15 (App Router) + Tailwind CSS, hosted on Vercel, connected via GitHub — chosen over WordPress/Ghost/Wix for full brand control, matches user's existing Vercel familiarity

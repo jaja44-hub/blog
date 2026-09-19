@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -u
 BASE='https://blog.addiscrown.et'
-TOKEN='19e291fa78cc1f87016694bbd50a40c6f2035250e4e1b528191f5c1745a4f735'
+TOKEN="${ADMIN_ACCESS_TOKEN:?Set ADMIN_ACCESS_TOKEN before running this probe}"
 COOKIE=$(mktemp)
 trap 'rm -f "$COOKIE"' EXIT
 printf 'SESSION\n'
@@ -23,7 +23,11 @@ post_probe() {
   id=$(printf '%s' "$body" | sed -n 's/.*"\(id\|source_id\|media_id\)"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\2/p' | head -1)
   if [ -n "$id" ] && [ "$status" -ge 200 ] && [ "$status" -lt 300 ]; then
     printf 'CLEANUP DELETE id=%s\n' "$id"
-    curl -sS -w '\nHTTP %{http_code}\n' -X DELETE -b "$COOKIE" "$BASE/api/admin/$route?id=$id" | head -c 500
+    local cleanup_url="$BASE/api/admin/$route?id=$id"
+    if [ "$route" = 'knowledge-sources' ]; then
+      cleanup_url="$BASE/api/admin/knowledge-sources/$id"
+    fi
+    curl -sS -w '\nHTTP %{http_code}\n' -X DELETE -b "$COOKIE" "$cleanup_url" | head -c 500
   fi
 }
 post_probe 'content-opportunities' '{"topic_suggestion":"Sprint 11 probe cleanup","demand_score":1,"competition_score":9,"monetization_potential":1,"estimated_effort":99}'

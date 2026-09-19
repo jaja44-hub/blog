@@ -1,16 +1,16 @@
 # Addis Crown Backend Development Progress Summary
 
-**Project**: Addis Crown Blog Platform Full-Stack Development  
-**Current Phase**: Phase 1 - Database Foundation & Authentication Core  
-**Overall Progress**: 15% Complete  
-**Status**: Authentication System Complete - Proceeding to API Development  
-**Last Updated**: 2026-09-16 17:00 UTC
+**Project**: Addis Crown Blog Platform Full-Stack Development
+**Current Phase**: Sprint 11 complete; Sprint 12 hardening is next
+**Overall Progress**: Core platform and admin foundation deployed; integration expansion remains
+**Status**: Production database target aligned, admin APIs verified, and reader smoke tests passing
+**Last Updated**: 2026-09-19
 
 ---
 
 ## Executive Summary
 
-The backend development roadmap has been created and is ready for execution. The planning phase is complete with comprehensive documentation including technical specifications, database schema design, and implementation timeline. The project is currently blocked on Neon database project creation, which requires manual user action through the Neon console.
+The core blog platform, token-gated admin workspace, Neon schema, and Sprint 1–11 evidence are deployed and synchronized with GitHub. The main Sprint 11 production incident was configuration drift: Vercel production referenced a different Neon endpoint than the verified production branch. That target is corrected, and the authenticated admin and reader-facing regression matrices pass.
 
 ---
 
@@ -46,28 +46,29 @@ The backend development roadmap has been created and is ready for execution. The
 - ⏳ Authentication system development
 - ⏳ API foundation setup
 
-### Phases 2-5: ⏳ Not Started
-- Phase 2: Editorial Content Management System (0%)
-- Phase 3: Reader Account & Engagement System (0%)
-- Phase 4: Admin Operations & Analytics (0%)
-- Phase 5: Optimization & Advanced Features (0%)
+### Current delivery status
+- ✅ Sprints 1–9: Core authentication, editorial, analytics, media, advertising scaffolds, and content-planning modules implemented
+- ✅ Sprint 10: Cross-API intelligence attempt documented as rolled back after build failures
+- ✅ Sprint 11: End-to-end API and reader verification completed; production database target corrected
+- 🔄 Sprint 12: Security, performance, deployment, and operational hardening
+- ⏳ Sprint 13: Google API production integration and legal-app brand extension research only
 
 ---
 
 ## Current Blocker
 
-### Neon Project Creation MCP Tool Limitation
-**Issue**: Despite browser session permissions for project creation (create projects, read projects, modify projects, delete projects), the Neon MCP server tools available do not include project creation or management capabilities. Available tools are limited to database operations on existing projects only.
+### Resolved: Neon/Vercel target drift
+**Issue**: Vercel production was connected to a different Neon endpoint from the verified production branch, producing missing-relation errors.
 
 **Available MCP Tools**: list_organizations, run_sql, run_sql_transaction, describe_table_schema, get_database_tables, prepare_database_migration, complete_database_migration
 
-**Impact**: Cannot proceed with database setup without a Neon project created through the browser console
+**Impact**: Admin integration routes failed in the earlier deployment even though the verified Neon branch contained the required tables.
 
-**Required Action**: User must create Neon project manually through Neon console using the authorized browser session
+**Resolution**: Vercel production `DATABASE_URL` was corrected and deployment `dpl_J62sQV5xPM32eMDSXphCyVhjN2Bg` is READY from commit `7c432b8`.
 
 **Organization**: jshukrala@gmail.com (org-twilight-glade-01205100) - console-managed, free plan
 
-**Suggested Project Name**: "addis-crown-blog-platform"
+**Current database**: Neon project `restless-cake-31725040`, branch `br-orange-rain-awpyfg18`, database `neondb`.
 
 ---
 
@@ -76,7 +77,7 @@ The backend development roadmap has been created and is ready for execution. The
 ### Database & Infrastructure
 - **Database Provider**: Neon PostgreSQL (Serverless)
 - **Organization**: jshukrala@gmail.com (org-twilight-glade-01205100)
-- **ORM**: Prisma (TypeScript ORM)
+- **Database access**: `@neondatabase/serverless` with parameterized SQL helpers
 - **Authentication**: NextAuth.js v5 (Auth.js)
 - **Deployment**: Vercel (existing project)
 
@@ -116,10 +117,10 @@ The backend development roadmap has been created and is ready for execution. The
 
 ## Next Steps
 
-### Immediate (User Action Required)
-1. Create Neon project "addis-crown-blog-platform" in jshukrala@gmail.com organization (org-twilight-glade-01205100) through Neon console using the authorized browser session
-2. Provide Neon project ID to development team
-3. Configure environment variables with DATABASE_URL
+### Immediate
+1. Deploy and verify the knowledge-source delete hardening from the current working branch.
+2. Continue Sprint 12 security and performance audit without changing the verified Neon schema.
+3. Keep Sprint 13 research-only until the user approves an implementation plan and supplies real Google credentials.
 
 ### Following Phase 1 Completion
 1. Implement database schema via Prisma migrations
@@ -134,7 +135,7 @@ The backend development roadmap has been created and is ready for execution. The
 
 ### Original Timeline: 12 Weeks
 - **Weeks 1-2**: Phase 1 - Database Foundation & Authentication Core
-- **Weeks 3-5**: Phase 2 - Editorial Content Management System  
+- **Weeks 3-5**: Phase 2 - Editorial Content Management System
 - **Weeks 6-7**: Phase 3 - Reader Account & Engagement System
 - **Weeks 8-9**: Phase 4 - Admin Operations & Analytics
 - **Weeks 10-12**: Phase 5 - Optimization & Advanced Features
@@ -211,7 +212,7 @@ The backend development roadmap has been created and is ready for execution. The
 
 ---
 
-**Document Status**: Active  
-**Next Review**: After Neon project creation  
-**Maintained By**: Development Team  
+**Document Status**: Active
+**Next Review**: After Sprint 12 hardening
+**Maintained By**: Development Team
 **Version**: 1.0

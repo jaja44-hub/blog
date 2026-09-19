@@ -4,7 +4,8 @@ import { config } from 'dotenv';
 config({ path: '.env.local' });
 
 async function testTokenAuth() {
-  const token = '19e291fa78cc1f87016694bbd50a40c6f2035250e4e1b528191f5c1745a4f735';
+  const token = process.env.ADMIN_ACCESS_TOKEN;
+  if (!token) throw new Error('ADMIN_ACCESS_TOKEN is not configured');
   
   try {
     console.log('Testing token-based authentication...');

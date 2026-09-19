@@ -13,7 +13,7 @@
 **Actual**: ✅ Token-based authentication working correctly
 **Evidence**:
 - Production API Endpoint: `POST https://blog.addiscrown.et/api/admin/session`
-- Test Token: `19e291fa78cc1f87016694bbd50a40c6f2035250e4e1b528191f5c1745a4f735`
+- Test Token: Valid `ADMIN_ACCESS_TOKEN` supplied from the protected environment (value intentionally redacted)
 - Response: `{"authenticated":true}`
 - HTTP Status: 200
 - Existing admin-auth.ts functions preserved

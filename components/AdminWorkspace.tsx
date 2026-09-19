@@ -507,6 +507,10 @@ export default function AdminWorkspace() {
   }
 
   async function deleteSource(sourceId: string) {
+    const source = sources.find((item) => item.id === sourceId);
+    const label = source?.title || source?.url || "this knowledge source";
+    if (!window.confirm(`Delete ${label}? This cannot be undone.`)) return;
+
     const response = await fetch(`/api/admin/knowledge-sources/${sourceId}`, {
       method: "DELETE"
     });

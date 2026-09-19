@@ -62,7 +62,7 @@ Type error: Argument of type 'string' is not assignable to parameter of type 'Te
 ### Test 2: Token Authentication API
 **URL:** `https://blog.addiscrown.et/api/admin/session`
 **Method:** POST
-**Body:** `{"token":"19e291fa78cc1f87016694bbd50a40c6f2035250e4e1b528191f5c1745a4f735"}`
+**Body:** `{"token":"$ADMIN_ACCESS_TOKEN"}` (value supplied from the protected environment)
 **Status:** ✅ 200 OK
 **Response:** `{"authenticated":true}`
 

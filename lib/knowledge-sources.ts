@@ -106,10 +106,12 @@ export async function createKnowledgeSource(input: {
 
 export async function deleteKnowledgeSource(id: string) {
   try {
-    await sql`
-      DELETE FROM knowledge_sources WHERE id = ${id}::uuid
+    const deleted = await sql`
+      DELETE FROM knowledge_sources
+      WHERE id = ${id}::uuid
+      RETURNING id
     `;
-    return true;
+    return deleted.length > 0;
   } catch (error) {
     console.error("Error deleting knowledge source:", error);
     throw error;
