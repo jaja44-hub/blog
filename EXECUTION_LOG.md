@@ -1126,7 +1126,7 @@ This document tracks the day-to-day execution of the backend development roadmap
 - **Scope Guard**: Sprint 12 and Sprint 13 were not implemented or modified.
 
 ### Sprint 12: Read-Only Intelligence Vertical Slice (Week 6, Days 4-5)
-- **Status**: ✅ Phase 1 complete; correlation fixtures and recommendation governance remain
+- **Status**: ✅ Phase 1 and Phase 2 complete; recommendation governance remains
 - **Completion Date**: 2026-09-19
 - **Commit**: `cf7a909`
 - **Production Deployment**: `dpl_AVsmcfKLhCHVJ7wwLShuTh8kTJMb` (READY)
@@ -1140,6 +1140,15 @@ This document tracks the day-to-day execution of the backend development roadmap
   7. ✅ Ran admin and reader regression suites after deployment
 - **Evidence**: `EVIDENCE_SPRINT_12_READ_ONLY_INTELLIGENCE.md`
 - **Deferred within Sprint 12**: fixture-based correlation scoring, partial-data tests, persisted recommendations, live Google API synchronization, and broad dashboard replacement
+
+#### Sprint 12 Phase 2: Deterministic Correlation Fixtures
+- **Status**: ✅ Complete
+- **Commit**: Pending publication after validation
+- **Implementation**: `correlateSignals()` in `lib/intelligence.ts`, stable fixtures in `lib/intelligence-fixtures.ts`, and expanded `scripts/test-intelligence.ts`
+- **Verified behavior**: complete data scoring, partial-data confidence, explicit missing-signal reporting, empty-data null score, bounded normalization, and zero-spend safety
+- **Test command**: `npm run test-intelligence`
+- **Results**: Deterministic tests passed, TypeScript validation passed, and the full production build passed
+- **Deferred**: persisted recommendations, live Google API synchronization, and broad dashboard replacement remain outside this phase
 
 ### Sprint 13: Google API Production Integration & Legal App Brand Extension (Week 7, Days 1-5)
 - **Status**: ⏳ Not Started - **REQUIRES RESEARCH AND DISCUSSION WITH USER BEFORE ANY ACTION BY ANY AGENT**

@@ -37,3 +37,20 @@ Production contract verification passed:
 ## Deliberate limitations
 
 This slice does not yet calculate persisted recommendations, use an LLM, synchronize live Google APIs, or replace the separate module dashboards. Those capabilities require the read-only contract and deterministic fixtures to mature first. The next safe step is fixture-based correlation scoring and partial-data tests, followed by explainable recommendations only after the contract remains stable.
+
+
+## Phase 2: Deterministic correlation fixtures and partial-data tests
+
+Phase 2 adds `correlateSignals()` to the pure intelligence library. It normalizes five bounded signals to a 0–100 scale: opportunity priority, performance score, Search Console CTR, return on ad spend, and completion rate. The score averages only available signals, while `confidence` reports the available-signal fraction. Missing signal names are returned explicitly. Values are clamped to their documented ranges, and an empty fixture returns a null score rather than inventing a result.
+
+Fixtures now cover complete, partial, and empty input sets. The deterministic test suite also covers zero-spend behavior and out-of-range clamping. These tests run through `npm run test-intelligence` and do not access Neon or mutate production data.
+
+Phase 2 verification passed:
+
+- Complete fixture: score `70`, confidence `1`, no missing signals.
+- Partial fixture: score `70`, confidence `0.6`, missing performance score and return on ad spend.
+- Empty fixture: null score, confidence `0`, all five signals reported missing.
+- Out-of-range values: clamped safely to the 0–100 normalized range.
+- Existing zero-spend overview behavior: return on ad spend remains `null`.
+- TypeScript validation: passed.
+- Full production build: passed.

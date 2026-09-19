@@ -2,7 +2,8 @@
 
 **Purpose:** Safely progress toward the original Sprint 10 intelligence scope without repeating the failed broad implementation.
 
-**Phase 1 status:** Complete in commit `cf7a909`. The read-only normalized endpoint, deterministic normalization tests, admin panel, production deployment, and regression evidence are now live. The remaining sections are the next Sprint 12 increments.
+**Phase 1 status:** Complete in commit `cf7a909`. The read-only normalized endpoint, deterministic normalization tests, admin panel, production deployment, and regression evidence are live.
+**Phase 2 status:** Complete in the current working change. Deterministic correlation fixtures now cover complete, partial, empty, clamped, and zero-spend inputs. The remaining sections are the next Sprint 12 increments.
 
 ## Recommended sequence
 
@@ -14,9 +15,9 @@ Add repository tests for the protected admin session, required relation inventor
 
 Implement one server-side route that reads existing `content_opportunities`, `content_performance`, `search_console_data`, and advertising metrics through typed helpers. Return a documented, versioned JSON shape with explicit nulls when a data source is unavailable. Do not write recommendations, trigger external APIs, or add a dashboard until this contract is stable.
 
-### 12.3 Deterministic correlation tests
+### 12.3 Deterministic correlation tests — complete
 
-Create fixtures for demand, competition, monetization, effort, search impressions, clicks, CTR, views, completion, and revenue. Test normalization, missing-data behavior, division-by-zero handling, date-window boundaries, and stable ordering. Use pure functions for calculations so the test suite does not depend on production Neon data.
+Fixtures now cover opportunity priority, performance score, Search Console CTR, return on ad spend, and completion rate. Tests cover normalization, missing-data confidence, empty-data behavior, clamping, and division-by-zero handling. The calculations are pure and do not depend on production Neon data.
 
 ### 12.4 Admin read-only panel
 
