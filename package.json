@@ -9,6 +9,7 @@
     "lint": "next lint",
     "db:verify-editorial": "node scripts/verify-editorial-foundation.mjs",
     "test-intelligence": "tsx scripts/test-intelligence.ts",
+    "test-recommendation-governance": "tsx scripts/test-recommendation-governance.ts",
     "create-admin": "tsx scripts/create-admin-user.ts",
     "test-db": "tsx scripts/test-db-connection.ts",
     "test-token-auth": "tsx scripts/test-token-auth.ts"
