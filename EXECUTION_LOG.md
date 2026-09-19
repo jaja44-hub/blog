@@ -1289,3 +1289,12 @@ Sprint 12 and Sprint 13 were not implemented. No Google production credentials o
 
 **Last Updated:** 2026-09-19
 **Updated By:** Manus AI
+
+
+## Sprint 11 Delete Hardening and Final Regression — 2026-09-19
+
+Commit `359d103` hardened the existing admin knowledge-source delete feature without changing the verified schema or cascading article evidence. The UI now requires explicit confirmation. `DELETE /api/admin/knowledge-sources/:id` returns HTTP 404 for a missing source, HTTP 409 when `source_usage` protects an article-linked source, and HTTP 200 for an unused source. The Sprint 11 probe cleanup was corrected to use the dynamic `/:id` endpoint, and tracked credentials were replaced with protected environment lookups and redacted evidence.
+
+The local production build passed with the verified Neon connection supplied only to the process environment. Vercel deployment `dpl_FTMNDN4PpcVRvj1X376n8Dinhvo7` is READY and built from `359d103`. Final authenticated production verification passed all tested admin GET routes, four controlled POST probes, and four cleanup deletes. Final reader smoke verification passed 21 tested routes with HTTP 200. Vercel runtime logs reported no errors for the deployment. Neon verification reported zero remaining Sprint 11 probe rows.
+
+Continuity artifacts committed in this change: `SPRINT_11_UPDATE_SUMMARY.md`, `KNOWN_ISSUES.md`, updated `NEXT_AGENT_GUIDE.md`, updated `PROGRESS_SUMMARY.md`, updated `docs/PROJECT_HANDOFF_LOG.md`, and sanitized historical evidence files. Next agents must load credentials from protected environment configuration and read the Sprint 11 summary plus known-issues contract before further production changes.

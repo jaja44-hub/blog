@@ -1,8 +1,8 @@
 # Sprint 11 Update Summary
 
-**Updated:** 2026-09-19  
-**Repository:** `jaja44-hub/blog`  
-**Current source commit:** `7c432b8` before the knowledge-source deletion hardening commit in this task  
+**Updated:** 2026-09-19
+**Repository:** `jaja44-hub/blog`
+**Current source commit:** `359d103`
 **Production:** `https://blog.addiscrown.et`
 
 ## Completed remediation
@@ -29,6 +29,10 @@ The admin UI already exposes a delete action for each knowledge source. This tas
 - Probe cleanup uses the dynamic `/:id` endpoint rather than the incorrect collection query-string endpoint
 
 The deletion policy preserves referential integrity. It does not cascade-delete article evidence.
+
+## Final verification after commit 359d103
+
+The production deployment `dpl_FTMNDN4PpcVRvj1X376n8Dinhvo7` is READY from commit `359d103`. The authenticated admin matrix passed every tested GET, all four controlled POSTs, and all four cleanup deletes. The reader smoke matrix passed 21 reader, feed, metadata, post, and category routes with HTTP 200. Vercel runtime logs showed no errors for the deployment, and Neon confirmed zero remaining uniquely named Sprint 11 probe rows.
 
 ## Handoff method
 
