@@ -39,3 +39,10 @@ The application should not receive Google Ads credentials or begin API synchroni
 ## Current blocker
 
 The connected Google Ads API identity cannot determine whether the account is canceled, incomplete, or policy-disabled because the API denies access before account details are returned. The next diagnostic step is a read-only inspection of the signed-in Google Ads web UI. The My Browser connector is currently disabled in this session, so that inspection requires the user to enable it.
+
+
+## Authenticated UI finding
+
+On 2026-09-20, the signed-in Google Ads web UI opened customer `725-192-6003` in a **New campaign** signup wizard rather than a normal campaign/account dashboard. The URL included `mode=signup` and a campaign creation step, and the form displayed a prefilled business name, `briliance`. Direct navigation to account settings and preferences redirected back to the same signup flow.
+
+This is consistent with an incomplete or draft account onboarding state and explains why the API reports `CUSTOMER_NOT_ENABLED`. The **Next** control was not clicked because continuing could create or configure a campaign and potentially lead to billing or payment steps. No account, campaign, billing, or ownership setting was changed.

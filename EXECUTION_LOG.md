@@ -1402,3 +1402,10 @@ The connected read-only Google Ads connector discovered customer `7251926003` as
 The blog Google Ads code is a local placeholder and does not make live Ads API calls; the legal app has no Ads customer integration. Therefore no application code can reactivate this account. Official Google guidance requires an Ads administrator to inspect Admin → Preferences → Account status and reactivate the account if canceled; payment or identity verification may be required. After activation, the administrator can link the customer to the intended manager, and may explicitly enable manager ownership if desired. Linking alone does not transfer ownership, and a customer can have only one owner manager.
 
 No campaigns, budgets, billing settings, credentials, database rows, or deployments were changed. Full sanitized findings and official references are in `GOOGLE_ADS_CUSTOMER_7251926003_STATUS.md`. A read-only UI inspection remains blocked until the My Browser connector is enabled.
+
+
+## Google Ads Authenticated UI Check — 2026-09-20
+
+After secure browser sign-in, customer `725-192-6003` opened in a Google Ads **New campaign** signup wizard with `mode=signup`, not a normal account dashboard. The form showed a prefilled business name, `briliance`; direct navigation to account settings/preferences redirected back to the same signup flow. This is consistent with an incomplete/draft signup and explains the API's `CUSTOMER_NOT_ENABLED` response.
+
+The **Next** control was not clicked because continuing could create/configure a campaign or enter payment and billing setup. No account, campaign, budget, billing, or ownership setting was changed. Completing this path now requires the account owner's business details and explicit confirmation before any campaign or financial step.
