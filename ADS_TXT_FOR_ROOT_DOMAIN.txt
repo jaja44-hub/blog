@@ -1,5 +1,7 @@
 This file is NOT meant to live in this repo's /public folder.
 
+Current implementation: the legal app now serves the verified publisher line from `public/ads.txt` in commit `9793f3a`.
+
 AdSense requires ads.txt to be served from the ROOT domain
 (https://addiscrown.et/ads.txt), even though this blog lives on the
 blog.addiscrown.et subdomain. This means the line below needs to be
@@ -9,7 +11,6 @@ Per the build spec: add it via a pull request against that repo,
 reviewed and merged by the project owner — not a direct commit — so a
 mistake here can never affect the live legal app.
 
-Once you've applied for AdSense and received your publisher ID, the
-real line will look like:
+The current publisher line is:
 
-google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0
+google.com, pub-2006507251466560, DIRECT, f08c47fec0942fa0

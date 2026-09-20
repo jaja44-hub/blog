@@ -1414,3 +1414,10 @@ The **Next** control was not clicked because continuing could create/configure a
 ## Google Ads Signup Decision — 2026-09-20
 
 The account owner chose **not to continue** the Google Ads signup wizard for customer `7251926003`. The account remains unchanged. No campaign, budget, billing, payment, ownership, or activation action was taken.
+
+
+## Google Ads versus AdSense Correction — 2026-09-20
+
+The earlier advertiser signup investigation was clarified: Google Ads is for buying traffic, while AdSense is the publisher product for serving Auto ads and receiving website ad revenue. Google Partners is an agency program and is not required for publisher monetization. The customer `7251926003` remains untouched in its incomplete advertiser signup state.
+
+The approved publisher-side fix was applied without changing either domain or visitor identity: the legal app now contains `public/ads.txt` with `google.com, pub-2006507251466560, DIRECT, f08c47fec0942fa0`, published in legal-app commit `9793f3a`. The blog source repository now contains `GOOGLE_ADS_VS_ADSENSE_ONBOARDING_RUNBOOK.md`, which documents the exact AdSense path, required owner materials, non-bypassable verification steps, and the separate Google Ads API path. The public root endpoint still returned HTTP 404 during the immediate post-push check, so Vercel deployment completion remains to be verified before treating ads.txt as live.
