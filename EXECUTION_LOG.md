@@ -1357,3 +1357,30 @@ The live public baseline passed: robots.txt and sitemap.xml returned HTTP 200; t
 AdSense onboarding confirmed payment information is present, but site connection is still required. Its Add Site form rejected the blog subdomain and suggested the root domain `addiscrown.et`; no site was added and no ad code was published. The root-domain versus blog-subdomain decision remains open. The read-only Google Ads connector found customer `7251926003`, but the API returned `CUSTOMER_NOT_ENABLED` / deactivated-account permission failure. No paid or account mutation was attempted.
 
 Phase 2 remains partially complete and safely paused at these account/property decisions. The next agent must record the sitemap retry result, resolve the AdSense domain choice, and investigate the Google Ads customer status before any approval request or paid configuration. No production code, database, credentials, campaigns, budgets, or billing settings changed.
+
+
+---
+
+## Sprint 13 Phase 2 Follow-up — 2026-09-20
+
+### Search Console retry and Gmail context
+- **Status**: Retry submitted successfully; Google processing remains unresolved.
+- **Evidence**: The latest Gmail message from Google Search Console was an onboarding confirmation for `https://blog.addiscrown.et/`, not an error notification. It confirmed the property is verified and recommended a Domain property for complete URL coverage.
+- **Public checks**: `robots.txt` returned HTTP 200 and referenced the canonical sitemap. `sitemap.xml` returned HTTP 200 as valid XML with 24 URLs.
+- **Dashboard action**: Re-submitted `sitemap.xml` in the verified `https://blog.addiscrown.et/` property. Search Console confirmed “Sitemap submitted successfully” and recorded Submitted 20 Sept 2026.
+- **Current Google result**: Last read remains blank; Status remains `Couldn't fetch`; Discovered pages and videos remain 0 immediately after the retry.
+- **Interpretation**: This is a Google processing/property-status discrepancy, not a confirmed public sitemap outage. No application code, database schema, credentials, billing, ads, or destructive account settings were changed.
+- **Evidence file**: `SEARCH_CONSOLE_RETRY_2026-09-20.md`.
+
+### Current blockers
+1. Search Console has not completed a successful sitemap read; wait for processing and then re-check.
+2. The AdSense site connection still requires a supported root-domain/property decision; no site was added.
+3. Google Ads customer `7251926003` remains inaccessible with `CUSTOMER_NOT_ENABLED` / deactivated-account status.
+4. Google Cloud ownership/configuration review remains incomplete through available read-only paths.
+
+### Next sprint proposal
+- **Sprint 13 Phase 2 completion**: Re-check Search Console after processing, inspect the Domain-property arrangement, and document the final indexing result; use Google support with `WNC-376106` if the fetch discrepancy persists.
+- **Sprint 13 Phase 3 readiness**: Resolve root-domain versus blog-subdomain AdSense ownership with the account owner, then complete only the normal publisher setup and policy/readiness checks. Keep ads unpublished until approval and reader review.
+- **Google Ads ownership lane**: Confirm the correct customer owner/manager relationship and account activation status with the account holder; do not create campaigns, budgets, or billing changes.
+- **Opportunity**: If manual Search Console review proves repeatedly costly after ownership is stable, propose a bounded, read-only, scheduled report for one property and one completed reporting window. Do not add synchronous Google calls to reader/admin requests.
+- **Do not expand scope**: Shared cookies, cross-domain identity, audience reuse, Blogger publishing, microfrontends, automatic publishing/campaign actions, and broad authentication replacement remain deferred.
