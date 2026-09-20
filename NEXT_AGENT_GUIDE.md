@@ -1,6 +1,6 @@
 # Next Agent Guide - Addis Crown Blog Platform
 
-**Generated**: 2026-09-19
+**Generated**: 2026-09-20
 **Current Documentation State**: Sprint 12 governance, the revised Sprint 13 roadmap, and Sprint 13 Phase 0/1 production hardening evidence are published. Verify the active production deployment and database target before making changes.
 **Production URL**: https://blog.addiscrown.et
 **Repository**: https://github.com/jaja44-hub/blog.git
@@ -118,15 +118,14 @@ Phase 0 production verification and Phase 1 focused blogging/admin hardening are
 ### Priority 1A: Admin request-boundary hardening
 **Status**: Implemented and deployed in commit `8a31667`. Browser-origin checks, request-size limits, defensive response headers, secure production cookies, and bounded recommendation inputs are covered by deterministic tests and production checks. The final authenticated admin probe passed all tested GET/POST/DELETE operations, and post-run database verification found no remaining probe rows.
 
-### Priority 2: POST Endpoint Failures
+### Priority 2: Integration scaffolds remain intentionally non-live
 **Affected Routes**: Google Ads, AdSense, and remaining integration scaffolds
-**Pattern**: Some create paths remain placeholder or require future integration-specific validation. Knowledge sources, media, Search Console, and content opportunities now have successful production POST evidence.
+**Pattern**: These modules are placeholders and must not be treated as live Google connectivity. Knowledge sources, media, Search Console, and content opportunities have successful production POST evidence.
 **Hypotheses Tested**:
 - ❌ UUID casting issue (disproven - fix attempt failed)
 - ❌ Google credentials (disproven - not related)
-- 🔍 Likely: Neon serverless foreign key constraint or runtime interaction
-**Workaround**: Direct database operations work via SQL
-**Recommendation**: Add detailed logging to capture real error messages from Vercel function logs
+- 🔍 Historical production failures were traced to a Vercel-to-Neon target mismatch and were remediated in Sprint 11
+**Current action**: Do not reopen this investigation without new production evidence; preserve the verified Neon relation inventory.
 
 ### Priority 3: NextAuth Integration
 **Status**: Deferred from Sprint 1
@@ -148,8 +147,8 @@ Phase 0 production verification and Phase 1 focused blogging/admin hardening are
 **Requirements**: Real credentials from legal app (no blocking impact)
 **Recommendation**: Coordinate with legal team for credential handoff
 
-### Priority 6: Legal App Integration Planning (Sprint 13)
-**Status**: Research phase only - NO implementation without user confirmation
+### Priority 6: Legal App Relationship (Sprint 13 boundary)
+**Status**: Separate application and database; brand/ownership review is allowed by the approved Phase 2 scope, but no shared identity or cross-app implementation is authorized
 **Legal App Production**: https://www.addiscrown.et
 **Legal App Vercel**: studio-legacy-updates-ouodmtr72-jafers-projects-761b2f62.vercel.app
 **Legal App GitHub**: github/jaja44-hub (branch: main, commit: 35b2ee5)
@@ -159,8 +158,8 @@ Phase 0 production verification and Phase 1 focused blogging/admin hardening are
 - Logo and brand asset sharing from Google Cloud project
 - Vercel microfrontend integration options
 - Revenue generation strategy across both platforms
-- **CRITICAL**: All research requires user discussion and confirmation before any implementation
-**Recommendation**: Sprint 13 is research-only phase. Do not implement without explicit user approval.
+- **Current boundary**: Keep the blog and legal app separate; defer shared cookies, audience reuse, microfrontends, automatic publishing/campaign actions, and synchronous Google calls.
+- **Recommendation**: Continue only the documented configuration-led Phase 2 follow-ups: Search Console processing, AdSense property decision, and Google Ads customer-status investigation.
 
 ---
 
@@ -281,7 +280,7 @@ Phase 0 production verification and Phase 1 focused blogging/admin hardening are
 ### GitHub
 - **Repository**: https://github.com/jaja44-hub/blog.git
 - **Branch**: main
-- **Current Commit**: 7c432b8 (Sprint 11 remediation)
+- **Current Commit**: 6d778f1 (Sprint 13 Phase 2 Search Console retry and handoff)
 - **Access**: User will authenticate agent via browser when needed
 
 ### Vercel
@@ -289,8 +288,8 @@ Phase 0 production verification and Phase 1 focused blogging/admin hardening are
 - **Team**: jafer's projects
 - **Team ID**: team_brr8I5k4O1GstQ81Ic0OfaF5
 - **Project ID**: prj_Ox7kkCUN94CSR14j0I5D3Wjc8cWo
-- **Latest Ready Deployment**: dpl_J62sQV5xPM32eMDSXphCyVhjN2Bg (Sprint 11 remediation)
-- **Access**: User will authenticate agent via browser when needed
+- **Latest documented ready deployment**: `dpl_9qc4yL1cJWiPBDCF7a1eWaad8NpT` (Phase 1 hardening); verify the current production deployment before any code change.
+- **Current connector note**: The configured Vercel MCP connector returned HTTP 403 for team scope `team_brr8I5k4O1GstQ81Ic0OfaF`; do not infer deployment state from stale IDs until access is re-authorized.
 
 ### Neon PostgreSQL
 - **Project ID**: restless-cake-31725040

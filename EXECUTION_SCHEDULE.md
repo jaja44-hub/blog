@@ -6,7 +6,9 @@
 **Cloud Strategy**: Option A - Reuse Existing Google Cloud Project  
 **Integration**: Full-stack development with Google API intelligence  
 **Timeline**: 12 weeks  
-**Status**: Ready for Execution
+**Status**: Historical schedule; superseded for current work by `SPRINT_13_ROADMAP_PROPOSAL.md`
+
+> **Current execution note:** This document describes the original broad implementation schedule and contains stale pre-Sprint-13 assumptions. For current work, follow the approved configuration-led Sprint 13 Phase 2 boundary, the evidence in `EVIDENCE_SPRINT_13_PHASE_0_1_HARDENING.md`, and the handoff in `NEXT_AGENT_GUIDE.md`. Local deterministic validation is permitted; production changes still require explicit deployment evidence.
 
 ---
 

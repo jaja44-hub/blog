@@ -118,9 +118,10 @@ The core blog platform, token-gated admin workspace, Neon schema, and Sprint 1â€
 ## Next Steps
 
 ### Immediate
-1. Deploy and verify the knowledge-source delete hardening from the current working branch.
-2. Continue Sprint 12 security and performance audit without changing the verified Neon schema.
-3. Keep Sprint 13 research-only until the user approves an implementation plan and supplies real Google credentials.
+1. Re-check Search Console after its processing window and document whether the submitted sitemap is read successfully.
+2. Resolve the supported AdSense root-domain/property choice with the account owner; keep ads unpublished until approval.
+3. Investigate Google Ads customer `7251926003` ownership/activation without changing campaigns, budgets, billing, or credentials.
+4. Preserve the separate blog/legal-app boundary and do not add synchronous Google calls or shared visitor identity.
 
 ### Following Phase 1 Completion
 1. Implement database schema via Prisma migrations
