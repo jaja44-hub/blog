@@ -1393,3 +1393,12 @@ The repository was reviewed against the attached handoff notes and the current `
 Local validation completed after a clean dependency install: `npm run test-request-security`, `npm run test-intelligence`, `npm run test-recommendation-governance`, `npx tsc --noEmit`, and `git diff --check` all passed. The public baseline was independently rechecked: `https://blog.addiscrown.et/robots.txt` and `/sitemap.xml` returned HTTP 200; the sitemap was valid XML with 24 URLs and robots referenced it.
 
 The current Vercel MCP connector could not inspect team-scoped deployments because the API returned HTTP 403 for team `team_brr8I5k4O1GstQ81Ic0OfaF`; deployment state must therefore be re-verified after connector re-authorization. Gmail still shows only the Search Console onboarding message, not a sitemap error notification. The continuity documents were corrected to remove stale research-only, zero-progress, and historical deployment instructions and to point agents to the active Phase 2 follow-ups.
+
+
+## Google Ads Customer 7251926003 Investigation — 2026-09-20
+
+The connected read-only Google Ads connector discovered customer `7251926003` as a standalone, non-manager customer (`manager=false`, hierarchy level `0`). Both an all-customers discovery and a direct discovery using `7251926003` as the login customer failed with HTTP 403 `PERMISSION_DENIED`, authorization error `CUSTOMER_NOT_ENABLED`: the account is not enabled, is still incomplete, or has been deactivated/canceled. This is not a missing manager-customer parameter.
+
+The blog Google Ads code is a local placeholder and does not make live Ads API calls; the legal app has no Ads customer integration. Therefore no application code can reactivate this account. Official Google guidance requires an Ads administrator to inspect Admin → Preferences → Account status and reactivate the account if canceled; payment or identity verification may be required. After activation, the administrator can link the customer to the intended manager, and may explicitly enable manager ownership if desired. Linking alone does not transfer ownership, and a customer can have only one owner manager.
+
+No campaigns, budgets, billing settings, credentials, database rows, or deployments were changed. Full sanitized findings and official references are in `GOOGLE_ADS_CUSTOMER_7251926003_STATUS.md`. A read-only UI inspection remains blocked until the My Browser connector is enabled.

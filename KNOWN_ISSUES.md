@@ -40,3 +40,7 @@ When editing production settings, record the exact deployment ID, commit, target
 ### Sprint 13 Phase 1 admin-boundary hardening
 
 Phase 1 is deployed in commit `8a31667` and verified by Vercel deployment `dpl_9qc4yL1cJWiPBDCF7a1eWaad8NpT`. Admin browser mutations reject cross-origin requests and oversized request bodies. Defensive response headers are applied by middleware, and the production admin cookie is explicitly secure. Recommendation inputs are bounded and identifier-validated. Deterministic tests and the authenticated production regression passed; probe records were cleaned up.
+
+
+### Google Ads customer 7251926003 is not enabled
+The read-only Google Ads connector can see customer `7251926003` as a standalone account but receives `CUSTOMER_NOT_ENABLED` when querying it, including when using that ID as the login customer. This indicates an account-side incomplete, canceled, or deactivated state rather than an application or manager-link bug. An Ads administrator must inspect Account status and reactivate the account; payment or identity verification may be required. Only after activation should manager linking/ownership and any API credentials be configured. See `GOOGLE_ADS_CUSTOMER_7251926003_STATUS.md`.
