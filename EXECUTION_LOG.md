@@ -1409,3 +1409,8 @@ No campaigns, budgets, billing settings, credentials, database rows, or deployme
 After secure browser sign-in, customer `725-192-6003` opened in a Google Ads **New campaign** signup wizard with `mode=signup`, not a normal account dashboard. The form showed a prefilled business name, `briliance`; direct navigation to account settings/preferences redirected back to the same signup flow. This is consistent with an incomplete/draft signup and explains the API's `CUSTOMER_NOT_ENABLED` response.
 
 The **Next** control was not clicked because continuing could create/configure a campaign or enter payment and billing setup. No account, campaign, budget, billing, or ownership setting was changed. Completing this path now requires the account owner's business details and explicit confirmation before any campaign or financial step.
+
+
+## Google Ads Signup Decision — 2026-09-20
+
+The account owner chose **not to continue** the Google Ads signup wizard for customer `7251926003`. The account remains unchanged. No campaign, budget, billing, payment, ownership, or activation action was taken.
