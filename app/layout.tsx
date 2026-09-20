@@ -25,7 +25,12 @@ export const metadata: Metadata = {
     template: "%s | Addis Crown"
   },
   description:
-    "Plain-language explainers on Ethiopian law, rights, and the policy questions shaping how AI and institutions affect ordinary people."
+    "Plain-language explainers on Ethiopian law, rights, and the policy questions shaping how AI and institutions affect ordinary people.",
+  icons: {
+    icon: "/logo.png",
+    shortcut: "/logo.png",
+    apple: "/logo.png"
+  }
 };
 
 export default function RootLayout({

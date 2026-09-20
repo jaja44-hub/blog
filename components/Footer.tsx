@@ -14,6 +14,7 @@ export default function Footer() {
           <p className="text-parchment/70 text-[9px] md:text-xs lg:text-sm"><Link href="/feed.xml" className="hover:text-white">Subscribe via RSS</Link></p>
           <p className="text-parchment/70 text-[9px] md:text-xs lg:text-sm"><Link href="/latest" className="hover:text-white">Latest stories</Link></p>
           <p className="text-parchment/70 text-[9px] md:text-xs lg:text-sm"><Link href="/about" className="hover:text-white">About Addis Crown</Link></p>
+          <p className="text-parchment/70 text-[9px] md:text-xs lg:text-sm"><a href="https://addiscrown.et" className="hover:text-white">Legal Assistant</a></p>
         </div>
         <div>
           <p className="mb-1 md:mb-1.5 lg:mb-2 text-[9px] md:text-xs font-semibold uppercase tracking-widest text-ochre">Trust & Support</p>
