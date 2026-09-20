@@ -51,3 +51,9 @@ When a Google-enabled session is available, check the AdSense Sites page for the
 ## Suggested continuation prompt
 
 > Read `SPRINT_13_EXECUTION_HANDOFF_2026-09-20.md` and `SPRINT_13_FINAL_CONTINUITY_2026-09-21.md` in the blog repository. Verify the latest Git commits in both `blog` and `legal-app`, check the Vercel deployment results for the cross-link/favicon changes, then use an authenticated Google session to inspect AdSense `ads.txt` crawl status and the five Search Console excluded URLs. Do not change Firebase, DNS, AdSense, Search Console, or Google Ads settings without recording the exact current value, reason, and reversible change.
+
+## Vercel deployment clarification
+
+After the commits were pushed, Vercel reported the blog deployment for commit `d3ef2aa` as **READY**. The legal-app deployment for commit `657cdf9` appeared as **BLOCKED**, but project inspection showed `ssoProtection.enabled: true` with `deploymentType: all_except_custom_domains`; the project is not password protected. The event log contained no build errors. This is a Vercel preview/deployment URL protection state, not a source build failure. The custom root domain remains reachable and serves the verified `ads.txt` file, so no rollback or Vercel setting change was made.
+
+The local legal-app production build also completed successfully. The local blog build compiled and passed type checking but could not collect database-backed API page data because this sandbox has no `DATABASE_URL`; no repository environment file was present, and no secret was fabricated or changed.
