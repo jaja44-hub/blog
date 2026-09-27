@@ -40,7 +40,7 @@ export default function Header() {
           <Link href="/latest" className="hover:text-teal transition-colors font-medium">Latest</Link>
           <Link href="/new-this-week" className="hover:text-teal transition-colors">New This Week</Link>
           <Link href="/popular" className="hover:text-teal transition-colors">Popular</Link>
-          <a href="https://addiscrown.et" className="hover:text-teal transition-colors font-medium text-ochre">Legal Assistant</a>
+          <a href="https://addiscrown.et" className="hover:text-teal transition-colors font-medium text-ochre">Our Legal Assistant app</a>
           <Link href="/contact" className="hover:text-teal transition-colors">Contact</Link>
         </nav>
 
@@ -126,7 +126,7 @@ export default function Header() {
                 onClick={() => setIsOpen(false)}
                 className="px-3 py-2 text-sm font-medium text-ochre hover:bg-parchmentDeep rounded transition-colors"
               >
-                Legal Assistant
+                Our Legal Assistant app
               </a>
               <Link
                 href="/contact"
