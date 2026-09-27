@@ -46,16 +46,10 @@ export default function AboutPage() {
           </h2>
           <div className="space-y-1 md:space-y-2">
             <a
-              href="https://wa.me/2519XXXXXXXX"
+              href="https://t.me/addiscrownblog"
               className="text-teal font-medium hover:text-tealDeep text-sm md:text-base"
             >
-              WhatsApp: AddisCrownEthiopia
-            </a>
-            <a
-              href="https://t.me/AddisCrownEthiopia"
-              className="text-teal font-medium hover:text-tealDeep text-sm md:text-base"
-            >
-              Telegram: @AddisCrownEthiopia
+              Telegram: @addiscrownblog
             </a>
             <a
               href="mailto:hello@addiscrown.et"

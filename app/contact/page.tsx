@@ -32,26 +32,13 @@ export default function ContactPage() {
 
         <div className="bg-parchmentDeep rounded-lg p-2 md:p-3 lg:p-4">
           <h2 className="font-display text-[16px] md:text-lg lg:text-xl font-semibold text-ink mb-1 md:mb-2">
-            WhatsApp
-          </h2>
-          <a
-            href="https://wa.me/2519XXXXXXXX"
-            className="text-teal font-medium hover:text-tealDeep text-sm md:text-base"
-          >
-            AddisCrownEthiopia
-          </a>
-          <p className="text-stone text-xs mt-1">Quick responses via WhatsApp</p>
-        </div>
-
-        <div className="bg-parchmentDeep rounded-lg p-2 md:p-3 lg:p-4">
-          <h2 className="font-display text-[16px] md:text-lg lg:text-xl font-semibold text-ink mb-1 md:mb-2">
             Telegram
           </h2>
           <a
-            href="https://t.me/AddisCrownEthiopia"
+            href="https://t.me/addiscrownblog"
             className="text-teal font-medium hover:text-tealDeep text-sm md:text-base"
           >
-            @AddisCrownEthiopia
+            @addiscrownblog
           </a>
           <p className="text-stone text-xs mt-1">Direct messaging via Telegram</p>
         </div>

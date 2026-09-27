@@ -23,8 +23,7 @@ export default function Footer() {
           <p className="text-parchment/70 text-[9px] md:text-xs lg:text-sm"><Link href="/privacy-policy" className="hover:text-white">Privacy Policy</Link></p>
           <p className="text-parchment/70 text-[9px] md:text-xs lg:text-sm"><Link href="/terms" className="hover:text-white">Terms</Link></p>
           <p className="text-parchment/70 text-[9px] md:text-xs lg:text-sm"><Link href="/contact" className="hover:text-white">Contact</Link></p>
-          <p className="text-parchment/70 text-[9px] md:text-xs lg:text-sm"><a href="https://wa.me/2519XXXXXXXX" className="hover:text-white">WhatsApp</a></p>
-          <p className="text-parchment/70 text-[9px] md:text-xs lg:text-sm"><a href="https://t.me/AddisCrownEthiopia" className="hover:text-white">Telegram</a></p>
+          <p className="text-parchment/70 text-[9px] md:text-xs lg:text-sm"><a href="https://t.me/addiscrownblog" className="hover:text-white">Telegram</a></p>
         </div>
       </div>
       <div className="border-t border-white/15">
