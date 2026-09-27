@@ -39,6 +39,32 @@ export default function AboutPage() {
           continuing curiosity about how legal and policy changes affect
           builders, families, professionals, institutions, and communities.
         </p>
+        
+        <div className="bg-parchmentDeep rounded-lg p-2 md:p-3 lg:p-4 mt-2 md:mt-3 lg:mt-4">
+          <h2 className="font-display text-[16px] md:text-lg lg:text-xl font-semibold text-ink mb-1 md:mb-2">
+            Connect With Us
+          </h2>
+          <div className="space-y-1 md:space-y-2">
+            <a
+              href="https://wa.me/2519XXXXXXXX"
+              className="text-teal font-medium hover:text-tealDeep text-sm md:text-base"
+            >
+              WhatsApp: AddisCrownEthiopia
+            </a>
+            <a
+              href="https://t.me/AddisCrownEthiopia"
+              className="text-teal font-medium hover:text-tealDeep text-sm md:text-base"
+            >
+              Telegram: @AddisCrownEthiopia
+            </a>
+            <a
+              href="mailto:hello@addiscrown.et"
+              className="text-teal font-medium hover:text-tealDeep text-sm md:text-base"
+            >
+              Email: hello@addiscrown.et
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   );
