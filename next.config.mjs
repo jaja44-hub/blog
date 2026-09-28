@@ -3,6 +3,19 @@ const nextConfig = {
   images: {
     remotePatterns: [{ protocol: "https", hostname: "**" }]
   },
+  async headers() {
+    return [
+      {
+        source: '/robots.txt',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=3600, s-maxage=3600',
+          },
+        ],
+      },
+    ];
+  },
   async redirects() {
     return [
       {
