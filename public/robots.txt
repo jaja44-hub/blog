@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Mediapartners-Google
+Allow: /
+
+User-agent: *
+Disallow: /admin/
+
+Sitemap: https://blog.addiscrown.et/sitemap.xml

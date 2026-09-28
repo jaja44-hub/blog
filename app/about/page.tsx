@@ -1,4 +1,9 @@
-export const metadata = { title: "About" };
+export const metadata = { 
+  title: "About",
+  alternates: {
+    canonical: 'https://blog.addiscrown.et/about'
+  }
+};
 
 export default function AboutPage() {
   return (
